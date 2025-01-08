@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% set myMandant = "" %}
+    {% set myMandataire = "" %}
+    {% for person in procuration.persons %}
+        {% for role in person.getRoles %}
+            {% if role.name == 'Mandant' %}
+                {% set myMandant = person %}
+            {% elseif role.name == 'Mandataire' %}
+                {% set myMandataire = person %}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+    <title>Procuration de {{ myMandant.FirstName }} {{ myMandant.LastName }} et {{ myMandataire.FirstName }} {{ myMandataire.LastName }}</title>{#<title>Procuration de {{ myMandant }} et {{ myMandataire }}</title>#}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        strong{
+            font-family: "Times New Roman";
+            font-size:20px;
+        }
+        .date {
+            font-family: "Times New Roman";
+            text-align: right;
+            margin-top: 10px;
+            padding-right: 40px;
+        }
+        .maitre{
+            font-family: "Times New Roman";
+            text-align: center;
+            margin-left: 100px;
+            margin-top: 40px;
+        }
+        .info {
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+        .uppercase{
+            text-transform: uppercase;
+            font-size: 18px;
+        }
+        .signature {
+        }
+    </style>
+</head>
+<body>
+<div class="info">
+    <strong style="font-size: 19px">PARDEVANT Maître Kamal BOUTASKIOUINE, Notaire à Marrakech, soussigné ;
+    <u>-------------------------------------------------------------------------------------------ACOMPARU</u></strong>
+    <br>
+    {% set myMandant = "" %}
+    {% set myMandataire = "" %}
+    {% for person in procuration.persons %}
+        {% for role in person.getRoles %}
+            {% if role.name == 'Mandant' %}
+                {% set myMandant = person %}
+                <strong>1/ {{ person.Civilite }} {{ person.FirstName }} {{ person.LastName }} </strong> fille de {{ person.PrenomPere }} et {{ person.PrenomPere }}
+                demeurant à {{ person.Address }}, titulaire de la carte d'identité nationale numéro
+                {{ person.Cin }} valable jusqu’au {{ person.ExpirationCin|date('d/m/Y') }} de nationalité Marocaine,
+                née le {{ person.BirthDate|date('d/m/Y') }} à {{ person.BirthPlace }}---------------------------------------------------------------------------------------------------------------------<br>
+                -{{ person.Situation }}------------------------------------------------------------------------------------------------------------------
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+    <br>
+    <strong><u>Lequel</u></strong>, a par les présentes requis
+    <strong>Maître Kamal BOUTASKIOUINE</strong> de constater par acte authentique, en langue française faisant ainsi exception à l’article 42 de la loi 32-09.------------
+    <strong>--------------------------------PROCURATION SPECIALE---------------------------------</strong>
+    <strong>{{ myMandant.Civilite }} {{ myMandant.FirstName }} {{ myMandant.LastName }}</strong>  a Constituer  pour son mandataire spéciale .-----------------------
+    {% for person in procuration.persons %}
+        {% for role in person.getRoles %}
+            {% if role.name == 'Mandataire' %}
+                {% set myMandataire = person %}
+                <strong>2/ {{ person.Civilite }} {{ person.FirstName }} {{ person.LastName }} </strong> fille de {{ person.PrenomPere }} et {{ person.PrenomPere }}
+                demeurant à {{ person.Address }}, titulaire de la carte d'identité nationale numéro
+                {{ person.Cin }} valable jusqu’au {{ person.ExpirationCin|date('d/m/Y') }} de nationalité Marocaine,
+                née le {{ person.BirthDate|date('d/m/Y') }} à {{ person.BirthPlace }}<br>
+                -{{ person.Situation }}------------------------------------------------------------------------------------------------------------------
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+    AUQUEL, IL donne pouvoir, Signature pour lui et en son nom, à l'effet généralement :----------------<br>
+    Acquérir en son nom personnel et/ou au nom de toute personne physique ou
+    morale qu’il désignera ultérieurement, et déclarer command, tous biens immobiliers
+    notamment le titre foncier N 337652/04 et ce aux prix charges et conditions que le
+    mandataire jugera convenable---------------<br>
+    *Consentir l'hypothèque au profit de l'Etat pour la garantie de la TVA.--------------------------------------<br>
+    *Régir, gérer et administrer, tant activement que passivement tous les biens et affaires
+    présents et à venir du constituant soit ceux qui lui appartiennent dès à présent en son
+    nom, soit qu’ils dépendent de succession, où elle peut et pourra être intéressé de
+    manière qu’ils proviennent de toute autre manière.
+    *Signer tout compromis de vente, tout acte de vente, tout additif, réquisition,désistement
+    ou annulation de réservation et toucher toutes sorte d’avance ou reliquat.<br>
+    *Représenter le constituant tant en demandant qu'en défendant auprès de toutes les administrations publiques,
+    semi-publiques et établissements privés, notamment l'administration de la conservation foncière et des hypothèques et tous les tribunaux.--------------------------------------<br>
+    *FAIRE LE BRANCHEMENT D’EAU ET D’ELECTRICITE.----------------------------------------------------<br>
+    *Faire toutes déclarations d’états civils.------------------------------------------------------------------------------<br>
+    *Procéder à toutes les formalités prescrites par la loi auprès de toutes administrations publiques, semi-publiques et privées relatives à la propriété acquise.-----------------------------------------------------<br>
+    *Accepter toutes déclarations de command, faire tous échanges avec ou sans soulte, obliger la constituante à toutes garanties pour les immeubles cédés en échange, comme aussi pour le paiement de tous prix d’acquisitions et soultes, faire
+    remplir toutes dénonciations et notifications.
+    Consentir toutes mainlevées d’inscriptions hypothèques, de nantissements, de saisies, oppositions ou autres droits avant ou après paiement.----------------------------------------------------------<br>
+    De toutes sommes reçues ou payées, donner ou retirer bonne et valables quittances et décharges.-------------------------------------------------------------------------------------------------------------------<br>
+    Faire assurer contre l’incendie et autres risques, tous biens meubles et immeubles signer à cet effet toutes polices,  administrations publiques, semi-publiques et établissements
+    privés notamment le centre régional d’investissement, le tribunal de commerce et la direction général des impôts.------------------------------------------------------------------------------------------------------------------<br>
+    Aux effets ci-dessus, passer et signer tous acte, élire domicile, substituer, révoquer tous mandats et substitution et généralement faire ce que la mandataire jugera utile et nécessaire.
+    Mention des présentes est consentie pour avoir lieu partout où besoin sera.-----------------------------------------------<br>
+    <strong>-----------------------------------------En conséquence------------------------------------------</strong><br>
+    Aux effets ci-dessus passer et signer tous actes et procès- verbaux, élire domicile, et généralement faire le nécessaire.-------------------------------------------------------------------------------------<br>
+    Le soussigné requiert Monsieur le receveur de l'enregistrement et timbre à Marrakech, de bien vouloir enregistrer la présente procuration.-------------------------------------------------------------------------<br>
+    <strong>--------------------------------------------------------------------------------------DONT ACTE</strong><br>
+    Fait et passé à Marrakech ;---------------------------------------------------------------------------------------------<br>
+    En l’étude du Notaire soussigné ;-------------------------------------------------------------------------------------<br>
+    L’an DEUX MILLE VINGT QUATRE----------------------------------------------------------------------------------<br>
+    Et après la lecture faite, le comparant a signé avec la Notaire, après avoir dispensé
+    ce dernier, de se faire assister d’un interprète traducteur assermenté. Déclarant avoir
+    parfaitement compris tous les termes du présent acte qu’il approuve sans réserve comme
+    étant l’expression de sa volonté, ainsi que les explications qui leur ont été faites par
+    ledit Acte fait sur é deux pages sans mot nul ni rature.-------------------------------------------------------------------------------------------------------------------------
+
+    <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif;">
+        <thead>
+        <tr>
+            <th style="border: 1px solid #000; padding: 8px; text-align: center; width: 36%;">&nbsp;</th>
+            <th style="border: 1px solid #000; padding: 8px; text-align: center; width: 32%;"><u>DATE ET HEURES</u></th>
+            <th style="border: 1px solid #000; padding: 8px; text-align: center; width: 32%;"><u>SIGNATURE</u></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td style="height: 100px; border: 1px solid #000; padding: 8px; text-align: center; font-family: 'Times New Roman'"><strong style="font-size: 18px;">
+                    {% if myMandant.Civilite == "Monsieur" %}
+                        Le MANDANT:<br> {{ myMandant.Civilite}} {{ myMandant.FirstName}} {{ myMandant.LastName}}  </strong>
+                    {% else %}
+                        La MANDANTE:<br> {{ myMandant.Civilite}} {{ myMandant.FirstName}} {{ myMandant.LastName}}  </strong>
+                    {% endif %}
+            </td>
+            <td style="border: 1px solid #000; padding: 8px; text-align: center;"></td>
+            <td style="border: 1px solid #000; padding: 8px; text-align: center;"></td>
+        </tr>
+        <tr>
+            <td style="height: 100px; border: 1px solid #000; padding: 8px; text-align: center; font-family: 'Times New Roman'"><strong style="font-size: 18px;">
+                {% if myMandataire.Civilite == "Monsieur" %}
+                    Le MANDANTAIRE:<br> {{ myMandataire.Civilite}} {{ myMandataire.FirstName}} {{ myMandataire.LastName}}  </strong>
+                {% else %}
+                    La MANDANTAIRE:<br> {{ myMandataire.Civilite}} {{ myMandataire.FirstName}} {{ myMandataire.LastName}}  </strong>
+                {% endif %}
+            </td>
+            <td style="border: 1px solid #000; padding: 8px; text-align: center;"></td>
+            <td style="border: 1px solid #000; padding: 8px; text-align: center;"></td>
+        </tr>
+        <tr>
+            <td style="height: 100px; border: 1px solid #000; padding: 8px; text-align: center; font-family: 'Times New Roman'"><strong style="font-size: 18px;">Maître : <br>Kamal BOUTASKIOUINE  </strong></td>
+            <td style="border: 1px solid #000; padding: 8px; text-align: center;"></td>
+            <td style="border: 1px solid #000; padding: 8px; text-align: center;"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

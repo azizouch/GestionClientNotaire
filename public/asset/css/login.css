@@ -1,0 +1,449 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    :root {
+        --mainColor: #89216b;
+        --whiteColor: #ffffff;
+        --titleColor: #555555;
+        --labelColor: #333333;
+    }
+
+    .avatar-img{
+        width: 80px;
+        height: 80px;
+    }
+
+    .wrapp {
+        position: relative;
+        width: 20rem;
+        height: 30rem;
+        margin-left:auto;
+        margin-right:auto;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+
+        opacity: 0; /* Start hidden */
+        transform: translateY(50%); /* Start slightly below the final position */
+        animation: fadeUp 1s ease-out forwards; /* Apply the fade-up animation */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .wrapp .form-container .form{
+        height: 30rem;
+    }
+
+    /* Define the fade-up animation */
+    @keyframes fadeUp {
+        0% {
+            opacity: 0;
+            transform: translateY(50%); /* Starting position */
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0); /* Final position */
+        }
+    }
+
+    @media(min-width: 540px) {
+        .wrapp,.wrapp {
+            width: 25rem;
+        }
+    }
+
+    .success-content{
+        display: block;
+        text-align: center;
+        margin-top: 0em;
+        unicode-bidi: isolate;
+    }
+
+    .singin-success{
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        background-color: var(--whiteColor);
+        border-radius: .5rem;
+        box-shadow: 0 1rem 3rem 0 rgba(211, 216, 194, 0.2);
+    }
+
+    .singin-success .btn {
+        background: linear-gradient(to right, #da4453, black);
+        color: var(--whiteColor);
+        text-transform: capitalize;
+        width: 100%;
+        height: 4rem;
+        font-size: 1.6rem;
+        font-weight: 500;
+        outline: none;
+        border: none;
+        border-radius: .5rem;
+        cursor: pointer;
+        box-shadow: 0 .2rem 1rem rgba(0 0 0 / .4);
+    }
+
+    .singin-success .btn:hover{
+        color:blue;
+    }
+
+    .alertModal {
+        position: relative;
+        padding: .6rem 1.25rem;
+        margin-bottom: 1rem;
+        border: 1px solid transparent;
+        border-radius: .25rem;
+    }
+
+    .alert-danger {
+        color: #721c24;
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+    }
+    
+    .wrapp .form-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        background-color: var(--whiteColor);
+        border-radius: .5rem;
+        box-shadow: 0 1rem 3rem 0 rgba(211, 216, 194, 0.2);
+    }
+    
+    .wrapp .form-container form h2 {
+        font-size: 2.5rem;
+        text-align: center;
+        text-transform: capitalize;
+        color: var(--titleColor);
+    }
+    
+    .wrapp .form-container form .form-group {
+        position: relative;
+        width: 20rem;
+        margin: 2rem 0;
+    }
+    
+    .wrapp .form-container form .form-group i,
+    .wrapp .form-container form .form-group label {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1rem;
+        text-transform: capitalize;
+        color: var(--labelColor);
+        padding: 0 .5rem;
+        pointer-events: none;
+        transition: all .5s ease;
+    }
+
+    .wrapp .form-container form .form-group i {
+        left: .5rem;
+    }
+
+    .wrapp .form-container form .form-group i.fa-eye, .wrapp .form-container form .form-group i.fa-eye-slash{
+        left: auto; /* Reset the left position */
+        right: 0.5rem; /* Move this icon to the right */
+        pointer-events: auto; /* Enable interaction for these icons */
+        cursor: pointer;
+    }
+    
+    .wrapp .form-container form .form-group label {
+        left: 2.5rem;
+    }
+    
+    .wrapp .form-container form .form-group input {
+        width: 100%;
+        height: 2.5rem;
+        padding: 0 1rem;
+        border-radius: .4rem;
+        border: none;
+        outline: none;
+        border: .1rem solid var(--labelColor);
+        font-size: 1rem;
+        color: var(--labelColor);
+        background: transparent;
+    }
+    
+    form .form-group input:focus~label,
+    form .form-group input:valid~label,
+    form .form-group input:focus~i,
+    form .form-group input:valid~i {
+        top: 0 !important;
+        font-size: 0.8rem !important;
+        background-color: var(--whiteColor);
+    }
+    
+    .wrapp .form-container form .forgot-pass {
+        margin: -1rem 0 1rem;
+    }
+    
+    .wrapp .form-container form .forgot-pass a {
+        color: blue;
+        text-decoration: none;
+        font-size: 1rem;
+        text-transform: capitalize;
+        transform: all .5s ease;
+    }
+    
+    .wrapp .form-container form .forgot-pass a:hover {
+        color: var(--mainColor);
+    }
+    
+    .wrapp .form-container form .btn {
+        background: linear-gradient(to right, #da4453, black);
+        color: var(--whiteColor);
+        text-transform: capitalize;
+        width: 100%;
+        height: 2.5rem;
+        font-size: 1.2rem;
+        font-weight: 500;
+        outline: none;
+        border: none;
+        border-radius: .4rem;
+        cursor: pointer;
+        box-shadow: 0 .2rem 1rem rgba(0 0 0 / .4);
+    }
+
+    .wrapp .form-container form .btn:hover{
+        background: linear-gradient(to right, #db7983, rgb(32, 30, 30));
+        box-shadow: 0 .3rem 1.5rem rgba(0 0 0 / .4);
+    }
+    
+    .wrapp .form-container form .link {
+        text-align: center;
+        font-size: 1.4rem;
+        color: var(--labelColor);
+        margin: 2.5rem 0;
+    }
+
+    .wrapp .form-container form .remember {
+        text-align: start;
+        font-size: 1rem;
+        color: var(--labelColor);
+        margin: 1rem 0;
+    }
+    
+    .wrapp .form-container form .link a {
+        text-transform: capitalize;
+        color: var(--mainColor);
+        text-decoration: none;
+        font-weight: 600;
+        transition: all .5s ease;
+    }
+    
+    .wrapp .form-container form .link a:hover {
+        color: blue;
+    }
+    
+    .wrapp .sign-up {
+        transform: rotate(7deg);
+    }
+    
+    .wrapp.animated-signin .form-container.sign-in {
+        animation: signin-flip 1s ease-in-out forwards;
+    }
+    
+    @keyframes signin-flip {
+        0% {
+            transform: translateX(0);
+        }
+    
+        50% {
+            transform: translateX(-50rem) scale(1.1);
+        }
+    
+        100% {
+            transform: translateX(0) rotate(7deg) scale(1);
+        }
+    }
+    
+    .wrapp.animated-signin .form-container.sign-up {
+        animation: rotatecard .7s ease-in-out forwards;
+    }
+    
+    @keyframes rotatecard {
+        0% {
+            transform: rotate(7deg);
+        }
+    
+        100% {
+            transform: rotate(0);
+            z-index: 1;
+        }
+    }
+    
+    .wrapp.animated-signup .form-container.sign-up {
+        animation: signup-flip 1s ease-in-out forwards;
+    }
+    
+    @keyframes signup-flip {
+        0% {
+            transform: translateX(0);
+            z-index: 1;
+        }
+    
+        50% {
+            transform: translateX(50rem) scale(1.1);
+        }
+    
+        100% {
+            transform: translateX(0) rotate(7deg) scale(1);
+        }
+    }
+    
+    .wrapp.wrapp.animated-signup .form-container.sign-in {
+        transform: rotate(7deg);
+        animation: rotatecard .7s ease-in-out forwards;
+        animation-delay: .3s;
+    }
+    
+    @keyframes rotatecard {
+        0% {
+            transform: rotate(7deg);
+        }
+    
+        100% {
+            transform: rotate(0);
+            z-index: 1;
+        }
+    }
+
+    .btn_submit {
+        pointer-events: auto;
+        margin-top: 6px;
+        margin-bottom: 6px;
+        white-space: nowrap;
+        border-radius: 6px;
+        cursor: pointer;
+        width: 100%;
+
+        border: none;
+        appearance: none;
+        color: rgb(255, 255, 255);
+        font-weight: 400;
+        opacity: 0.95;
+        padding: 0px;
+        background-color: rgb(76, 160, 252);
+        /*background-image: linear-gradient(286deg, rgb(76, 160, 252) 23%, rgb(224, 47, 238) 76%);*/
+        transition: 0.3s;
+        position: relative;
+    }
+
+    .btn_submit:hover:not(:disabled) {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+
+    .span_Sing_in {
+        position: relative;
+        display: flex;
+        -webkit-box-pack: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        align-items: center;
+        border-radius: 5px;
+        font-size: 18px;
+        padding: 9px 20px;
+        margin: 2px;
+    }
+
+    .label_Sing_in {
+        opacity: 1;
+        color: unset;
+    }
+
+    .form-container {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+        width: 100%;
+    }
+
+    .form-container h2 {
+        text-align: center;
+        color: #2c3e50;
+    }
+
+    .form-container .form-group {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+    .form-container .form-group input {
+        width: 100%;
+        padding: 10px 40px 10px 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1em;
+    }
+
+    .form-container .form-group i {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #aaa;
+    }
+
+    .form-container .form-group label {
+        position: absolute;
+        left: 10px;
+        top: -8px;
+        background-color: #ffffff;
+        padding: 0 5px;
+        font-size: 0.9em;
+        color: #777;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        font-size: 1em;
+        background-color: #3498db;
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #2980b9;
+    }
+
+    /* Media Query for Mobile Screens */
+    @media (max-width: 768px) {
+        .wrapp {
+            padding: 10px;
+        }
+
+        .form-container {
+            padding: 20px;
+        }
+
+        .form-container h2 {
+            font-size: 1.8em;
+        }
+
+        .form-group input {
+            padding: 10px;
+        }
+
+        .checkbox label {
+            font-size: 0.9em;
+        }
+
+        .forgot-pass a {
+            font-size: 0.9em;
+        }
+    }

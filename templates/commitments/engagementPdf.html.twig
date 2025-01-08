@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>PDF Document</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+            }
+            strong{
+                font-family: "Times New Roman";
+                font-size:20px;
+            }
+            .date {
+                font-family: "Times New Roman";
+                text-align: right;
+                margin-top: 10px;
+                padding-right: 40px;
+            }
+            .maitre{
+                font-family: "Times New Roman";
+                text-align: center;
+                margin-left: 100px;
+                margin-top: 40px;
+            }
+            .info {
+                margin-bottom: 20px;
+            }
+            .uppercase{
+                text-transform: uppercase;
+                font-size: 18px;
+            }
+            .signature {
+                position: absolute;
+                bottom: 0;
+                text-align: center;
+                border-top: 1px solid #6c6363;
+                width: 100%;
+            }
+            .buttom{
+                color: #0059ff;
+                font-family: "Times New Roman";
+                font-weight: bold;
+            }
+            .eng{
+                font-family: "calibri";
+                text-align: center;
+                font-size: 25px;
+                margin-bottom: 40px;
+            }
+            .header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                border-bottom: 1px solid #6c6363;
+                margin-bottom: 20px;
+            }
+
+            .logo {
+                width: 130px;
+                height: auto;
+            }
+            .Left.logo{
+                position: absolute;
+                left: 0;top: 0
+            }
+            .Right.logo{
+                position: absolute;
+                right: 0;top: 0
+            }
+            .title {
+                color:#0059ff;
+                font-size: 27px;
+                text-align: center;
+                flex-grow: 1;
+                margin-top: 40px;
+
+            }
+            .content{
+                font-family: "Calibri";
+                font-size: 20px;
+                line-height: 1.3;
+                padding-left: 40px;
+                padding-right: 40px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <div><img src="data:image/jpeg;base64,{{ logo_data }}" class="Left logo" alt="Left Logo"></div>
+            <div><h1 class="title">MAITRE KAMAL BOUTASKIOUINE <br>NOTAIRE </h1></div>
+            <div><img src="data:image/jpeg;base64,{{ logo_data }}" class="Right logo" alt="Right Logo"></div>
+        </div>
+        <div class="info">
+            <h3 class="date">Marrakech le <strong>{{ today|date('d/m/Y') }}</strong></h3>
+            <p style=";font-size: 24px;text-align: center;">
+                ENGAGEMENT
+            </p>
+            <p class="content">Je soussigné, Maître
+                <span class="uppercase">BOUTASKIOUINE KAMAL</span>  Notaire à Marrakech, Adresse
+                <strong class="uppercase">ANGLE RUE LIENTENANT LAMURE ET ROUTE TARGA RES TISSIR</strong>
+                <strong> 3émé étage NR 18 Marrakech</strong>, ayant l’identifiant fiscal N°
+                <strong class="uppercase">15177782</strong> m’engage à présenter, dans le délai de 30 jours maximum à partir de la date du virement du montant de la TVA  la somme de
+                <strong class="uppercase">QUARANTE NEUF MILLE DEUX CENT SOIXANTE DOUZE DIRHAMS ET TRENTE SEPT CENTIMES (49 272.37 DHS)</strong>, dans mon compte ouvert   auprès de la CDG N°
+                <strong class="uppercase">060450300010521301280120</strong>, une copie du contrat de la vente définitif portant sur la logement social sise à
+                <strong>Marrakech</strong>  , programme résidentiel
+                <strong class="uppercase">«ZOHOUR TARGA ILOT5, 6, 10 et 11 GH 04ILOT6</strong>N° du Bien «
+                <strong class="uppercase"> ZTRA032A002 </strong>» consistant en un appartement en copropriété, compose d’un salon , 3 chambres ,cuisine et salle de bain situé au
+                <strong class="uppercase">RDC</strong>, d’une superficie de
+                <strong class="uppercase">SOIXANTE DEUX </strong>Mètres Carrées
+                <strong> (62M²)</strong>, constituant la fraction divise numéro
+                <strong class="uppercase">15,2</strong> , immatriculée à la conservation foncière de Marrakech sous la dénomination de
+                <strong class="uppercase">«ZTRA032A002»</strong> objet du titre foncier
+                <strong class="uppercase">N°338876/04</strong>, par
+                <strong class="uppercase">MONSIEUR {{ client.firstName }} {{ client.lastName }} </strong>CIN
+                <strong class="uppercase">N°{{ client.cin }}</strong> demeurant à
+                <strong class="uppercase">{{ client.address }}</strong>, Au cas où la vente n’a pas abouti,
+                je m’engage à adresser au service précité une lettre avec accusé de réception,
+                l’informant de la non réalisation de la vente, accompagnée du chèque de récupération du montant de la TVA.
+            </p>
+            <p class="maitre">Maître <strong class="uppercase">BOUTASKIOUINE KAMAL</strong></p>
+        </div>
+
+        <div class="signature">
+            <p class="buttom">
+                Angle rue lientenant lamure et route targa.Res. Tissir 3émè étage N°18-Marrakech<br>
+                Tél : 05 24 43 24 37. Email: me.kamelbts@gmail.com
+            </p>
+        </div>
+    </body>
+</html>

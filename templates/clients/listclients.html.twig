@@ -1,0 +1,462 @@
+{% extends '_base.html.twig' %}
+
+{% block title %}Liste clients{% endblock %}
+
+{% block body %}
+    <style>
+        .head th{
+            color:  #313539;
+            background-color: #bccee4;
+            font-family: 'Public Sans', sans-serif;
+            text-transform: capitalize;
+        }
+        .badge {
+            --bs-badge-padding-x: 0.65em;
+            --bs-badge-padding-y: 0.35em;
+            --bs-badge-font-size: 0.75em;
+            --bs-badge-font-weight: 700;
+            --bs-badge-color: #fff;
+            --bs-badge-border-radius: 0.3125rem;
+            display: inline-block;
+            padding: var(--bs-badge-padding-y) var(--bs-badge-padding-x);
+            font-size: var(--bs-badge-font-size);
+            font-weight: var(--bs-badge-font-weight);
+            line-height: 1;
+            color: var(--bs-badge-color);
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            border-radius: var(--bs-badge-border-radius);
+        }
+        .bg-soft-dark {
+            background-color: rgba(19, 33, 68, .1) !important;
+        }
+        .badge {
+            line-height: normal;
+            vertical-align: middle;
+        }
+        .ms-2 {
+            margin-left: .75rem !important;
+        }
+        #multi-filter-select a.btn:hover,#multi-filter-select form button:hover{
+            background: white;
+            opacity: 1;
+        }
+        .modal-body{
+            margin-left: 4rem;
+        }
+        .modal-body p{
+            color: #808B96;
+        }
+        .modal-body p strong{
+            font-weight: 800;
+            color: #586570 ;
+        }
+
+    </style>
+
+    <div class="container">
+        <div class="page-inner">
+            <div class="page-header">
+                <h3 class="fw-bold mb-3">Liste Clients</h3>
+                <ul class="breadcrumbs mb-3">
+                    <li class="nav-home">
+                        <a href="{{ path('app_admin') }}">
+                            <i class="icon-home"></i>
+                        </a>
+                    </li>
+                    <li class="separator">
+                        <i class="icon-arrow-right"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">Clients</a>
+                    </li>
+                    <li class="separator">
+                        <i class="icon-arrow-right"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">La liste des Clients</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center">
+                                <h4 class="card-title">Clients <span class="badge bg-soft-dark text-dark ms-2">{{clients|length}}</span></h4>
+                                <button class="btn btn-primary btn-round ms-auto" onclick="window.location.href='{{ path('app_add_client') }}'">
+                                    <i class="fa fa-plus"></i>
+                                    Nouveau client
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="multi-filter-select" class="display table table-hover">
+                                    <thead>
+                                        <tr class="head">
+                                            <th style="text-transform: capitalize;"><input type="checkbox" onclick="toggleAll(this)"></th>
+                                            <th style="text-transform: capitalize;">Nom</th>
+                                            <th style="text-transform: capitalize;">Prenom</th>
+                                            <th style="text-transform: capitalize;">Cin</th>
+                                            <th style="text-transform: capitalize;">Adresse</th>
+                                            <th style="text-transform: capitalize;">Situation</th>
+                                            <th style="width: 10%;text-transform: capitalize;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th></th>
+                                            <th>Nom</th>
+                                            <th>Prenom</th>
+                                            <th>Cin</th>
+                                            <th>Adresse</th>
+                                            <th>Situation</th>
+                                            <th style="width: 10%">Action</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                    {% for client in clients %}
+                                        <tr data-client='{
+                                            "id": {{ client.id }},
+                                            "lastName": "{{ client.lastName|e('js') }}",
+                                            "firstName": "{{ client.firstName|e('js') }}",
+                                            "cin": "{{ client.cin|e('js') }}",
+                                            "phone": "{{ client.telephone|e('js') }}",
+                                            "email": "{{ client.email|e('js') }}",
+                                            "address": "{{ client.address|e('js') }}",
+                                            "situation": "{{ client.situation|e('js') }}",
+                                            "gender": "{{ client.genre|e('js') }}",
+                                            "fatherFirstName": "{{ client.prenomPere|e('js') }}",
+                                            "motherFirstName": "{{ client.prenomMere|e('js') }}",
+{#                                            "partners": [#}
+{#                                                {% for partner in client.partners %}#}
+{#                                                    {#}
+{#                                                        "id": {{ partner.id }},#}
+{#                                                        "firstName": "{{ partner.firstName|e('js') }}",#}
+{#                                                        "lastName": "{{ partner.lastName|e('js') }}",#}
+{#                                                        "mariage_date": "{{ partner.mariageDate|date('Y-m-d')|e('js') }}",#}
+{#                                                        "mariage_place": "{{ partner.mariagePlace|e('js') }}"#}
+{#                                                    }{% if not loop.last %},{% endif %}#}
+{#                                                {% endfor %}#}
+{#                                            ]#}
+                                            }'>
+                                            <td><input type="checkbox" class="row-checkbox"></td>
+                                            <td>{{ client.lastName }}</td>
+                                            <td>{{ client.firstName }}</td>
+                                            <td>{{ client.cin }}</td>
+                                            <td>{{ client.address }}</td>
+                                            <td>{{ client.situation }}</td>
+                                            <td>
+                                                <div class="form-button-action">
+                                                    <a class="btn btn-icon" href="{{ path('app_update_client', { id: client.id }) }}">
+                                                        <i class="fas fa-edit fa-sm text-success"></i>
+                                                    </a>
+                                                    <form id="delete-client-form-{{ client.id }}" action="{{ path('app_delete_client', { id: client.id }) }}" method="POST">
+                                                        <button type="button" class="btn btn-icon mx-2 delete-client-btn" data-client-id="{{ client.id }}">
+                                                            <i class="fas fa-trash-alt fa-sm text-danger"></i>
+                                                        </button>
+                                                    </form>
+                                                    <div class="card-tools">
+                                                        <div class="dropdown">
+                                                            <button
+                                                                    class="btn btn-icon btn-clean me-0"
+                                                                    type="button"
+                                                                    id="dropdownMenuButton"
+                                                                    data-bs-toggle="dropdown"
+                                                                    aria-haspopup="true"
+                                                                    aria-expanded="false"
+                                                            >
+                                                                <i class="fas fa-ellipsis-h"></i>
+                                                            </button>
+                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                                <a class="dropdown-item" href="{{ path('app_demande_immolog_pdf', { id: client.id }) }}" target="_blank">
+                                                                    <i class="icon-printer"></i> PDF Demande du tva
+                                                                </a>
+                                                                <a class="dropdown-item" href="{{ path('app_engagement_pdf', { id: client.id }) }}" target="_blank">
+                                                                    <i class="icon-printer"></i> PDF Engagement du tva
+                                                                </a>
+                                                                <a class="dropdown-item" href="#">
+                                                                    Somthing else here
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                <!-- Modal -->
+                                <div class="modal fade" id="clientModal" tabindex="-1" role="dialog" aria-labelledby="clientModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-xl" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="clientModalLabel">Client Details</h5>
+                                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row container">
+                                                    <div class="col-md-2">
+                                                        <p><strong>Nom :</strong></p>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <p><span id="clientLastName"></span></p>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <p><strong>Prénom :</strong></p>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <p><span id="clientFirstName"></span></p>
+                                                    </div>
+                                                </div>
+                                                <div class="row container">
+                                                    <div class="col-md-2">
+                                                        <p><strong>Prénom du père :</strong></p>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <p><span class="ml-2" id="clientFatherFirstName"></span></p>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <p><strong>Prénom du mère :</strong></p>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <p><span class="ml-2" id="clientMotherFirstName"></span></p>
+                                                    </div>
+                                                </div>
+                                                <div class="row container">
+                                                    <div class="col-md-2">
+                                                        <p><strong>Situation :</strong></p>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <p><span id="clientSituation"></span></p>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <p><strong>Genre :</strong></p>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <p><span class="ml-2" id="clientGenre"></span></p>
+                                                    </div>
+                                                </div>
+                                                <div class="row container">
+                                                    <div class="col-md-2">
+                                                        <p><strong>CIN :</strong></p>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <p><span class="ml-2" id="clientCin"></span></p>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <p><strong>Telephone :</strong></p>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <p><span class="ml-2" id="clientTelephone"></span></p>
+                                                    </div>
+                                                </div>
+                                                <div class="row container">
+                                                    <div class="col-md-2">
+                                                        <p><strong>Adresse :</strong></p>
+                                                    </div>
+                                                    <div class="col-md-10">
+                                                        <p><span class="ml-2" id="clientAddress"></span></p>
+                                                    </div>
+                                                </div>
+                                                <div class="row container">
+                                                    <div class="col-md-2">
+                                                        <p><strong>Email :</strong></p>
+                                                    </div>
+                                                    <div class="col-md-10">
+                                                        <p><span class="ml-2" id="clientEmail"></span></p>
+                                                    </div>
+                                                </div>
+                                                <div id="partnerInfo"></div> <!-- Partner info will be populated here -->
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="{{ asset('js/core/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('js/plugin/datatables/datatables.min.js') }}"></script>
+    <script>
+        function toggleAll(source) {
+            const checkboxes = document.querySelectorAll('.row-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = source.checked;
+            });
+        }
+
+        $(document).ready(function () {
+            // Event delegation for clicking on table rows
+            $('#multi-filter-select tbody').on('click', 'tr', function(e) {
+                // Check if the click target is not a button
+                if (!$(e.target).closest('button').length && !$(e.target).closest('a').length) {
+                    // Get client information from the data attributes
+                    const clientData = JSON.parse($(this).attr('data-client'));
+
+                    // Populate modal with client data
+                    $('#clientLastName').text(clientData.lastName);
+                    $('#clientFirstName').text(clientData.firstName);
+                    $('#clientCin').text(clientData.cin);
+                    $('#clientTelephone').text(clientData.phone);
+                    $('#clientAddress').text(clientData.address);
+                    $('#clientEmail').text(clientData.email);
+                    $('#clientSituation').text(clientData.situation);
+                    $('#clientGenre').text(clientData.gender);
+                    $('#clientFatherFirstName').text(clientData.fatherFirstName);
+                    $('#clientMotherFirstName').text(clientData.motherFirstName);
+
+                    // Check if the situation is 'Marié' and show partner information
+                    if (clientData.situation === 'Marié') {
+                        $('#partnerInfo').empty(); // Clear previous info
+
+                        $.each(clientData.partners, function(index, partner) {
+                            $('#partnerInfo').append(`
+                            <div class="row container mb-2"><p><strong>Marié(e) avec :</strong></p><br></div>
+                            <div class="container">
+                                <div class="row container">
+                                    <div class="col-md-2">
+                                        <p><strong>Nom :</strong></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><span>${partner.lastName}</span></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <p><strong>Prénom :</strong></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><span>${partner.firstName}</span></p>
+                                    </div>
+                                </div>
+                                <div class="row container">
+                                    <div class="col-md-2">
+                                        <p><strong>Date de mariage :</strong></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><span>${partner.mariage_date}</span></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <p><strong>Lieu de mariage :</strong></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><span>${partner.mariage_place}</span></p>
+                                    </div>
+                                </div>
+                            </div>`
+                            );
+                        });
+                    } else {
+                        // Clear partner info if not 'Marié'
+                        $('#partnerInfo').empty();
+                    }
+
+                    // Show the modal
+                    $('#clientModal').modal('show');
+                }
+            });
+
+            // Prevent modal from showing when clicking on update or delete buttons
+            $('#multi-filter-select').on('click', 'a.btn', function(e) {
+                // Prevent the modal opening event
+                e.stopPropagation(); // This prevents the click event from bubbling up to the row click event
+            });
+
+            $("#basic-datatables").DataTable({});
+
+            $("#multi-filter-select").DataTable({
+                pageLength: 5,
+                initComplete: function () {
+                    this.api()
+                        .columns()
+                        .every(function () {
+                            var column = this;
+                            var select = $(
+                                '<select class="form-select"><option value=""></option></select>'
+                            )
+                                .appendTo($(column.footer()).empty())
+                                .on("change", function () {
+                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                                    column
+                                        .search(val ? "^" + val + "$" : "", true, false)
+                                        .draw();
+                                });
+
+                            column
+                                .data()
+                                .unique()
+                                .sort()
+                                .each(function (d, j) {
+                                    select.append(
+                                        '<option value="' + d + '">' + d + "</option>"
+                                    );
+                                });
+                        });
+                },
+            });
+
+            // Add Row
+            $("#add-row").DataTable({
+                pageLength: 5,
+            });
+
+            var action =
+                '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
+
+            $("#addRowButton").click(function () {
+                $("#add-row")
+                    .dataTable()
+                    .fnAddData([
+                        $("#addName").val(),
+                        $("#addPosition").val(),
+                        $("#addOffice").val(),
+                        action,
+                    ]);
+                $("#addRowModal").modal("hide");
+            });
+
+            $(".delete-client-btn").click(function (e) {
+                e.preventDefault(); // Prevent the default button action
+                const clientId = $(this).data("client-id");
+                const form = $("#delete-client-form-" + clientId); // Get the form associated with this button
+
+                swal({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    buttons: {
+                        confirm: {
+                            text: "Yes, delete it!",
+                            className: "btn btn-danger",
+                        },
+                        cancel: {
+                            visible: true,
+                            className: "btn btn-success",
+                        },
+                    },
+                }).then((Delete) => {
+                    if (Delete) {
+                        form.submit(); // Submit the form if confirmed
+                    } else {
+                        swal.close();
+                    }
+                });
+            });
+        });
+    </script>
+
+{% endblock %}

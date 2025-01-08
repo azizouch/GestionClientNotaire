@@ -1,0 +1,682 @@
+{% extends '_base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+    <style>
+        .form-control{
+            border: 0.5px solid lightgrey;
+        }
+        #newClientModal2 {
+            color: #adb5bd; /* Applies white text color to all content inside the modal */
+        }
+
+        #newClientModal2 label {
+            color: #adb5bd !important; /* Ensures all form labels are white */
+        }
+
+        #newClientModal2 .btn-close {
+            filter: invert(100%); /* Makes the close button visible on a dark background */
+        }
+        #newClientModal2 .modal-body {
+            max-height: 550px;
+            overflow-y: auto;
+        }
+        #newClientModal2 .modal-header{
+            border-bottom: 1px solid #adb5bd !important;
+        }
+        #newClientModal2 .modal-footer{
+            border-top: 1px solid #adb5bd !important;
+        }
+        .shake {
+            animation: shake 0.3s ease-in-out;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+
+    </style>
+
+    <div class="container">
+        <div class="page-inner">
+            <div class="page-header">
+                <h3 class="fw-bold mb-3">Ajouter procuration</h3>
+                <ul class="breadcrumbs mb-3">
+                    <li class="nav-home">
+                        <a href="{{ path('app_admin') }}">
+                            <i class="icon-home"></i>
+                        </a>
+                    </li>
+                    <li class="separator">
+                        <i class="icon-arrow-right"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">Procurations</a>
+                    </li>
+                    <li class="separator">
+                        <i class="icon-arrow-right"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">Creer procuration</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card ">
+                        <div class="card-header text-center h2">
+                            Créer un nouveau procuration
+                        </div>
+                        <div class="container card-body">
+                            {{ form_start(form)}}
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    {{ form_row(form.repertoir) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.titre_foncier) }}
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    {{ form_row(form.date_mandant, { 'attr': { 'class': 'form-control shadow-sm' } }) }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form_row(form.date_mandataire, { 'attr': { 'class': 'form-control shadow-sm' } }) }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form_row(form.date_maitre, { 'attr': { 'class': 'form-control shadow-sm' } }) }}
+                                </div>
+                            </div>
+                            <div class="personsContainer mb-3 ">
+                                {{ form_row(form.persons) }}
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <div class="card shadow">
+                                        <div class="card-header">
+                                            <div class="card-title">Mandant(s)</div>
+                                        </div>
+                                        <div class="card-body">
+                                            <table class="table table-hover" id="MandantTable">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col" class="text-capitalize">Dénomination/Nom Prenom</th>
+                                                    <th scope="col" class="text-capitalize">Identifiant</th>
+                                                    <th scope="col" class="text-capitalize">Ville</th>
+                                                    <th scope="col" class="text-capitalize">Telephone</th>
+                                                    <th scope="col" class="text-capitalize">Email</th>
+                                                    <th scope="col" class="text-capitalize">Actions</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <!-- Client entries will go here -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="card-footer">
+                                            <!-- Button to Open the Modal -->
+                                            <button type="button" class="btn btn-light " id="ajouterMandant" data-bs-toggle="modal" data-bs-target="#newClientModal">
+                                                <i class="fas fa-plus-circle"></i>
+                                                Ajouter une ligne
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <div class="card shadow">
+                                        <div class="card-header">
+                                            <div class="card-title">Mandataire(s)</div>
+                                        </div>
+                                        <div class="card-body">
+                                            <table class="table table-hover" id="MandataireTable">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col" class="text-capitalize">Dénomination/Nom Prenom</th>
+                                                    <th scope="col" class="text-capitalize">Identifiant</th>
+                                                    <th scope="col" class="text-capitalize">Ville</th>
+                                                    <th scope="col" class="text-capitalize">Telephone</th>
+                                                    <th scope="col" class="text-capitalize">Email</th>
+                                                    <th scope="col" class="text-capitalize">Actions</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <!-- Client entries will go here -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="card-footer">
+                                            <!-- Button to Open the Modal -->
+                                            <button type="button" class="btn btn-light " id="ajouterMandataire" data-bs-toggle="modal" data-bs-target="#newClientModal">
+                                                <i class="fas fa-plus-circle"></i>
+                                                Ajouter une ligne
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                {{ form_row(form.Submit) }}
+                            </div>
+                            {{ form_end(form) }}
+                            <!-- Modal for Client Selection -->
+                            <div class="modal fade" id="newClientModal" tabindex="-1" aria-labelledby="newClientModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="newClientModalLabel">Choisir un client</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <table class="table table-hover" id="clientsTables">
+                                                <thead>
+                                                <tr>
+                                                    <th>Prenom</th>
+                                                    <th>Nom</th>
+                                                    <th>CIN</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for person in Persons %}
+                                                    <tr data-client-info='{
+                                                            "firstName": "{{ person.firstName }}",
+                                                            "lastName": "{{ person.lastName }}",
+                                                            "cin": "{{ person.cin }}",
+                                                            "phone": "{{ person.telephone }}",
+                                                            "address": "{{ person.address }}",
+                                                            "situation": "{{ person.situation }}",
+                                                            "email": "{{ person.email }}",
+                                                        }'>
+                                                        <td>{{ person.firstName }}</td>
+                                                        <td>{{ person.lastName }}</td>
+                                                        <td>{{ person.cin }}</td>
+                                                    </tr>
+                                                {% else %}
+                                                    <tr>
+                                                        <td colspan="3">No person available.</td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                            <button type="button" class="btn btn-primary" id="addNewClientButton" data-bs-toggle="modal" data-bs-target="#newClientModal2">Nouveau</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- New Client Modal -->
+                            <div class="modal fade" id="newClientModal2" tabindex="-1" aria-labelledby="newClientModal2Label" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content" style="background-color: #343a40">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="newClientModal2Label">Créer</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Person Form -->
+                                            <form class="container" id="personForm">
+                                                <div class="row mb-3 justify-content-center">
+                                                    <div class="d-flex justify-content-center align-items-center col-md-8">
+                                                        <div class="col-md-2">
+                                                            <label class="form-label mb-0" for="civilite" >Civilité</label>
+                                                        </div>
+                                                        <div class="col-md-10">
+                                                            <select id="civilite" class="form-select" required>
+                                                                <option value="" disabled selected>Choisissez une civilité...</option>
+                                                                <option value="Monsieur">Monsieur</option>
+                                                                <option value="Madame">Madame</option>
+                                                                <option value="Mademoiselle">Mademoiselle</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-md-6">
+                                                        <label for="firstName" class="form-label required" >Prenom</label>
+                                                        <input type="text" class="form-control" id="firstName" required>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="lastName" class="form-label required">Nom</label>
+                                                        <input type="text" class="form-control" id="lastName" required>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-md-6">
+                                                        <label for="firstNameFather" class="form-label required">Prenom du pere</label>
+                                                        <input type="text" class="form-control" id="firstNameFather" required>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="firstNameMother" class="form-label required">Prenom du mere</label>
+                                                        <input type="text" class="form-control" id="firstNameMother" required>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-md-6">
+                                                        <label for="cin" class="form-label required">CIN</label>
+                                                        <input type="text" class="form-control" id="cin" required>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="birth_place" class="form-label required">Lieu de naissance</label>
+                                                        <input type="text" class="form-control" id="birth_place" required>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-md-6">
+                                                        <label for="DateExpiration" class="form-label required">Date d'expiration du CIN</label>
+                                                        <input type="date" class="form-control" id="DateExpiration" required>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="DateNaissance" class="form-label required">Date de naissance</label>
+                                                        <input type="date" class="form-control" id="DateNaissance" required>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-md-6">
+                                                        <label for="genre" class="form-label required">Genre</label>
+                                                        <select id="genre" class="form-select" required>
+                                                            <option value="" disabled selected>Choisissez une genre...</option>
+                                                            <option value="Male">Male</option>
+                                                            <option value="Femelle">Femelle</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="situation" class="form-label required">Situation familiale</label>
+                                                        <select id="situation" class="form-select" required>
+                                                            <option value="" disabled selected>Choisissez une situation...</option>
+                                                            <option value="Célibataire">Célibataire</option>
+                                                            <option value="Marié">Marié</option>
+                                                            <option value="Veuf">Veuf</option>
+                                                            <option value="Veuve">Veuve</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="row " id="partenaire" style="display: none">
+                                                    <label class="form-label">Partenaire</label>
+                                                </div>
+                                                <div class="container mb-3 rounded-1 p-2" id="partnerFields" style="display: none;border: 0.5px solid #adb5bd">
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-6">
+                                                            <label for="partnerFirstName" class="form-label required">Prenom</label>
+                                                            <input type="text" class="form-control" id="partnerFirstName" required>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="partnerLastName" class="form-label required">Nom</label>
+                                                            <input type="text" class="form-control" id="partnerLastName" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-6">
+                                                            <label for="mariagePlace" class="form-label required">Lieu de mariage</label>
+                                                            <input type="text" class="form-control" id="mariagePlace" required>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="mariageYear" class="form-label required">Année de mariage</label>
+                                                            <input type="number" class="form-control" id="mariageYear" min="1900" max="2024"  required>
+                                                            <small id="mariageYearMessage" class="text-danger" style="display: none;">
+                                                                L'année doit être comprise entre 1900 et l'année actuelle.
+                                                            </small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-md-6">
+                                                        <label for="nationality" class="form-label">Nationalité</label>
+                                                        <input type="text" class="form-control" id="nationality" required>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="ville" class="form-label required">Ville</label>
+                                                        <input type="text" class="form-control" id="ville" required>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-md-6">
+                                                        <label for="phone" class="form-label">Téléphone</label>
+                                                        <input type="text" class="form-control" id="phone">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="email" class="form-label">Email</label>
+                                                        <input type="email" class="form-control" id="email">
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-md-12">
+                                                        <label for="address" class="form-label required">Address</label>
+                                                        <textarea class="form-control" id="address" rows="3" required></textarea>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                            <button type="button" class="btn btn-primary" id="saveNewClientButton">Enregistrer</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ asset('asset/js/core/jquery-3.7.1.min.js') }}"></script>
+
+    <script>
+        let selectedRole = ''; // Store the role from the button click
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const newClientModal = new bootstrap.Modal(document.getElementById('newClientModal'), {
+                backdrop: 'static',
+                keyboard: false
+            });
+            const newClientModal2 = new bootstrap.Modal(document.getElementById('newClientModal2'), {
+                backdrop: 'static',
+                keyboard: false
+            });
+            // Get the form element
+            const personForm = document.getElementById('personForm');
+
+            // Add event listener to reset the form when the modal is closed
+            document.getElementById('newClientModal2').addEventListener('hidden.bs.modal', () => {
+                personForm.reset(); // Reset the form fields
+                // Remove 'is-invalid' class from all fields
+                const invalidFields = personForm.querySelectorAll('.is-invalid');
+                invalidFields.forEach(field => field.classList.remove('is-invalid'));
+            });
+
+            // other code :
+            const partner = document.getElementById('partenaire');
+            const partnerFields = document.getElementById('partnerFields');
+            const situationSelect = document.getElementById('situation');
+            const saveButton = document.getElementById('saveNewClientButton');
+            const mariageYearInput = document.getElementById('mariageYear');
+            const mariageYearMessage = document.getElementById('mariageYearMessage');
+
+            mariageYearInput.addEventListener('input', () => {
+                const year = parseInt(mariageYearInput.value, 10);
+                const currentYear = new Date().getFullYear();
+                const minYear = 1900;
+
+                if (year < minYear || year > currentYear) {
+                    mariageYearMessage.style.display = 'block';
+                    mariageYearInput.setCustomValidity('Invalid');
+                } else {
+                    mariageYearMessage.style.display = 'none';
+                    mariageYearInput.setCustomValidity('');
+                }
+            });
+
+            // Show partner fields when "Marié" is selected in the "Situation" dropdown
+            situationSelect.addEventListener('change', function () {
+                if (situationSelect.value === 'Marié') {
+                    partner.style.display = 'block';
+                    partnerFields.style.display = 'block';
+                } else {
+                    partner.style.display = 'none';
+                    partnerFields.style.display = 'none';
+                    const partnerInputs = partnerFields.querySelectorAll('input');
+                    partnerInputs.forEach(input => {
+                        input.value = ''; // Reset the value of each input field
+                    });
+                }
+            });
+
+            // Handle form submission and add data to the correct fieldset
+            saveButton.addEventListener('click', function () {
+                let formData = {};
+                let partnerData = {};
+                let isValid = true; // Flag to track overall form validity
+                // Utility function to validate a field
+                function validateField(field) {
+                    if (field.value.trim() === '' && field.hasAttribute('required')) {
+                        field.classList.add('is-invalid'); // Highlight invalid field
+                        field.classList.add('shake'); // Add shake effect
+                        isValid = false;
+
+                        // Remove shake effect after animation ends
+                        field.addEventListener('animationend', () => {
+                            field.classList.remove('shake');
+                        }, { once: true });
+                    } else {
+                        field.classList.remove('is-invalid'); // Remove invalid highlight
+                    }
+                }
+                if (situationSelect.value === 'Marié') {
+                    const partnerFields = ['partnerFirstName', 'partnerLastName', 'mariagePlace', 'mariageYear'];
+                    partnerFields.forEach(id => validateField(document.getElementById(id)));
+                    partnerData = {
+                        partnerFirstName: document.getElementById('partnerFirstName').value,
+                        partnerLastName: document.getElementById('partnerLastName').value,
+                        mariagePlace: document.getElementById('mariagePlace').value,
+                        mariageYear: document.getElementById('mariageYear').value
+                    }
+                }
+                else {
+                    partnerData = {}
+                }
+                // Collect data from Personne Physique form and validate fields
+                const requiredFields = ['firstName', 'lastName', 'firstNameFather', 'firstNameMother', 'cin', 'situation', 'genre', 'address','ville','DateNaissance','DateExpiration','civilite','birth_place','nationality'];
+                requiredFields.forEach(id => validateField(document.getElementById(id)));
+                // Collect data from Personne Physique form
+                formData = {
+                    civilite: document.getElementById('civilite').value,
+                    firstName: document.getElementById('firstName').value,
+                    lastName: document.getElementById('lastName').value,
+                    firstNameFather: document.getElementById('firstNameFather').value,
+                    firstNameMother: document.getElementById('firstNameMother').value,
+                    cin: document.getElementById('cin').value,
+                    phone: document.getElementById('phone').value,
+                    situation: situationSelect.value,
+                    genre: document.getElementById('genre').value,
+                    email: document.getElementById('email').value,
+                    ville: document.getElementById('ville').value,
+                    address: document.getElementById('address').value,
+                    dateNaissance: document.getElementById('DateNaissance').value,
+                    dateExpiration: document.getElementById('DateExpiration').value,
+                    birth_place: document.getElementById('birth_place').value,
+                    nationality: document.getElementById('nationality').value,
+                    role: selectedRole,
+                    partnerData: partnerData
+                };
+                if (isValid) {
+                    console.log(formData)
+                    addToFieldsetPersons(formData);
+                }
+                if (!isValid) {
+                    return; // Stop processing if the form is invalid
+                }
+                // Close modal (optional)
+                $('#newClientModal2').modal('hide');
+            });
+
+            const form = document.querySelector('form[name="procuration"]');
+            const mandantTable = document.querySelector('#MandantTable tbody');
+            const mandataireTable = document.querySelector('#MandataireTable tbody');
+
+            form.addEventListener('submit', function (event) {
+                let mandantIsEmpty = mandantTable.children.length === 0;
+                let mandataireIsEmpty = mandataireTable.children.length === 0;
+
+                // Check if either table is empty
+                if (mandantIsEmpty || mandataireIsEmpty) {
+                    event.preventDefault(); // Prevent form submission
+
+                    // Display appropriate messages
+                    if (mandantIsEmpty && mandataireIsEmpty) {
+                        showAlert('Vous devez avoir au moins un "Mandant" et un "Mandataire".');
+                    } else if (mandantIsEmpty) {
+                        showAlert('Vous devez avoir au moins un "Mandant".');
+                    } else if (mandataireIsEmpty) {
+                        showAlert('Vous devez avoir au moins un "Mandataire".');
+                    }
+                }
+            });
+        });
+
+        document.getElementById('ajouterMandant').addEventListener('click', () => {
+            selectedRole = 'Mandant'; // Set the role to "Mandant"
+        });
+
+        document.getElementById('ajouterMandataire').addEventListener('click', () => {
+            selectedRole = 'Mandataire'; // Set the role to "Mandataire"
+        });
+
+        function addToFieldsetPersons(personData) {
+            const container = document.getElementById('procuration_persons');
+            const prototype = container.getAttribute('data-prototype');  // Get the prototype
+            const newFieldset = document.createElement('div');  // Create a new div for the fieldset
+
+            // Get the current number of fields and replace placeholders in the prototype
+            const index = container.children.length;
+            const uniquePrototype = prototype.replace(/__name__/g, index);  // Replace placeholders with index
+
+            // Add the fieldset's data-cin attribute to link the fieldset with the person
+            newFieldset.setAttribute('data-cin', personData.cin);
+
+            // Insert the new fieldset HTML into the new div
+            newFieldset.innerHTML = uniquePrototype;
+
+            // Select the newly created fieldset (it will have a unique name based on the index)
+            const newPersonFieldset = newFieldset.querySelector(`#procuration_persons_${index}`);
+
+            // Populate the new fieldset with the client data
+            newPersonFieldset.querySelector('[name$="[civilite]"]').value = personData.civilite;
+            newPersonFieldset.querySelector('[name$="[first_name]"]').value = personData.firstName;
+            newPersonFieldset.querySelector('[name$="[last_name]"]').value = personData.lastName;
+            newPersonFieldset.querySelector('[name$="[prenom_pere]"]').value = personData.firstNameFather;
+            newPersonFieldset.querySelector('[name$="[prenom_mere]"]').value = personData.firstNameMother;
+            newPersonFieldset.querySelector('[name$="[cin]"]').value = personData.cin;
+            newPersonFieldset.querySelector('[name$="[telephone]"]').value = personData.phone;
+            newPersonFieldset.querySelector('[name$="[situation]"]').value = personData.situation;
+            newPersonFieldset.querySelector('[name$="[genre]"]').value = personData.genre;
+            newPersonFieldset.querySelector('[name$="[email]"]').value = personData.email;
+            newPersonFieldset.querySelector('[name$="[city]"]').value = personData.ville;
+            newPersonFieldset.querySelector('[name$="[address]"]').value = personData.address;
+            newPersonFieldset.querySelector('[name$="[birth_date]"]').value = personData.dateNaissance;
+            newPersonFieldset.querySelector('[name$="[expiration_cin]"]').value = personData.dateExpiration;
+            newPersonFieldset.querySelector('[name$="[birth_place]"]').value = personData.birth_place;
+            newPersonFieldset.querySelector('[name$="[nationality]"]').value = personData.nationality;
+
+            // Add the selected role to the roles fieldset
+            const rolesContainer = newPersonFieldset.querySelector(`#procuration_persons_${index}_roles`);
+            if (rolesContainer && selectedRole) {
+                const rolePrototype = rolesContainer.getAttribute('data-prototype');
+                const roleIndex = rolesContainer.children.length;
+
+                // Replace placeholders in the roles prototype
+                const newRole = rolePrototype
+                    .replace(/__name__/g, roleIndex)
+                    .replace(/__name__label__/g, `Role ${roleIndex + 1}`);
+
+                // Create a new div for the role and append it
+                const roleDiv = document.createElement('div');
+                roleDiv.innerHTML = newRole;
+
+                // Set the role name field value to the selected role
+                roleDiv.querySelector(`[name$="[name]"]`).value = selectedRole;
+
+                // Append the new role to the roles fieldset
+                rolesContainer.appendChild(roleDiv);
+            }
+            // If partnerData exists, add the partner information
+            if (Object.keys(personData.partnerData).length > 0) {
+                const partnerContainer = newPersonFieldset.querySelector(`#procuration_persons_${index}_partenaire`);
+                if (partnerContainer) {
+                    const partnerPrototype = partnerContainer.getAttribute('data-prototype');
+                    const partnerIndex = partnerContainer.children.length;
+
+                    const uniquePartnerPrototype = partnerPrototype.replace(/__name__/g, partnerIndex);
+
+                    const newPartnerFieldset = document.createElement('div');
+                    newPartnerFieldset.innerHTML = uniquePartnerPrototype;
+
+                    // Populate the partner fieldset with the partner data
+                    const newPartnerFieldsetDiv = newPartnerFieldset.querySelector(`#procuration_persons_${index}_partenaire_${partnerIndex}`);
+                    newPartnerFieldsetDiv.querySelector('[name$="[first_name]"]').value = personData.partnerData.partnerFirstName;
+                    newPartnerFieldsetDiv.querySelector('[name$="[last_name]"]').value = personData.partnerData.partnerLastName;
+                    newPartnerFieldsetDiv.querySelector('[name$="[mariage_year]"]').value = personData.partnerData.mariageYear;
+                    newPartnerFieldsetDiv.querySelector('[name$="[mariage_place]"]').value = personData.partnerData.mariagePlace;
+
+                    partnerContainer.appendChild(newPartnerFieldsetDiv);
+                }
+            }
+
+            // Append the new fieldset to the container
+            container.appendChild(newFieldset);
+
+            // Optionally, you can reset the form or handle any other UI logic after adding the new fieldset
+            document.getElementById('personForm').reset();
+
+            // Reset other related fields if needed
+            document.getElementById('partnerFields').style.display = 'none';
+
+            // Optionally, display the person data in a table or any other structure
+            displayPersonInTable(personData);
+
+            // Hide the modal after adding the person
+            const modalElement = document.getElementById('newClientModal2');
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            modal.hide();
+        }
+
+        function displayPersonInTable(person) {
+            const newRow = $(`
+                <tr data-cin="${person.cin}">
+                    <td>${person.firstName} ${person.lastName}</td>
+                    <td>${person.cin}</td>
+                    <td>${person.ville}</td>
+                    <td>${person.phone}</td>
+                    <td>${person.email}</td>
+                    <td class="text-center"><button type="button" class="btn btn-danger btn-sm delete-client"><i class="fas fa-trash-alt"></button></td>
+                </tr>
+            `);
+            if (person.role === 'Mandant') {
+                $('#MandantTable tbody').append(newRow);
+            } else if (person.role === 'Mandataire') {
+                $('#MandataireTable tbody').append(newRow);
+            } else {
+                console.error(`Unknown role: ${person.role}`);
+            }
+            // Add event listener to the delete button
+            newRow.find('.delete-client').on('click', function() {
+                deletePersonFromFieldset(person.cin); // Call function to remove from fieldset
+                newRow.remove(); // Remove row from table
+            });
+        }
+
+        function deletePersonFromFieldset(cin) {
+            // Find the corresponding fieldset using the cin
+            const fieldsetToDelete = document.querySelector(`[data-cin="${cin}"]`);
+
+            if (fieldsetToDelete) {
+                fieldsetToDelete.remove(); // Remove the fieldset from the DOM
+            } else {
+                console.error('No matching fieldset found for CIN:', cin);
+            }
+        }
+
+        function showAlert(message) {
+            swal("Warning!", message, {
+                icon: "warning",
+                buttons: {
+                    confirm: {
+                        text: "Okay",
+                        className: "btn btn-warning",
+                    },
+                },
+            });
+        }
+
+    </script>
+
+{% endblock %}

@@ -1,0 +1,138 @@
+{% extends '_loginbase.html.twig' %}
+
+{% block title %}Log In!{% endblock %}
+
+{% block body %}
+    <link rel="stylesheet" href="{{ asset('asset/css/login.css') }}">
+    <link rel="stylesheet" href="{{ asset('asset/css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('asset/css/fonts.min.css') }}">
+    <style>
+        body, html {
+            overflow: hidden; /* Prevent scrolling */
+            height: 100%;
+            margin: 0;
+            display: flex;
+            min-height: 100vh; /* Full-screen height */
+            align-items: center;
+            justify-content: center;
+            background-image: url("{{ asset('asset/img/background2.jpg') }}"); /* Replace with the actual image path */
+            /* Ensure the image covers the entire screen */
+            background-size: cover;
+            /* Position the background at the center */
+            background-position: center;
+            /* Prevent the background from repeating */
+            background-repeat: no-repeat;
+            /* Make sure the background image stays fixed on scroll */
+            background-attachment: fixed;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+    <div class="wrapp">
+        <div class="form-container sign-in">
+            <form method="post">
+{#                <div class="text-center"><i class="fas fa-user-circle fs-1" ></i></div>#}
+                <div class="text-center">
+                    <img src="{{ asset('asset/img/logo.jpg') }}" alt="image profile" class="avatar-img"/>
+                </div>
+
+                <h2>Login</h2>
+
+                {% if error %}
+                    <div class="alertModal alert-danger"><i class="mdi mdi-information-outline mr-2"></i>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+
+                <div class="form-group">
+                    <input type="text" name="username" value="{{ last_username }}" id="inputUsername" autocomplete="username" required>
+                    <i class="fas fa-user"></i>
+                    <label for="inputUsername">Username</label>
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" id="inputPassword" autocomplete="current-password" required>
+                    <i class="fas fa-lock"></i>
+                    <i class="fas fa-eye-slash" id="togglePassword" style="cursor: pointer"></i>
+                    <label for="inputPassword">Password</label>
+                </div>
+                <div class="forgot-pass">
+                    <a href="#" class="text-decoration-underline">Forgot password ?</a>
+                </div>
+                <div class="checkbox mb-3">
+                    <label class="text-dark">
+                        <input type="checkbox" name="_remember_me"> Remember me
+                    </label>
+                </div>
+                <input type="hidden" name="_csrf_token"
+                        value="{{ csrf_token('authenticate') }}"
+                >
+                <button type="submit" class="btn_submit">
+                    <span class="span_Sing_in">
+                        <span class="label_Sing_in">Sign In</span>
+                    </span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const passwordInput = document.getElementById('inputPassword');
+            const isPassword = passwordInput.type === 'password';
+
+            // Toggle the input type between password and text
+            passwordInput.type = isPassword ? 'text' : 'password';
+
+            // Toggle the icon class between fa-eye and fa-eye-slash
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+
+    </script>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    {# <form method="post">
+        {% if error %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        {% if app.user %}
+            <div class="mb-3">
+                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+            </div>
+        {% endif %}
+
+        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        <label for="inputUsername">Username</label>
+        <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" autocomplete="username" required autofocus>
+        <label for="inputPassword">Password</label>
+        <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+
+        <input type="hidden" name="_csrf_token"
+            value="{{ csrf_token('authenticate') }}"
+        >
+
+        <div class="checkbox mb-3">
+            <label>
+                <input type="checkbox" name="_remember_me"> Remember me
+            </label>
+        </div>
+
+        <button class="btn btn-lg btn-primary" type="submit">
+            Sign in
+        </button>
+    </form> #}
+

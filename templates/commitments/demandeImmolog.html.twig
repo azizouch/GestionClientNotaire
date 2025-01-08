@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PDF Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        strong{
+            font-family: "Times New Roman";
+            font-size:20px;
+        }
+        .date {
+            font-family: "Times New Roman";
+            text-align: right;
+            margin-top: 10px;
+            padding-right: 40px;
+        }
+        .signature{
+            font-size: 17px;
+            font-family: "Times New Roman";
+            text-align: center;
+            margin-left: 200px;
+            margin-top: 40px;
+        }
+        .info {
+            margin-bottom: 20px;
+        }
+        .uppercase{
+            text-transform: uppercase;
+            font-size: 18px;
+        }
+        .pied {
+            position: absolute;
+            bottom: 0;
+            text-align: center;
+            border-top: 1px solid #6c6363;
+            width: 100%;
+        }
+        .buttom{
+            color: #0059ff;
+            font-family: "Times New Roman";
+            font-weight: bold;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #6c6363;
+            margin-bottom: 10px;
+        }
+        .logo {
+            width: 130px;
+            height: auto;
+        }
+        .Left.logo{
+            position: absolute;
+            left: 0;top: 0
+        }
+        .Right.logo{
+            position: absolute;
+            right: 0;top: 0
+        }
+        .title {
+            color:#0059ff;
+            font-size: 27px;
+            text-align: center;
+            flex-grow: 1;
+            margin-top: 40px;
+
+
+        }
+        .content{
+            line-height: 1.5;
+            padding-left: 40px;
+            padding-right: 40px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="header">
+    <div><img src="data:image/jpeg;base64,{{ logo_data }}" class="Left logo" alt="Left Logo"></div>
+    <div><h1 class="title">MAITRE KAMAL BOUTASKIOUINE <br>NOTAIRE </h1></div>
+    <div><img src="data:image/jpeg;base64,{{ logo_data }}" class="Right logo" alt="Right Logo"></div>
+</div>
+<div class="info">
+    <h3 class="date">Marrakech le <strong>{{ today|date('d/m/Y') }}</strong></h3>
+    <div style="text-align: center;">
+        <p>
+            <span style="font-weight: bold;font-size: 22px; font-style: italic;">
+                Demande de paiement du montant de la TVA <br>afférente au logement social
+            </span><br>
+            <span style="font-family: 'Tahoma'; font-size: 17px">
+                (Article 93-I du code général des impôts)
+            </span>
+        </p>
+    </div>
+
+    <p class="content">Je soussigné, Maître
+        <span class="uppercase">BOUTASKIOUINE KAMAL</span>  Notaire à <span class="uppercase">Marrakech</span> Adresse ANGLE RUE LIENTENANT LAMURE ET ROUTE TARGA RES TISSIR 3émé étage NR 18 Marrakech, ayant l’identifiant fiscal N°
+        <strong class="uppercase">15177782</strong>, agissant pour le compte de
+        <strong class="uppercase">MONSIEUR {{ client.firstName }} {{ client.lastName }} </strong>CIN
+        <strong class="uppercase">N°{{ client.cin }}</strong> demeurant à
+        <strong class="uppercase">{{ client.address }}</strong>.<br>
+        - demande le paiement du montant de somme
+        <strong class="uppercase">QUARANTE NEUF MILLE DEUX CENT SOIXANTE DOUZE DIRHAMS ET TRENTE SEPT CENTIMES (49 272.37 DHS)</strong>, de la TVA afférente au logement social sise à Marrakech, programme résidentiel
+        <strong class="uppercase">«ZOHOUR TARGA ILOT5, 6, 10 et 11 GH 04ILOT6</strong> N° du Bien «
+        <strong>ZTRA032A002</strong> » consistant en un appartement en copropriété, compose d’un salon,
+        <strong>3</strong> chambres,cuisine et salle de bain situé au
+        <strong>RDC</strong>, d’une superficie de
+        <strong class="uppercase">SOIXANTE DEUX</strong> Mètres Carrées
+        <strong>(62M²)</strong>, constituant la fraction divise numéro
+        <strong>15,2</strong> , immatriculée à la conservation foncière de Marrakech sous la dénomination de «
+        <strong class="uppercase">ZTRA032A002</strong>» objet du titre foncier N°
+        <strong class="uppercase">338876/04</strong>, réalisé par le promoteur immobilier  la société «
+        <strong class="uppercase">IMMOLOG</strong>» SARL.<br>
+        - déclare que l’acquéreur s’engage à affecter ledit logement à son habitation principale
+        pendant une durée de quatre (4) années à compter de la date de la conclusion du contrat
+        d’acquisition définitif.
+    </p>
+    <p class="signature">Signature :</p>
+</div>
+
+<div class="pied">
+    <p class="buttom">Angle rue lientenant lamure et route targa.Res. Tissir 3émè étage N°18-Marrakech</p>
+    <p class="buttom">Tél : 05 24 43 24 37. Email: me.kamelbts@gmail.com</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,242 @@
+{% extends '_base.html.twig' %}
+
+{% block title %}Liste clients{% endblock %}
+
+{% block body %}
+    <style>
+        .form-control{
+            border: 0.5px solid lightgrey;
+        }
+        .partner-row {
+            display: flex;
+            justify-content: flex-start; /* Align items to the start to minimize space */
+            gap: 10px;                  /* Use a smaller gap for spacing between items */
+            flex-wrap: wrap;            /* Allow fields to wrap if necessary */
+        }
+
+        .partner-row .mb-3 {
+            flex: 1;                     /* Allow the field to grow */
+            min-width: 150px;           /* Set a minimum width to avoid too small inputs */
+            margin-bottom: 0;           /* Remove margin-bottom to control spacing */
+        }
+
+        /* Optional: Adjust button margin if needed */
+        .partner-row .delete-partner {
+            align-self: center;         /* Center the delete button vertically */
+            margin-left: 10px;         /* Optional: Add a little space before the button */
+        }
+        .form-check-inline {
+            display: flex;
+            gap: 10px; /* Space between radio options */
+        }
+    </style>
+    <div class="container">
+        <div class="page-inner">
+            <div class="page-header">
+                <h3 class="fw-bold mb-3">Ajouter Client</h3>
+                <ul class="breadcrumbs mb-3">
+                    <li class="nav-home">
+                        <a href="{{ path('app_admin') }}">
+                            <i class="icon-home"></i>
+                        </a>
+                    </li>
+                    <li class="separator">
+                        <i class="icon-arrow-right"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">Clients</a>
+                    </li>
+                    <li class="separator">
+                        <i class="icon-arrow-right"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">Ajouter Client</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header text-center h2">
+                            Ajouter un nouveau client
+                        </div>
+                        <div class="container card-body">
+                            {{ form_start(form) }}
+                            <div class="row justify-content-center">
+                                <div class="d-flex justify-content-center align-items-center col-md-8">
+                                    <div class="col-md-1">
+                                        <label class="form-label mb-3">Civilité</label>
+                                    </div>
+                                    <div class="col-md-11">
+                                        {{ form_row(form.civilite) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form_row(form.first_name) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.last_name) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form_row(form.prenom_pere) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.prenom_mere) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form_row(form.cin) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.birth_place) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form_row(form.expiration_cin) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.birth_date) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form_row(form.genre) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.situation) }}
+                                </div>
+                            </div>
+                            <div class="row partner" style="display:none">
+                                <div class="col-md-12">
+                                    {{ form_row(form.partenaire) }}
+                                    <button class="btn btn-dark mb-2" id="addpartner"><i class="fas fa-plus-circle"></i> Ajouter partenaire</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form_row(form.nationality) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.city) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form_row(form.telephone) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.email) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    {{ form_row(form.address) }}
+                                </div>
+                            </div>
+                            <div class="row d-none">
+                                <div class="col-md-12">
+                                    {{ form_row(form.roles) }}
+                                </div>
+                            </div>
+                            <button class="btn btn-success">Ajouter</button>
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const situationSelect = document.getElementById('personne_physique_form_situation');
+            const partnerFormContainer = document.querySelector('.partner');
+            const addPartnerButton = document.getElementById('addpartner');
+            const partnerContainer = document.getElementById('personne_physique_form_partenaire');
+            let partnerIndex = 1;
+
+            // Function to renumber partners
+            function renumberPartners() {
+                const partnerForms = partnerContainer.querySelectorAll('fieldset');
+                partnerForms.forEach((fieldset, index) => {
+                    const legend = fieldset.querySelector('legend');
+                    if (legend) {
+                        legend.textContent = `Partenaire ${index + 1}`;
+                    }
+                });
+            }
+            // Function to add a new partner form
+            function addPartnerForm() {
+                const prototype = partnerContainer.getAttribute('data-prototype');
+
+                // Create a new outer div for the partner form
+                const newPartner = document.createElement('div');
+
+                // Set the inner HTML from the prototype
+                newPartner.innerHTML = prototype;
+
+                // Find the div that wraps the fields and add the class 'partner-row'
+                const fieldsContainer = newPartner.querySelector('div'); // This should target the div containing the fields
+                fieldsContainer.classList.add('partner-row'); // Add the partner-row class here
+
+                // Append the new partner form to the container
+                partnerContainer.appendChild(newPartner);
+                newPartner.querySelector('fieldset').classList.remove('mb-3');
+
+                // Set the legend text to "Partenaire X"
+                const legend = newPartner.querySelector('legend');
+                if (legend) {
+                    legend.textContent = `Partenaire ${partnerIndex}`;
+                }
+
+                // Increment the index for the next partner
+                partnerIndex++;
+
+                // Create and append the "Delete" button
+                const deleteButton = document.createElement('button');
+                deleteButton.type = 'button';
+                deleteButton.className = 'btn btn-danger delete-partner mt-3';
+                deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
+                deleteButton.addEventListener('click', function() {
+                    newPartner.remove();
+                    // Renumber partners after deletion
+                    renumberPartners();
+                });
+
+                // Append the delete button to the new partner form
+                newPartner.querySelector('div').appendChild(deleteButton);
+
+                // Renumber partners after addition
+                renumberPartners();
+            }
+
+            // Show partner form and add a new partner when "Marié" is selected
+            situationSelect.addEventListener('change', function() {
+                if (situationSelect.value === 'Marié') {
+                    partnerFormContainer.style.display = 'block';
+                    if (partnerContainer.children.length === 0) {
+                        addPartnerForm();
+                    }
+                } else {
+                    partnerFormContainer.style.display = 'none';
+                    // Clear all partners if hiding
+                    partnerContainer.innerHTML = '';
+                    partnerIndex = 1;
+                }
+            });
+
+            // Manually add partner when "Ajouter partenaire" button is clicked
+            addPartnerButton.addEventListener('click', function(event) {
+                event.preventDefault();
+                addPartnerForm();
+            });
+        });
+    </script>
+
+{% endblock %}

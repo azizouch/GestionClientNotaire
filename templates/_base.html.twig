@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Kaiadmin | Dashboard{% endblock %}</title>
+
+        <link rel="icon" href="{{ asset('asset/img/kaiadmin/favicon.ico') }}" type="image/x-icon"/>
+        <link rel="stylesheet" href="{{ asset('asset/css/bootstrap.min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('asset/css/plugins.min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('asset/css/admin.min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('asset/css/demo.css') }}" />
+
+        <script src="{{ asset('asset/js/plugin/webfont/webfont.min.js') }}"></script>
+        <script>
+            WebFont.load({
+                google: { families: ["Public Sans:300,400,500,600,700"] },
+                custom: {
+                    families: [
+                        "Font Awesome 5 Solid",
+                        "Font Awesome 5 Regular",
+                        "Font Awesome 5 Brands",
+                        "simple-line-icons",
+                    ],
+                    urls: ["{{ asset('asset/css/fonts.min.css') }}"],
+                },
+                active: function () {
+                    sessionStorage.fonts = true;
+                },
+            });
+        </script>
+        <style>
+            /******** loader style********/
+            /* Fullscreen loader container */
+            #loader {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: #f0f0f0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 9999;
+            }
+            /*!* Spinner animation *!*/
+            .spinner {
+                width: 50px;
+                height: 50px;
+                border: 5px solid #ccc;
+                border-top: 5px solid #3498db;
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+            }
+            /*!* Keyframe animation for spinning *!*/
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+            /******** loader style********/
+
+            .lang-box .lang-center a .lang-img img {
+                width: 100%;
+                height: 100%;
+                border-radius: 5px;
+            }
+
+            .lang-box .lang-center a {
+                display: flex;
+                color: #4d585f;
+            }
+
+            .sidebar-content {
+                display: flex;
+                flex-direction: column; /* Arrange items in a column */
+                height: 100%; /* Ensure the sidebar takes full height */
+            }
+
+            .nav {
+                flex: 1; /* Allow the nav to grow and take remaining space */
+            }
+
+            .sidebar-info {
+                margin-top: auto;
+                margin-left: 30px;
+                display: flex;
+                align-items: center;
+            }
+
+            .sidebar-info .u-text{
+                padding: 0 10px;
+            }
+
+            .log_out i{
+                color: #b9babf;
+                cursor: pointer;
+                margin-left: 20px;
+                margin-top: 10px;
+            }
+
+            .log_out i:hover{
+                color: blue;
+            }
+
+            @media (max-width: 1023px) {
+                .drop_lang{
+                    width: 140px;
+                }
+            }
+
+            .sidebar_minimize .sidebar-info {
+                margin-left: 0;
+            }
+
+            .sidebar_minimize.sidebar_minimize_hover .sidebar-info {
+                margin-left: 30px;
+            }
+
+            /* chat style*/
+            .user-list {
+                max-height: 300px;
+                overflow-y: auto;
+                margin-bottom: 15px;
+            }
+
+            .user-message {
+                display: flex;
+                align-items: center;
+                padding: 10px;
+                cursor: pointer;
+            }
+
+            .user-message:hover {
+                background-color: #f1f1f1;
+            }
+
+            .user-profile {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                margin-right: 10px;
+            }
+
+            .user-details {
+                flex-grow: 1;
+            }
+
+            .last-message {
+                margin: 0;
+            }
+
+            .chat-box {
+                max-height: 300px;
+                overflow-y: auto;
+                margin-bottom: 15px;
+                background-color: #fff;
+                border-radius: 5px;
+                padding: 10px;
+                border: 1px solid #dee2e6;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .message {
+                padding: 8px;
+                margin-bottom: 10px;
+                border-radius: 5px;
+                max-width: 80%;
+            }
+
+            .sent {
+                background-color: #007bff;
+                color: white;
+                align-self: flex-end; /* Align to the right */
+                margin-left: auto; /* Align to the right */
+            }
+
+            .received {
+                background-color: #e9ecef;
+                color: black;
+                align-self: flex-start; /* Align to the left */
+                margin-right: auto; /* Align to the left */
+            }
+
+            /* Add flex properties to chat box for alignment */
+            .input-group {
+                position: relative;
+            }
+
+            .search-input {
+                width: auto;
+                margin-left: auto;
+            }
+
+        </style>
+
+    </head>
+    <body>
+        <div class="wrapper">
+            <!-- Sidebar -->
+            <div class="sidebar" data-background-color="dark">
+                <div class="sidebar-logo">
+                    <!-- Logo Header -->
+                    <div class="logo-header" data-background-color="dark">
+                        <a href="{{ path('app_admin') }}" class="logo">
+                            <img src="{{ asset('asset/img/kaiadmin/logo_light.svg') }}" alt="navbar brand" class="navbar-brand" height="20"
+                                 data-logo-light="{{ asset('asset/img/kaiadmin/logo_light.svg') }}"
+                                 data-logo-dark="{{ asset('asset/img/kaiadmin/logo_dark.svg') }}"
+                            />
+                        </a>
+                        <div class="nav-toggle">
+                            <button class="btn btn-toggle toggle-sidebar">
+                                <i class="gg-menu-right"></i>
+                            </button>
+                            <button class="btn btn-toggle sidenav-toggler">
+                                <i class="gg-menu-left"></i>
+                            </button>
+                        </div>
+                        <button class="topbar-toggler more">
+                            <i class="gg-more-vertical-alt"></i>
+                        </button>
+                    </div>
+                    <!-- End Logo Header -->
+                </div>
+                <div class="sidebar-wrapper scrollbar scrollbar-inner">
+                    <div class="sidebar-content">
+                        <ul class="nav nav-secondary">
+                            <li class="nav-item active text-center">
+                                <a href="{{ path('app_admin') }}" class="collapsed" aria-expanded="false">
+                                    <i class="fas fa-home"></i>
+                                    <p>Dashboard</p>
+                                </a>
+                            </li>
+                            <li class="nav-section">
+                                <span class="sidebar-mini-icon">
+                                  <i class="fa fa-ellipsis-h"></i>
+                                </span>
+                                <h4 class="text-section">Components</h4>
+                            </li>
+                            <li class="nav-item">
+                                <a data-bs-toggle="collapse" href="#base">
+                                    <i class="fas fa-users"></i>
+                                    <p>Clients</p>
+                                    <span class="caret"></span>
+                                </a>
+                                <div class="collapse" id="base">
+                                    <ul class="nav nav-collapse ml-5">
+                                        <li>
+                                            <a href="{{ path('app_add_client') }}">
+                                                <span class="sub-item">Nouveau client</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_clients') }}">
+                                                <span class="sub-item">Liste clients</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a data-bs-toggle="collapse" href="#sidebarLayouts">
+                                    <i class="fas fa-handshake"></i>
+                                    <p>Compromis</p>
+                                    <span class="caret"></span>
+                                </a>
+                                <div class="collapse" id="sidebarLayouts">
+                                    <ul class="nav nav-collapse">
+                                        <li>
+                                            <a href="{{ path('app_add_new_compromis') }}">
+                                                <span class="sub-item">Nouveau compromis</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_compromis') }}">
+                                                <span class="sub-item">Liste Compromis</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a data-bs-toggle="collapse" href="#forms">
+                                    <i class="fas fa-file-signature"></i>
+                                    <p>Ventes</p>
+                                    <span class="caret"></span>
+                                </a>
+                                <div class="collapse" id="forms">
+                                    <ul class="nav nav-collapse">
+                                        <li>
+                                            <a href="forms/forms.html">
+                                                <span class="sub-item">Nouveau vente</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_ventes') }}">
+                                                <span class="sub-item">Liste ventes</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a data-bs-toggle="collapse" href="#tables">
+                                    <i class="fas fa-hand-paper"></i>
+                                    <p>Desistements</p>
+                                    <span class="caret"></span>
+                                </a>
+                                <div class="collapse" id="tables">
+                                    <ul class="nav nav-collapse">
+                                        <li>
+                                            <a href="tables/tables.html">
+                                                <span class="sub-item">Nouveau desistement</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_desistements') }}">
+                                                <span class="sub-item">Liste desistements</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a data-bs-toggle="collapse" href="#maps">
+                                    <i class="fas fa-user-tie"></i>
+                                    <p>Procurations</p>
+                                    <span class="caret"></span>
+                                </a>
+                                <div class="collapse" id="maps">
+                                    <ul class="nav nav-collapse">
+                                        <li>
+                                            <a href="{{ path('app_add_new_procuration') }}">
+                                                <span class="sub-item">Nouveau procuration</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_procurations') }}">
+                                                <span class="sub-item">Liste procurations</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a data-bs-toggle="collapse" href="#engagement">
+                                    <i class="fas fa-file-contract"></i>
+                                    <p>Engagements</p>
+                                    <span class="caret"></span>
+                                </a>
+                                <div class="collapse" id="engagement">
+                                    <ul class="nav nav-collapse">
+                                        <li>
+                                            <a href="#">
+                                                <span class="sub-item">Banque</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <span class="sub-item">TVA</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a data-bs-toggle="collapse" href="#attestation">
+                                    <i class="fas fa-file-alt"></i>
+                                    <p>Attestations</p>
+                                    <span class="caret"></span>
+                                </a>
+                                <div class="collapse" id="attestation">
+                                    <ul class="nav nav-collapse">
+                                        <li>
+                                            <a href="#">
+                                                <span class="sub-item">Example 1</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <span class="sub-item">Exemple 2</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="sidebar-info">
+                            <div class="avatar-lg">
+                                <img src="/asset/img/profile.jpg" alt="image profile" class="avatar-img rounded">
+                            </div>
+                            <div class="u-text">
+                                <h6 class="m-0 mb-1">Mouaad Gouri</h6>
+                                <a href="profile.html" class="btn btn-xs btn-secondary btn-sm">
+                                    View Profile
+                                </a>
+                            </div>
+                            <div class="log_out ml-4">
+                                <i class="fas fa-power-off fa-lg" data-bs-toggle="modal" data-bs-target="#logoutModal"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Sidebar -->
+
+            <div class="main-panel">
+                <div class="main-header">
+                    <div class="main-header-logo">
+                        <!-- Logo Header -->
+                        <div class="logo-header" data-background-color="dark">
+                            <a href="index.html" class="logo">
+                                <img src="{{ asset('asset/img/kaiadmin/logo_light.svg') }}" alt="navbar brand" class="navbar-brand" height="20"/>
+                            </a>
+                            <div class="nav-toggle">
+                                <button class="btn btn-toggle toggle-sidebar">
+                                    <i class="gg-menu-right"></i>
+                                </button>
+                                <button class="btn btn-toggle sidenav-toggler">
+                                    <i class="gg-menu-left"></i>
+                                </button>
+                            </div>
+                            <button class="topbar-toggler more">
+                                <i class="gg-more-vertical-alt"></i>
+                            </button>
+                        </div>
+                        <!-- End Logo Header -->
+                    </div>
+                    <!-- Navbar Header -->
+                    <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
+                        <div class="container-fluid">
+                            <nav class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <button type="submit" class="btn btn-search pe-1">
+                                            <i class="fa fa-search search-icon"></i>
+                                        </button>
+                                    </div>
+                                    <input type="text" placeholder="Recherche un client ..." class="form-control"/>
+                                </div>
+                            </nav>
+
+                            <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+                                <li class="nav-item topbar-icon dropdown hidden-caret d-flex d-lg-none">
+                                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" aria-haspopup="true">
+                                        <i class="fa fa-search"></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-search animated fadeIn">
+                                        <form class="navbar-left navbar-form nav-search">
+                                            <div class="input-group">
+                                                <input type="text" placeholder="Search ..." class="form-control"/>
+                                            </div>
+                                        </form>
+                                    </ul>
+                                </li>
+                                <li class="nav-item topbar-icon dropdown hidden-caret">
+                                    <a class="nav-link " href="{{ path('app_chats') }}">
+                                        <i class="fa fa-comment"></i>
+                                    </a>
+                                </li>
+                                <li class="nav-item topbar-icon dropdown hidden-caret">
+                                    <a class="nav-link dropdown-toggle" href="#" id="messageDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa fa-envelope"></i>
+                                    </a>
+                                    <ul class="dropdown-menu messages-notif-box animated fadeIn" aria-labelledby="messageDropdown">
+                                        <li>
+                                            <div class="dropdown-title d-flex justify-content-between align-items-center">
+                                                Messages
+                                                <a href="#" class="small">Mark all as read</a>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="message-notif-scroll scrollbar-outer">
+                                                <div class="notif-center">
+                                                    <a href="#">
+                                                        <div class="notif-img">
+                                                            <img src="{{ asset('asset/img/jm_denis.jpg') }}" alt="Img Profile"/>
+                                                        </div>
+                                                        <div class="notif-content">
+                                                            <span class="subject">Jimmy Denis</span>
+                                                            <span class="block"> How are you ? </span>
+                                                            <span class="time">5 minutes ago</span>
+                                                        </div>
+                                                    </a>
+                                                    <a href="#">
+                                                        <div class="notif-img">
+                                                            <img src="{{ asset('asset/img/chadengle.jpg') }}" alt="Img Profile"/>
+                                                        </div>
+                                                        <div class="notif-content">
+                                                            <span class="subject">Chad</span>
+                                                            <span class="block"> Ok, Thanks ! </span>
+                                                            <span class="time">12 minutes ago</span>
+                                                        </div>
+                                                    </a>
+                                                    <a href="#">
+                                                        <div class="notif-img">
+                                                            <img src="{{ asset('asset/img/mlane.jpg') }}" alt="Img Profile"/>
+                                                        </div>
+                                                        <div class="notif-content">
+                                                            <span class="subject">Jhon Doe</span>
+                                                            <span class="block">
+                                                                Ready for the meeting today...
+                                                            </span>
+                                                            <span class="time">12 minutes ago</span>
+                                                        </div>
+                                                    </a>
+                                                    <a href="#">
+                                                        <div class="notif-img">
+                                                            <img src="{{ asset('asset/img/talha.jpg') }}" alt="Img Profile"/>
+                                                        </div>
+                                                        <div class="notif-content">
+                                                            <span class="subject">Talha</span>
+                                                            <span class="block"> Hi, Apa Kabar ? </span>
+                                                            <span class="time">17 minutes ago</span>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <a class="see-all" href="{{ path('app_chats') }}">
+                                                See all messages
+                                                <i class="fa fa-angle-right"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item topbar-icon dropdown hidden-caret">
+                                    <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa fa-bell"></i>
+                                        <span class="notification">4</span>
+                                    </a>
+                                    <ul class="dropdown-menu notif-box animated fadeIn" aria-labelledby="notifDropdown">
+                                        <li>
+                                            <div class="dropdown-title">
+                                                You have 4 new notification
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="notif-scroll scrollbar-outer">
+                                                <div class="notif-center">
+                                                    <a href="#">
+                                                        <div class="notif-icon notif-primary">
+                                                            <i class="fa fa-user-plus"></i>
+                                                        </div>
+                                                        <div class="notif-content">
+                                                            <span class="block"> New user registered </span>
+                                                            <span class="time">5 minutes ago</span>
+                                                        </div>
+                                                    </a>
+                                                    <a href="#">
+                                                        <div class="notif-icon notif-success">
+                                                            <i class="fa fa-comment"></i>
+                                                        </div>
+                                                        <div class="notif-content">
+                                                            <span class="block">
+                                                                Rahmad commented on Admin
+                                                            </span>
+                                                            <span class="time">12 minutes ago</span>
+                                                        </div>
+                                                    </a>
+                                                    <a href="#">
+                                                        <div class="notif-img">
+                                                            <img src="{{ asset('asset/img/profile2.jpg') }}" alt="Img Profile"/>
+                                                        </div>
+                                                        <div class="notif-content">
+                                                            <span class="block">
+                                                                Reza send messages to you
+                                                            </span>
+                                                            <span class="time">12 minutes ago</span>
+                                                        </div>
+                                                    </a>
+                                                    <a href="#">
+                                                        <div class="notif-icon notif-danger">
+                                                            <i class="fa fa-heart"></i>
+                                                        </div>
+                                                        <div class="notif-content">
+                                                            <span class="block"> Farrah liked Admin </span>
+                                                            <span class="time">17 minutes ago</span>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <a class="see-all" href="javascript:void(0);">
+                                                See all notifications
+                                                <i class="fa fa-angle-right"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item topbar-icon dropdown hidden-caret">
+                                    <div class="dropdown">
+                                        <button class="btn  btn-light text-dark dropdown-toggle btn_lang" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: .5rem .5rem;">
+                                            <span id="lang_label">Francais</span>
+                                            <span style="display: inline-block; margin-left: 0.255em; vertical-align: 0.255em; border-top: 0.3em solid; border-right: 0.3em solid transparent; border-bottom: 0; border-left: 0.3em solid transparent;"></span>
+                                        </button>
+                                        <div class="dropdown-menu drop_lang" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="#" data-lang="العربية">العربية</a>
+                                            <a class="dropdown-item" href="#" data-lang="Francais">Francais</a>
+                                            <a class="dropdown-item" href="#" data-lang="Anglais">Anglais</a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="nav-item topbar-user dropdown hidden-caret">
+                                    <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
+                                        <div class="avatar-sm">
+                                            <img src="{{ asset('asset/img/profile.jpg') }}" alt="..." class="avatar-img rounded-circle"/>
+                                        </div>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-user animated fadeIn">
+                                        <div class="dropdown-user-scroll scrollbar-outer">
+                                            <li>
+                                                <div class="user-box">
+                                                    <div class="avatar-lg">
+                                                        <img src="{{ asset('asset/img/profile.jpg') }}" alt="image profile" class="avatar-img rounded"/>
+                                                    </div>
+                                                    <div class="u-text">
+                                                        <h4>Mouaad Gouri</h4>
+                                                        <p class="text-muted">hello@example.com</p>
+                                                        <a href="profile.html" class="btn btn-xs btn-secondary btn-sm">
+                                                            View Profile
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item" href="#">My Profile</a>
+                                                <a class="dropdown-item" href="#">My Balance</a>
+                                                <a class="dropdown-item" href="#">Inbox</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item" href="#">Account Setting</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">Logout</a>
+                                            </li>
+                                        </div>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                    <!-- End Navbar -->
+                </div>
+
+                {#<a class="nav-link " href="#" role="button" id="openModalBtn">#}
+                {#    <i class="fa fa-comment"></i>#}
+                {#</a>#}
+                <!-- modal chat -->
+                <div class="modal" id="chatModal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 id="modalUserName" class="modal-title">Messages</h5>
+                                <input type="text" class="form-control search-input" placeholder="Search..." id="searchInput">
+                                <button type="button" class="close" id="closeModalBtn" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="userList" class="user-list">
+                                    <div class="user-message" data-username="Alice">
+                                        <img src="https://via.placeholder.com/40" alt="Profile" class="user-profile">
+                                        <div class="user-details">
+                                            <strong>Alice</strong>
+                                            <p class="last-message">Hey! How's it going?</p>
+                                            <small class="last-seen">Last seen: 5 mins ago</small>
+                                        </div>
+                                    </div>
+                                    <div class="user-message" data-username="Bob">
+                                        <img src="https://via.placeholder.com/40" alt="Profile" class="user-profile">
+                                        <div class="user-details">
+                                            <strong>Bob</strong>
+                                            <p class="last-message">Are we still on for tomorrow?</p>
+                                            <small class="last-seen">Last seen: 10 mins ago</small>
+                                        </div>
+                                    </div>
+                                    <!-- Add more users as needed -->
+                                </div>
+
+                                <div class="chat-box d-none">
+                                    <div class="messages"></div>
+                                    <div class="input-group mt-3">
+                                        <input type="text" class="form-control" placeholder="Type a message..." aria-label="Message" id="chatInput">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" id="sendMessageBtn">Send</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- modal logout -->
+                <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="logoutModalLabel">Ready to Leave?</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <a href="{{ path('app_logout') }}" class="btn btn-primary">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container">
+                    <!-- Loader -->
+                    <div id="loader">
+                        <div class="spinner"></div>
+                    </div>
+                    {% block body %}{% endblock %}
+                </div>
+
+                <footer class="footer">
+                    <div class="container-fluid d-flex justify-content-center">
+                        <div class="copyright">
+                            Admin Dashboard
+                        </div>
+                    </div>
+                </footer>
+
+            </div>
+
+            <!-- Custom template | don't include it in your project! -->
+            <div class="custom-template">
+                <div class="title">Settings</div>
+                <div class="custom-content">
+                    <div class="switcher">
+                        <div class="switch-block">
+                            <h4>Logo Header</h4>
+                            <div class="btnSwitch">
+                                <button
+                                        type="button"
+                                        class="selected changeLogoHeaderColor"
+                                        data-color="dark"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="changeLogoHeaderColor"
+                                        data-color="blue"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="changeLogoHeaderColor"
+                                        data-color="purple"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="changeLogoHeaderColor"
+                                        data-color="light-blue"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="changeLogoHeaderColor"
+                                        data-color="green"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="changeLogoHeaderColor"
+                                        data-color="orange"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="changeLogoHeaderColor"
+                                        data-color="red"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="changeLogoHeaderColor"
+                                        data-color="white"
+                                ></button>
+                                <br />
+                                <button
+                                        type="button"
+                                        class="changeLogoHeaderColor"
+                                        data-color="dark2"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="changeLogoHeaderColor"
+                                        data-color="blue2"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="changeLogoHeaderColor"
+                                        data-color="purple2"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="changeLogoHeaderColor"
+                                        data-color="light-blue2"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="changeLogoHeaderColor"
+                                        data-color="green2"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="changeLogoHeaderColor"
+                                        data-color="orange2"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="changeLogoHeaderColor"
+                                        data-color="red2"
+                                ></button>
+                            </div>
+                        </div>
+                        <div class="switch-block">
+                            <h4>Navbar Header</h4>
+                            <div class="btnSwitch">
+                                <button
+                                        type="button"
+                                        class="changeTopBarColor"
+                                        data-color="dark"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="changeTopBarColor"
+                                        data-color="blue"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="changeTopBarColor"
+                                        data-color="purple"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="changeTopBarColor"
+                                        data-color="light-blue"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="changeTopBarColor"
+                                        data-color="green"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="changeTopBarColor"
+                                        data-color="orange"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="changeTopBarColor"
+                                        data-color="red"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="selected changeTopBarColor"
+                                        data-color="white"
+                                ></button>
+                                <br />
+                                <button
+                                        type="button"
+                                        class="changeTopBarColor"
+                                        data-color="dark2"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="changeTopBarColor"
+                                        data-color="blue2"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="changeTopBarColor"
+                                        data-color="purple2"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="changeTopBarColor"
+                                        data-color="light-blue2"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="changeTopBarColor"
+                                        data-color="green2"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="changeTopBarColor"
+                                        data-color="orange2"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="changeTopBarColor"
+                                        data-color="red2"
+                                ></button>
+                            </div>
+                        </div>
+                        <div class="switch-block">
+                            <h4>Sidebar</h4>
+                            <div class="btnSwitch">
+                                <button
+                                        type="button"
+                                        class="changeSideBarColor"
+                                        data-color="white"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="selected changeSideBarColor"
+                                        data-color="dark"
+                                ></button>
+                                <button
+                                        type="button"
+                                        class="changeSideBarColor"
+                                        data-color="dark2"
+                                ></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="custom-toggle">
+                    <i class="icon-settings"></i>
+                </div>
+            </div>
+            <!-- End Custom template -->
+        </div>
+
+        <script src="{{asset('asset/js/core/jquery-3.7.1.min.js')}}"></script>
+        <script src="{{ asset('asset/js/core/popper.min.js') }}"></script>
+        <script src="{{ asset('asset/js/core/bootstrap.min.js') }}"></script>
+        <!-- jQuery Scrollbar -->
+        <script src="{{ asset('asset/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
+        <!-- Chart JS -->
+        <script src="{{ asset('asset/js/plugin/chart.js/chart.min.js') }}"></script>
+        <!-- jQuery Sparkline -->
+        <script src="{{ asset('asset/js/plugin/jquery.sparkline/jquery.sparkline.min.js') }}"></script>
+        <!-- Chart Circle -->
+        <script src="{{ asset('asset/js/plugin/chart-circle/circles.min.js') }}"></script>
+        <!-- Datatables -->
+        <script src="{{ asset('asset/js/plugin/datatables/datatables.min.js') }}"></script>
+        <!-- Bootstrap Notify -->
+        <script src="{{ asset('asset/js/plugin/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
+        <!-- jQuery Vector Maps -->
+        <script src="{{ asset('asset/js/plugin/jsvectormap/jsvectormap.min.js') }}"></script>
+        <script src="{{ asset('asset/js/plugin/jsvectormap/world.js') }}"></script>
+        <!-- Sweet Alert -->
+        <script src="{{ asset('asset/js/plugin/sweetalert/sweetalert.min.js') }}"></script>
+        <!-- Kaiadmin JS -->
+        <script src="{{ asset('asset/js/kaiadmin.min.js') }}"></script>
+        <!-- Kaiadmin DEMO methods, don't include it in your project! -->
+        <script src="{{ asset('asset/js/setting-demoo.js') }}"></script>
+        <script src="{{ asset('asset/js/demo.js') }}"></script>
+        <script>
+            //chat js
+            $(document).ready(function () {
+                // Show the modal when the button is clicked
+                $('#openModalBtn').on('click', function () {
+                    $('#chatModal').modal('show');
+                });
+
+                // Close the modal when the close button is clicked
+                $('#closeModalBtn').on('click', function () {
+                    $('#chatModal').modal('hide');
+                });
+
+                // Handle user selection
+                $('.user-message').on('click', function () {
+                    const username = $(this).data('username');
+                    $('#modalUserName').text(username);
+                    $('.user-list').hide();
+                    $('.chat-box').removeClass('d-none');
+
+                    // Example messages for the selected user
+                    $('.messages').html(`
+                        <div class="message received">Hi! How can I help you?</div>
+                        <div class="message sent">Hello!</div>
+                        <div class="message received">What are you looking for?</div>
+                    `);
+                });
+
+                // Handle sending messages
+                $('#sendMessageBtn').on('click', function () {
+                    const input = $('#chatInput');
+                    const message = input.val().trim();
+                    if (message) {
+                        const messageElement = $('<div class="message sent"></div>').text(message);
+                        $('.messages').append(messageElement);
+                        input.val(''); // Clear the input
+                        $('.chat-box').scrollTop($('.chat-box')[0].scrollHeight); // Scroll to the bottom
+                    }
+                });
+
+                // Optionally, you can handle pressing Enter to send a message
+                $('#chatInput').on('keypress', function (event) {
+                    if (event.key === 'Enter') {
+                        $('#sendMessageBtn').click();
+                    }
+                });
+            });
+            // end chat js
+
+            // Wait for the page to fully load
+            window.addEventListener('load', () => {
+                const loader = document.getElementById('loader');
+                // After 2 seconds, hide the loader and show the content
+                setTimeout(() => {
+                    loader.style.display = 'none';   // Hide the loader
+                }, 20);
+            });
+
+            // Select the dropdown menu and button elements
+            const dropdownMenu = document.querySelector('#dropdownMenuButton + .dropdown-menu');
+            const langLabel = document.querySelector('#lang_label');
+
+            // Add a click event listener to the dropdown menu for languages
+            dropdownMenu.addEventListener('click', function (event) {
+                // Check if a dropdown item was clicked
+                if (event.target.classList.contains('dropdown-item')) {
+                    event.preventDefault(); // Prevent default link behavior
+                    const selectedLang = event.target.getAttribute('data-lang'); // Get the selected language
+                    langLabel.textContent = selectedLang; // Update the lang_label span text
+                }
+            });
+
+            $("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {
+                type: "line",
+                height: "70",
+                width: "100%",
+                lineWidth: "2",
+                lineColor: "#177dff",
+                fillColor: "rgba(23, 125, 255, 0.14)",
+            });
+
+            $("#lineChart2").sparkline([99, 125, 122, 105, 110, 124, 115], {
+                type: "line",
+                height: "70",
+                width: "100%",
+                lineWidth: "2",
+                lineColor: "#f3545d",
+                fillColor: "rgba(243, 84, 93, .14)",
+            });
+
+            $("#lineChart3").sparkline([105, 103, 123, 100, 95, 105, 115], {
+                type: "line",
+                height: "70",
+                width: "100%",
+                lineWidth: "2",
+                lineColor: "#ffa534",
+                fillColor: "rgba(255, 165, 52, .14)",
+            });
+        </script>
+    </body>
+</html>

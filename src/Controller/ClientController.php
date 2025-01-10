@@ -54,8 +54,8 @@ class ClientController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Manually persist each partner
-            dd($Personneph);
-            foreach ($Personneph->getPartners() as $partner) {
+//            dd($Personneph);
+            foreach ($Personneph->getPartenaire() as $partner) {
                 $entityManager->persist($partner);
             }
             $entityManager->persist($Personneph);

@@ -4,7 +4,6 @@
 
 {% block body %}
 
-    <link href="https://cdn.jsdelivr.net/npm/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet">
     <style>
         /* General Styles */
         .message-item:hover {
@@ -218,6 +217,15 @@
             border-left: 4px solid #ffc107; /* Yellow border for emphasis */
             padding-left: 8px; /* Adjust padding to match the border */
         }
+        #button_send{
+            display: none;
+        }
+        /* For screens smaller than 768px */
+        @media (max-width: 1023px) {
+            #button_send{
+                display: block;
+            }
+        }
 
 
     </style>
@@ -228,9 +236,9 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body pb-0">
-                            <div class="d-flex" style="height: 580px;">
+                            <div class="d-flex listmessage pb-3" style="height: 580px;">
                                 <!-- Messages List (Left) -->
-                                <div class="messages-list perfect-scrollbar ps ps--active-y" data-mdb-perfect-scrollbar-init data-mdb-perfect-scrollbar-initialized="true" style="position: relative; width: 30%; border-right: 1px solid #ccc; overflow: auto;padding-right: 21px">
+                                <div class="messages-list scrollbar scrollbar-inner"  style="position: relative; width: 30%; border-right: 1px solid #ccc; overflow: auto;padding-right: 21px">
                                     <!-- Chat List Header -->
                                     <div class="chat-list-header d-flex align-items-center p-3">
                                         <h5 class="mb-0 me-3">Chats</h5>
@@ -319,7 +327,7 @@
                                     </div>
 
                                     <!-- Chat Messages -->
-                                    <div id="chatMessages" class="chat-messages flex-grow-1 p-3 overflow-auto perfect-scrollbar ps ps--active-y" data-mdb-perfect-scrollbar-init id="chatMessages"  style="background-color: #f8f9fa;">
+                                    <div id="chatMessages" class="chat-messages flex-grow-1 p-3 overflow-auto scrollbar scrollbar-inner"  id="chatMessages"  style="background-color: #f8f9fa;">
                                         <!-- Example of Receiver's Message -->
 {#                                        <div class="chat-message received">#}
 {#                                            <span class="message-content">Hello! How are you?</span>#}
@@ -340,7 +348,7 @@
                                         <input type="text" id="messageInput" class="form-control border-0" placeholder="Type your message...">
                                         <!-- Attach Button with Dropdown -->
                                         <div class="dropdown me-2">
-                                            <button class="btn p-2 dropdown-toggle" type="button" id="attachDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <button class="btn p-2 dropdown-toggle bg-warning" type="button" style="border-radius: 15px" id="attachDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i class="fa fa-paperclip fa-fw fa-lg text-muted"></i>
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="attachDropdown">
@@ -370,6 +378,9 @@
                                                 </li>
                                             </ul>
                                         </div>
+                                        <button class="btn p-2 bg-success" type="button" style="border-radius: 15px;" id="button_send" onclick="sendMessage()">
+                                            <i class="fa fa-paper-plane fa-fw fa-lg text-muted"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -380,16 +391,7 @@
         </div>
     </div>
     <script src="{{asset('asset/js/core/jquery-3.7.1.min.js')}}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/perfect-scrollbar/dist/perfect-scrollbar.min.js"></script>
     <script>
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const messagesList = document.querySelector('.messages-list');
-            const messagesChat = document.querySelector('.chat-messages');
-            new PerfectScrollbar(messagesList);
-            new PerfectScrollbar(messagesChat);
-        });
-
 
         function selectFile(type) {
             const fileInput = document.createElement('input');
@@ -510,6 +512,17 @@
         }
 
         $(document).ready(function () {
+
+            var scrollbarlistmessage = $('.listmessage .scrollbar');
+            if (scrollbarlistmessage.length > 0) {
+                scrollbarlistmessage.scrollbar();
+            }
+
+            var scrollbarchatarea = $('.chat-area .scrollbar');
+            if (scrollbarchatarea.length > 0) {
+                scrollbarchatarea.scrollbar();
+            }
+
             // Header Search Toggle
 
             var $searchWrapper = $('.header-search-wrapper'),
@@ -537,14 +550,12 @@
             // Header Search Toggle
 
             // send message by clicking the enter keyboard
-            $(document).ready(function () {
-                // Listen for the Enter key on the message input
-                $('#messageInput').on('keypress', function (event) {
-                    if (event.which === 13) { // 13 is the Enter key
-                        event.preventDefault(); // Prevents the default action (like form submission)
-                        sendMessage(); // Call the send message function
-                    }
-                });
+            // Listen for the Enter key on the message input
+            $('#messageInput').on('keypress', function (event) {
+                if (event.which === 13) { // 13 is the Enter key
+                    event.preventDefault(); // Prevents the default action (like form submission)
+                    sendMessage(); // Call the send message function
+                }
             });
 
             // Listen for input on the search field

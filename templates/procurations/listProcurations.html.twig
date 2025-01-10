@@ -33,14 +33,6 @@
             font-family: 'Public Sans', sans-serif;
             -webkit-font-smoothing: antialiased;
         }
-        .table tbody td span{
-            background-color: rgba(72, 171, 247, .1);
-            border: #0dcaf0 2px solid ;
-            padding: 5px;
-            border-radius: 12px;
-            text-transform: uppercase;
-            color:#0dcaf0;
-        }
     </style>
 
     <div class="container">
@@ -109,7 +101,7 @@
                                                 {% for person in procuration.persons %}
                                                     {% for role in person.getRoles %}
                                                         {% if role.name == 'Mandant' %}
-                                                            <span> {{ person.FirstName }} {{ person.LastName }} </span> {# Replace 'name' with the property for the person's name #}
+                                                            <span class="badge bg-soft-dark text-dark ms-1 fw-bold text-uppercase" style="font-size: 12px"> {{ person.FirstName }} {{ person.LastName }} </span> {# Replace 'name' with the property for the person's name #}
                                                         {% endif %}
                                                     {% endfor %}
                                                 {% endfor %}
@@ -119,13 +111,13 @@
                                                 {% for person in procuration.persons %}
                                                     {% for role in person.getRoles %}
                                                         {% if role.name == 'Mandataire' %}
-                                                            <span> {{ person.FirstName }} {{ person.LastName }} </span>
+                                                            <span class="badge bg-soft-dark text-dark ms-1 fw-bold text-uppercase" style="font-size: 12px"> {{ person.FirstName }} {{ person.LastName }} </span>
                                                         {% endif %}
                                                     {% endfor %}
                                                 {% endfor %}
                                             </td>
                                             <td>
-                                                <span class="text-capitalize">active</span>
+                                                <span class="badge bg-soft-success text-success border-0" style="font-size: 11px">active</span>
                                             </td>
                                             <td>
                                                 <div class="dropdown">
@@ -152,8 +144,8 @@
         </div>
     </div>
 
-    <script src="{{ asset('js/core/jquery-3.7.1.min.js') }}"></script>
-    <script src="{{ asset('js/plugin/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('asset/js/core/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('asset/js/plugin/datatables/datatables.min.js') }}"></script>
     <script>
         $(document).ready(function () {
             $("#basic-datatables").DataTable({});

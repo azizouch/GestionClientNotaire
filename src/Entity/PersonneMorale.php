@@ -27,6 +27,12 @@ class PersonneMorale
     #[ORM\ManyToMany(targetEntity: Contrat::class, mappedBy: 'pmorale')]
     private Collection $contrats;
 
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
+
+    #[ORM\Column(length: 2000)]
+    private ?string $description = null;
+
     public function __construct()
     {
         $this->roles = new ArrayCollection();
@@ -88,6 +94,30 @@ class PersonneMorale
         if ($this->contrats->removeElement($contrat)) {
             $contrat->removePmorale($this);
         }
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): static
+    {
+        $this->description = $description;
 
         return $this;
     }

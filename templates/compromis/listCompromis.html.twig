@@ -33,14 +33,6 @@
             font-family: 'Public Sans', sans-serif;
             -webkit-font-smoothing: antialiased;
         }
-        .table tfoot th span{
-            background-color: rgba(72, 171, 247, .1);
-            border: #0dcaf0 2px solid ;
-            padding: 5px;
-            border-radius: 12px;
-            text-transform: uppercase;
-            color:#0dcaf0;
-        }
     </style>
     <div class="container">
         <div class="page-inner">
@@ -93,15 +85,23 @@
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <th>534/2024</th>
-                                            <th>299729,34</th>
-                                            <th><span>immolog</span></th>
-                                            <th><span>mahjouba lafissi</span></th>
-                                            <th><span>Statut</span></th>
+                                            <th>Repertoire</th>
+                                            <th>Montant de l'affaire</th>
+                                            <th>1ere partie(S)</th>
+                                            <th>2eme partie(S)</th>
+                                            <th>Statut</th>
                                             <th style="width: 10%">Action</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
+                                    <tr>
+                                        <th>534/2024</th>
+                                        <th>299729,34</th>
+                                        <th><span class="badge bg-soft-dark text-dark ms-1 fw-bold text-uppercase" style="font-size: 12px">immolog</span></th>
+                                        <th><span class="badge bg-soft-dark text-dark ms-1 fw-bold text-uppercase " style="font-size: 12px">mahjouba lafissi</span></th>
+                                        <th><span class="badge bg-soft-success text-success border-0" style="font-size: 11px">Statut</span></th>
+                                        <th style="width: 10%">Action</th>
+                                    </tr>
                                     {% for compromi in compromis %}
                                         <tr>
                                             <td>{{ compromi.id }}</td>
@@ -121,9 +121,8 @@
             </div>
         </div>
     </div>
-
-    <script src="{{ asset('js/core/jquery-3.7.1.min.js') }}"></script>
-    <script src="{{ asset('js/plugin/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('asset/js/core/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('asset/js/plugin/datatables/datatables.min.js') }}"></script>
     <script>
         $(document).ready(function () {
             $("#basic-datatables").DataTable({});

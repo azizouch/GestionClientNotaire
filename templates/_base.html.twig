@@ -192,6 +192,28 @@
                 margin-left: auto;
             }
 
+            .nav-item a.active {
+                color: white !important;
+                font-weight: bold;
+            }
+
+            .nav-item .collapse.show > .nav-collapse a.active {
+                color: #fff !important;
+                position: relative; /* Ensure the parent `<a>` acts as the positioning context */
+            }
+
+            .nav-item .collapse.show > .nav-collapse a.active .arrow {
+                position: absolute; /* Allow positioning relative to the `<a>` element */
+                top: 50%; /* Center the arrow vertically */
+                right: 32px; /* Keep the arrow 25px from the right border */
+                border: solid #6861ce; /* Arrow styling */
+                border-width: 0 3px 3px 0;
+                display: inline-block;
+                padding: 3px;
+                transform: translateY(-50%) rotate(-45deg); /* Center and rotate for the arrow effect */
+                -webkit-transform: translateY(-50%) rotate(-45deg); /* For older browsers */
+            }
+
         </style>
 
     </head>
@@ -238,105 +260,115 @@
                                 <h4 class="text-section">Components</h4>
                             </li>
                             <li class="nav-item">
-                                <a data-bs-toggle="collapse" href="#base">
+                                <a data-bs-toggle="collapse" href="#client">
                                     <i class="fas fa-users"></i>
                                     <p>Clients</p>
                                     <span class="caret"></span>
                                 </a>
-                                <div class="collapse" id="base">
+                                <div class="collapse" id="client">
                                     <ul class="nav nav-collapse ml-5">
                                         <li>
                                             <a href="{{ path('app_add_client') }}">
                                                 <span class="sub-item">Nouveau client</span>
+                                                <span class="arrow"></span>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="{{ path('app_clients') }}">
                                                 <span class="sub-item">Liste clients</span>
+                                                <span class="arrow"></span>
                                             </a>
                                         </li>
                                     </ul>
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a data-bs-toggle="collapse" href="#sidebarLayouts">
+                                <a data-bs-toggle="collapse" href="#compromis">
                                     <i class="fas fa-handshake"></i>
                                     <p>Compromis</p>
                                     <span class="caret"></span>
                                 </a>
-                                <div class="collapse" id="sidebarLayouts">
+                                <div class="collapse" id="compromis">
                                     <ul class="nav nav-collapse">
                                         <li>
                                             <a href="{{ path('app_add_new_compromis') }}">
                                                 <span class="sub-item">Nouveau compromis</span>
+                                                <span class="arrow"></span>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="{{ path('app_compromis') }}">
                                                 <span class="sub-item">Liste Compromis</span>
+                                                <span class="arrow"></span>
                                             </a>
                                         </li>
                                     </ul>
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a data-bs-toggle="collapse" href="#forms">
+                                <a data-bs-toggle="collapse" href="#vente">
                                     <i class="fas fa-file-signature"></i>
                                     <p>Ventes</p>
                                     <span class="caret"></span>
                                 </a>
-                                <div class="collapse" id="forms">
+                                <div class="collapse" id="vente">
                                     <ul class="nav nav-collapse">
                                         <li>
-                                            <a href="forms/forms.html">
+                                            <a href="#">
                                                 <span class="sub-item">Nouveau vente</span>
+                                                <span class="arrow"></span>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="{{ path('app_ventes') }}">
                                                 <span class="sub-item">Liste ventes</span>
+                                                <span class="arrow"></span>
                                             </a>
                                         </li>
                                     </ul>
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a data-bs-toggle="collapse" href="#tables">
+                                <a data-bs-toggle="collapse" href="#desistement">
                                     <i class="fas fa-hand-paper"></i>
                                     <p>Desistements</p>
                                     <span class="caret"></span>
                                 </a>
-                                <div class="collapse" id="tables">
+                                <div class="collapse" id="desistement">
                                     <ul class="nav nav-collapse">
                                         <li>
-                                            <a href="tables/tables.html">
+                                            <a href="#">
                                                 <span class="sub-item">Nouveau desistement</span>
+                                                <span class="arrow"></span>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="{{ path('app_desistements') }}">
                                                 <span class="sub-item">Liste desistements</span>
+                                                <span class="arrow"></span>
                                             </a>
                                         </li>
                                     </ul>
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a data-bs-toggle="collapse" href="#maps">
+                                <a data-bs-toggle="collapse" href="#procuration">
                                     <i class="fas fa-user-tie"></i>
                                     <p>Procurations</p>
                                     <span class="caret"></span>
                                 </a>
-                                <div class="collapse" id="maps">
+                                <div class="collapse" id="procuration">
                                     <ul class="nav nav-collapse">
                                         <li>
                                             <a href="{{ path('app_add_new_procuration') }}">
                                                 <span class="sub-item">Nouveau procuration</span>
+                                                <span class="arrow"></span>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="{{ path('app_procurations') }}">
                                                 <span class="sub-item">Liste procurations</span>
+                                                <span class="arrow"></span>
                                             </a>
                                         </li>
                                     </ul>
@@ -353,11 +385,13 @@
                                         <li>
                                             <a href="#">
                                                 <span class="sub-item">Banque</span>
+                                                <span class="arrow"></span>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="#">
                                                 <span class="sub-item">TVA</span>
+                                                <span class="arrow"></span>
                                             </a>
                                         </li>
                                     </ul>
@@ -950,6 +984,54 @@
         <script src="{{ asset('asset/js/setting-demoo.js') }}"></script>
         <script src="{{ asset('asset/js/demo.js') }}"></script>
         <script>
+
+            // Select the dropdown menu and button elements
+            const dropdownMenu = document.querySelector('#dropdownMenuButton + .dropdown-menu');
+            const langLabel = document.querySelector('#lang_label');
+
+            // Add a click event listener to the dropdown menu for languages
+            dropdownMenu.addEventListener('click', function (event) {
+                // Check if a dropdown item was clicked
+                if (event.target.classList.contains('dropdown-item')) {
+                    event.preventDefault(); // Prevent default link behavior
+                    const selectedLang = event.target.getAttribute('data-lang'); // Get the selected language
+                    langLabel.textContent = selectedLang; // Update the lang_label span text
+                }
+            });
+
+            document.addEventListener("DOMContentLoaded", function () {
+                const currentPath = window.location.pathname; // Get the current URL path
+                const navLinks = document.querySelectorAll(".nav-item .nav-collapse a"); // Target nested links
+
+                navLinks.forEach(link => {
+                    if (link.getAttribute("href") === currentPath) {
+                        // Add 'active' class to the link
+                        link.classList.add("active");
+
+                        // Ensure the parent submenu is expanded
+                        const parentSubmenu = link.closest(".collapse");
+                        if (parentSubmenu) {
+                            parentSubmenu.classList.add("show");
+
+                            // Add 'active' class to the parent <li>
+                            const parentNavItem = parentSubmenu.closest(".nav-item");
+                            if (parentNavItem) {
+                                parentNavItem.querySelector("a[data-bs-toggle]").classList.add("active");
+                            }
+                        }
+                    }
+                });
+            });
+
+            // Wait for the page to fully load
+            window.addEventListener('load', () => {
+                const loader = document.getElementById('loader');
+                // After 2 seconds, hide the loader and show the content
+                setTimeout(() => {
+                    loader.style.display = 'none';   // Hide the loader
+                }, 20);
+            });
+
             //chat js
             $(document).ready(function () {
                 // Show the modal when the button is clicked
@@ -995,31 +1077,9 @@
                         $('#sendMessageBtn').click();
                     }
                 });
+
             });
             // end chat js
-
-            // Wait for the page to fully load
-            window.addEventListener('load', () => {
-                const loader = document.getElementById('loader');
-                // After 2 seconds, hide the loader and show the content
-                setTimeout(() => {
-                    loader.style.display = 'none';   // Hide the loader
-                }, 20);
-            });
-
-            // Select the dropdown menu and button elements
-            const dropdownMenu = document.querySelector('#dropdownMenuButton + .dropdown-menu');
-            const langLabel = document.querySelector('#lang_label');
-
-            // Add a click event listener to the dropdown menu for languages
-            dropdownMenu.addEventListener('click', function (event) {
-                // Check if a dropdown item was clicked
-                if (event.target.classList.contains('dropdown-item')) {
-                    event.preventDefault(); // Prevent default link behavior
-                    const selectedLang = event.target.getAttribute('data-lang'); // Get the selected language
-                    langLabel.textContent = selectedLang; // Update the lang_label span text
-                }
-            });
 
             $("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {
                 type: "line",
@@ -1047,6 +1107,7 @@
                 lineColor: "#ffa534",
                 fillColor: "rgba(255, 165, 52, .14)",
             });
+
         </script>
     </body>
 </html>

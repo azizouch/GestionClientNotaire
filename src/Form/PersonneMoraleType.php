@@ -14,6 +14,9 @@ class PersonneMoraleType extends AbstractType
         $builder
             ->add('name')
             ->add('description')
+            ->add('description')
+            ->add('description')
+            ->add('description')
         ;
     }
 

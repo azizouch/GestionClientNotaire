@@ -1,0 +1,472 @@
+{% extends '_base.html.twig' %}
+
+{% block title %}Liste Utilisateur{% endblock %}
+
+{% block body %}
+    <style>
+        .head th{
+            color:  #313539;
+            background-color: #bccee4;
+            font-family: 'Public Sans', sans-serif;
+            text-transform: capitalize;
+        }
+        .badge {
+            --bs-badge-padding-x: 0.65em;
+            --bs-badge-padding-y: 0.35em;
+            --bs-badge-font-size: 0.75em;
+            --bs-badge-font-weight: 700;
+            --bs-badge-color: #fff;
+            --bs-badge-border-radius: 0.3125rem;
+            display: inline-block;
+            padding: var(--bs-badge-padding-y) var(--bs-badge-padding-x);
+            font-size: var(--bs-badge-font-size);
+            font-weight: var(--bs-badge-font-weight);
+            line-height: 1;
+            color: var(--bs-badge-color);
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            border-radius: var(--bs-badge-border-radius);
+        }
+        .bg-soft-dark {
+            background-color: rgba(19, 33, 68, .1) !important;
+        }
+        .badge {
+            line-height: normal;
+            vertical-align: middle;
+        }
+        .ms-2 {
+            margin-left: .75rem !important;
+        }
+        #multi-filter-select a.btn:hover,#multi-filter-select form button:hover{
+            background: white;
+            opacity: 1;
+        }
+        .modal-body{
+            margin-left: 4rem;
+        }
+        .modal-body p{
+            color: #808B96;
+        }
+        .modal-body p strong{
+            font-weight: 800;
+            color: #586570 ;
+        }
+
+    </style>
+
+    <div class="container">
+        <div class="page-inner">
+            <div class="page-header">
+                <h3 class="fw-bold mb-3">Liste Utilisateurs</h3>
+                <ul class="breadcrumbs mb-3">
+                    <li class="nav-home">
+                        <a href="{{ path('app_users') }}">
+                            <i class="icon-home"></i>
+                        </a>
+                    </li>
+                    <li class="separator">
+                        <i class="icon-arrow-right"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">Utilisateurs</a>
+                    </li>
+                    <li class="separator">
+                        <i class="icon-arrow-right"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">La liste des Utilisateurs</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center">
+                                <h4 class="card-title">Utilisateurs <span class="badge bg-soft-dark text-dark ms-2">{{users|length}}</span></h4>
+                                <button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal" data-bs-target="#registerModal">
+                                    <i class="fa fa-plus"></i>
+                                    Nouveau Utilisateur
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="multi-filter-select" class="display table table-hover">
+                                    <thead>
+                                    <tr class="head">
+                                        <th style="text-transform: capitalize;"><input type="checkbox" onclick="toggleAll(this)"></th>
+                                        <th style="text-transform: capitalize;">Id</th>
+                                        <th style="text-transform: capitalize;">Username</th>
+                                        <th style="text-transform: capitalize;">Email</th>
+                                        <th style="text-transform: capitalize;">Role</th>
+                                        <th style="width: 10%;text-transform: capitalize;">Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tfoot>
+                                    <tr>
+                                        <th style="text-transform: capitalize;">Id</th>
+                                        <th style="text-transform: capitalize;">Username</th>
+                                        <th style="text-transform: capitalize;">Email</th>
+                                        <th style="text-transform: capitalize;">Role</th>
+                                        <th style="width: 10%;text-transform: capitalize;">Action</th>
+                                    </tr>
+                                    </tfoot>
+                                    <tbody>
+                                    {% for user in users %}
+                                        <tr>
+                                            <td><input type="checkbox" class="row-checkbox"></td>
+                                            <td>{{ user.id }}</td>
+                                            <td>{{ user.username }}</td>
+                                            <td>{{ user.email }}</td>
+                                            {% set role = user.getRoles()[0] %}
+                                            {% if role == 'ROLE_ADMIN' %}
+                                                <td>Administrateur</td>
+                                            {% else %}
+                                                <td>Utilisateur</td>
+                                            {% endif %}
+
+                                            <td>
+                                                <div class="form-button-action">
+                                                    <a class="btn btn-icon" href="#">
+                                                        <i class="fas fa-edit fa-sm text-success"></i>
+                                                    </a>
+                                                    <form id="delete-client-form-{{ user.id }}" action="#" method="POST">
+                                                        <button type="button" class="btn btn-icon mx-2 delete-client-btn" data-client-id="{{ user.id }}">
+                                                            <i class="fas fa-trash-alt fa-sm text-danger"></i>
+                                                        </button>
+                                                    </form>
+                                                    <div class="card-tools">
+                                                        <div class="dropdown">
+                                                            <button
+                                                                    class="btn btn-icon btn-clean me-0"
+                                                                    type="button"
+                                                                    id="dropdownMenuButton"
+                                                                    data-bs-toggle="dropdown"
+                                                                    aria-haspopup="true"
+                                                                    aria-expanded="false"
+                                                            >
+                                                                <i class="fas fa-ellipsis-h"></i>
+                                                            </button>
+                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                                <a class="dropdown-item" href="#" target="_blank">
+                                                                    <i class="icon-printer"></i> PDF Demande du tva
+                                                                </a>
+                                                                <a class="dropdown-item" href="#" target="_blank">
+                                                                    <i class="icon-printer"></i> PDF Engagement du tva
+                                                                </a>
+                                                                <a class="dropdown-item" href="#">
+                                                                    Somthing else here
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Structure -->
+    <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 25px;box-shadow: 2px 6px 15px 0 rgba(69, 65, 78, .1);border: 0;">
+                <div class="modal-body">
+                    <div class="container h-100">
+                        <div class="row d-flex justify-content-center align-items-center h-100">
+                            <div class="col-lg-12">
+                                <div class="card text-black mb-0 shadow-none">
+                                    <div class="d-flex justify-content-end align-items-center">
+                                        <button type="button" class="btn-close text-right" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="card-body ">
+                                        <div class="row justify-content-center">
+                                            <div class="col-md-10 col-lg-6 col-xl-6 order-2 order-lg-1">
+
+                                                <p class="text-center h1 mb-5 mx-1 mx-md-4 mt-4 text-muted" style="font-weight: 900">Sign up</p>
+
+                                                {{ form_errors(registrationForm) }}
+
+                                                {{ form_start(registrationForm, { attr: { class: 'mx-1 mx-md-4' } }) }}
+
+                                                <div class="d-flex flex-row align-items-center mb-4">
+                                                    <i class="fas fa-user fa-lg me-3 fa-fw text-muted"></i>
+                                                    <div data-mdb-input-init class="form-outline flex-fill mb-0">
+                                                        {{ form_widget(registrationForm.username) }}
+                                                        {{ form_label(registrationForm.username, 'Your Name') }}
+                                                        <div class="form-notch">
+                                                            <div class="form-notch-leading"></div>
+                                                            <div class="form-notch-middle"></div>
+                                                            <div class="form-notch-trailing"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="d-flex flex-row align-items-center mb-4">
+                                                    <i class="fas fa-envelope fa-lg me-3 fa-fw text-muted"></i>
+                                                    <div data-mdb-input-init class="form-outline flex-fill mb-0">
+                                                        {{ form_widget(registrationForm.email) }}
+                                                        {{ form_label(registrationForm.email, 'Your Email') }}
+                                                        <div class="form-notch">
+                                                            <div class="form-notch-leading"></div>
+                                                            <div class="form-notch-middle"></div>
+                                                            <div class="form-notch-trailing"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="d-flex flex-row align-items-center mb-4">
+                                                    <i class="fas fa-lock fa-lg me-3 fa-fw text-muted"></i>
+                                                    <div data-mdb-input-init class="form-outline flex-fill mb-0">
+                                                        {{ form_widget(registrationForm.plainPassword) }}
+                                                        {{ form_label(registrationForm.plainPassword, 'Password') }}
+                                                        <div class="form-notch">
+                                                            <div class="form-notch-leading"></div>
+                                                            <div class="form-notch-middle"></div>
+                                                            <div class="form-notch-trailing"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="d-flex flex-row align-items-center mb-3">
+                                                    <i class="fas fa-key fa-lg me-3 fa-fw text-muted"></i>
+                                                    <div data-mdb-input-init class="form-outline flex-fill mb-0">
+                                                        <input type="password" id="registration_form_repeatPassword" class="form-control" />
+                                                        <label class="form-label" for="registration_form_repeatPassword">Repeat your password</label>
+                                                        <div class="form-notch">
+                                                            <div class="form-notch-leading"></div>
+                                                            <div class="form-notch-middle"></div>
+                                                            <div class="form-notch-trailing"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="d-flex flex-row align-items-center mb-3">
+                                                    {{ form_widget(registrationForm.image) }}
+
+                                                </div>
+
+                                                <div class="error-message" id="error-message">Passwords do not match!</div> <!-- Error message placeholder -->
+
+                                                <div class="d-flex flex-row justify-content-between align-items-center mb-4">
+                                                    <label for="userType" class="form-label mb-0" style="margin-left: 35px">User type</label>
+                                                    <select name="userType" id="userType" class="form-select" style="flex: 1; max-width: 200px;">
+                                                        <option value="ROLE_ADMIN">Admin</option>
+                                                        <option value="ROLE_USER">User</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="form-check d-flex justify-content-center mb-4">
+                                                    <input type="checkbox"
+                                                           id="{{ registrationForm.agreeTerms.vars.id }}"
+                                                           name="{{ field_name(registrationForm.agreeTerms) }}"
+                                                           class="form-check-input me-2"
+                                                           value="{{ field_value(registrationForm.agreeTerms) }}"
+                                                            {% if registrationForm.agreeTerms.vars.required %} required="required" {% endif %}
+                                                    >
+                                                    <label class="form-check-label" for="registration_form_agreeTerms">
+                                                        I agree all statements in <a href="#!">Terms of service</a>
+                                                    </label>
+                                                </div>
+
+                                                <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                                                    <button type="submit" class="btn btn-primary btn-lg">
+                                                        Register
+                                                    </button>
+                                                </div>
+
+                                                {{ form_end(registrationForm) }}
+
+                                            </div>
+                                            <div class="col-md-10 col-lg-6 col-xl-6 d-flex align-items-center order-1 order-lg-2">
+                                                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp" class="img-fluid" alt="Sample image">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ asset('asset/js/core/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('asset/js/plugin/datatables/datatables.min.js') }}"></script>
+    <script>
+        function toggleAll(source) {
+            const checkboxes = document.querySelectorAll('.row-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = source.checked;
+            });
+        }
+
+        $(document).ready(function () {
+            // Event delegation for clicking on table rows
+            $('#multi-filter-select tbody').on('click', 'tr', function(e) {
+                // Check if the click target is not a button
+                if (!$(e.target).closest('button').length && !$(e.target).closest('a').length) {
+                    // Get client information from the data attributes
+                    const clientData = JSON.parse($(this).attr('data-client'));
+
+                    // Populate modal with client data
+                    $('#clientLastName').text(clientData.lastName);
+                    $('#clientFirstName').text(clientData.firstName);
+                    $('#clientCin').text(clientData.cin);
+                    $('#clientTelephone').text(clientData.phone);
+                    $('#clientAddress').text(clientData.address);
+                    $('#clientEmail').text(clientData.email);
+                    $('#clientSituation').text(clientData.situation);
+                    $('#clientGenre').text(clientData.gender);
+                    $('#clientFatherFirstName').text(clientData.fatherFirstName);
+                    $('#clientMotherFirstName').text(clientData.motherFirstName);
+
+                    // Check if the situation is 'Marié' and show partner information
+                    if (clientData.situation === 'Marié') {
+                        $('#partnerInfo').empty(); // Clear previous info
+
+                        $.each(clientData.partners, function(index, partner) {
+                            $('#partnerInfo').append(`
+                            <div class="row container mb-2"><p><strong>Marié(e) avec :</strong></p><br></div>
+                            <div class="container">
+                                <div class="row container">
+                                    <div class="col-md-2">
+                                        <p><strong>Nom :</strong></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><span>${partner.lastName}</span></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <p><strong>Prénom :</strong></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><span>${partner.firstName}</span></p>
+                                    </div>
+                                </div>
+                                <div class="row container">
+                                    <div class="col-md-2">
+                                        <p><strong>Date de mariage :</strong></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><span>${partner.mariage_date}</span></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <p><strong>Lieu de mariage :</strong></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><span>${partner.mariage_place}</span></p>
+                                    </div>
+                                </div>
+                            </div>`
+                            );
+                        });
+                    } else {
+                        // Clear partner info if not 'Marié'
+                        $('#partnerInfo').empty();
+                    }
+
+                    // Show the modal
+                    $('#clientModal').modal('show');
+                }
+            });
+
+            // Prevent modal from showing when clicking on update or delete buttons
+            $('#multi-filter-select').on('click', 'a.btn', function(e) {
+                // Prevent the modal opening event
+                e.stopPropagation(); // This prevents the click event from bubbling up to the row click event
+            });
+
+            $("#basic-datatables").DataTable({});
+
+            $("#multi-filter-select").DataTable({
+                pageLength: 5,
+                initComplete: function () {
+                    this.api()
+                        .columns()
+                        .every(function () {
+                            var column = this;
+                            var select = $(
+                                '<select class="form-select"><option value=""></option></select>'
+                            )
+                                .appendTo($(column.footer()).empty())
+                                .on("change", function () {
+                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                                    column
+                                        .search(val ? "^" + val + "$" : "", true, false)
+                                        .draw();
+                                });
+
+                            column
+                                .data()
+                                .unique()
+                                .sort()
+                                .each(function (d, j) {
+                                    select.append(
+                                        '<option value="' + d + '">' + d + "</option>"
+                                    );
+                                });
+                        });
+                },
+            });
+
+            // Add Row
+            $("#add-row").DataTable({
+                pageLength: 5,
+            });
+
+            var action =
+                '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
+
+            $("#addRowButton").click(function () {
+                $("#add-row")
+                    .dataTable()
+                    .fnAddData([
+                        $("#addName").val(),
+                        $("#addPosition").val(),
+                        $("#addOffice").val(),
+                        action,
+                    ]);
+                $("#addRowModal").modal("hide");
+            });
+
+            $(".delete-client-btn").click(function (e) {
+                e.preventDefault(); // Prevent the default button action
+                const clientId = $(this).data("client-id");
+                const form = $("#delete-client-form-" + clientId); // Get the form associated with this button
+
+                swal({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    buttons: {
+                        confirm: {
+                            text: "Yes, delete it!",
+                            className: "btn btn-danger",
+                        },
+                        cancel: {
+                            visible: true,
+                            className: "btn btn-success",
+                        },
+                    },
+                }).then((Delete) => {
+                    if (Delete) {
+                        form.submit(); // Submit the form if confirmed
+                    } else {
+                        swal.close();
+                    }
+                });
+            });
+        });
+    </script>
+
+{% endblock %}

@@ -434,33 +434,41 @@
                                             <form class="container" id="personneMoraleForm" style="display: none;">
                                                 <!-- Fields specific to Personne Morale -->
                                                 <div class="row mb-3">
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-12">
                                                         <label for="companyName" class="form-label required">Nom de l'Entreprise</label>
                                                         <input type="text" class="form-control" id="companyName" required>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label for="registrationNumber" class="form-label required">Numéro d'Enregistrement</label>
-                                                        <input type="text" class="form-control" id="registrationNumber" required>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <div class="col-md-6">
-                                                        <label for="companyName" class="form-label required">Nom de l'Entreprise</label>
-                                                        <input type="text" class="form-control" id="companyName" required>
+                                                        <label for="companyIF" class="form-label required">IF</label>
+                                                        <input type="text" class="form-control" id="companyIF" required>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label for="registrationNumber" class="form-label required">Numéro d'Enregistrement</label>
-                                                        <input type="text" class="form-control" id="registrationNumber" required>
+                                                        <label for="companyICE" class="form-label required">ICE</label>
+                                                        <input type="text" class="form-control" id="companyICE" required>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <div class="col-md-6">
-                                                        <label for="companyName" class="form-label required">Nom de l'Entreprise</label>
-                                                        <input type="text" class="form-control" id="companyName" required>
+                                                        <label for="companyRC" class="form-label required">RC</label>
+                                                        <input type="text" class="form-control" id="companyRC" required>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label for="registrationNumber" class="form-label required">Numéro d'Enregistrement</label>
-                                                        <input type="text" class="form-control" id="registrationNumber" required>
+                                                        <label for="companyVille" class="form-label required">Ville</label>
+                                                        <input type="text" class="form-control" id="companyVille" required>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-md-12">
+                                                        <label for="companyAddress" class="form-label required">Address</label>
+                                                        <textarea class="form-control" id="companyAddress" rows="3" required></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-md-12">
+                                                        <label for="companyDescription" class="form-label required">Description</label>
+                                                        <textarea class="form-control" id="companyDescription" rows="5" required></textarea>
                                                     </div>
                                                 </div>
                                                 <!-- Additional fields for Personne Morale as needed -->
@@ -563,6 +571,7 @@
                         field.classList.remove('is-invalid'); // Remove invalid highlight
                     }
                 }
+
                 if (physiqueRadio.checked) {
                     if (situationSelect.value === 'Marié') {
                         const partnerFields = ['partnerFirstName', 'partnerLastName', 'mariagePlace', 'mariageDate'];
@@ -596,19 +605,31 @@
                         dateNaissance: document.getElementById('DateNaissance').value,
                         dateExpiration: document.getElementById('DateExpiration').value,
                         role: selectedRole,
-                        partnerData: partnerData
+                        partnerData: partnerData,
+                        type:"personPhysique"
                     };
                     if (isValid) {
                         addToFieldsetPersonPhysique(formData);
+                        physiqueRadio.checked = true;
+                        toggleFormVisibility();
                     }
                 } else if (moraleRadio.checked) {
                     // Collect data from Personne Morale form
                     formData = {
                         companyName: document.getElementById('companyName').value,
-                        registrationNumber: document.getElementById('registrationNumber').value
+                        companyIF: document.getElementById('companyIF').value,
+                        companyICE: document.getElementById('companyICE').value,
+                        companyRC: document.getElementById('companyRC').value,
+                        companyVille: document.getElementById('companyVille').value,
+                        companyAddress: document.getElementById('companyAddress').value,
+                        companyDescription: document.getElementById('companyDescription').value,
+                        role: selectedRole,
+                        type:"personMorale"
                     };
                     if (isValid) {
-                        console.log(formData);
+                        addToFieldsetPersonMorale(formData);
+                        physiqueRadio.checked = true;
+                        toggleFormVisibility();
                     }
                 }
 
@@ -721,43 +742,137 @@
         }
 
         function displayPersonInTable(person) {
-            const newRow = $(`
-                <tr data-cin="${person.cin}">
-                    <td>${person.firstName} ${person.lastName}</td>
-                    <td>${person.cin}</td>
-                    <td>${person.ville}</td>
-                    <td>${person.phone}</td>
-                    <td>${person.email}</td>
-                    <td class="text-center"><button type="button" class="btn btn-danger btn-sm delete-client"><i class="fas fa-trash-alt"></button></td>
-                </tr>
-            `);
+            let newRow;
+            // Check if it's a personPhysique or personMorale
+            if (person.type === 'personPhysique') {
+                newRow = $(`
+                    <tr data-cin="${person.cin}">
+                        <td>${person.firstName} ${person.lastName}</td>
+                        <td>${person.cin}</td>
+                        <td>${person.ville}</td>
+                        <td>${person.phone}</td>
+                        <td>${person.email}</td>
+                        <td class="text-center"><button type="button" class="btn btn-danger btn-sm delete-client"><i class="fas fa-trash-alt"></i></button></td>
+                    </tr>
+                `);
+            } else if (person.type === 'personMorale') {
+                newRow = $(`
+                    <tr data-if="${person.companyIF}">
+                        <td>${person.companyName}</td>
+                        <td>${person.companyIF}</td>
+                        <td>${person.companyVille}</td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-center"><button type="button" class="btn btn-danger btn-sm delete-client"><i class="fas fa-trash-alt"></i></button></td>
+                    </tr>
+                `);
+            } else {
+                console.error(`Unknown person type: ${person.type}`);
+                return; // Exit the function if the person type is unknown
+            }
+
+            // Append the row to the correct table based on the role
             if (person.role === 'Promettant') {
                 $('#PromettantTable tbody').append(newRow);
             } else if (person.role === 'Bénéficiaire') {
                 $('#BeneficiaireTable tbody').append(newRow);
             } else {
                 console.error(`Unknown role: ${person.role}`);
+                return; // Exit the function if the role is unknown
             }
+
             // Add event listener to the delete button
             newRow.find('.delete-client').on('click', function() {
-                deletePersonFromFieldset(person.cin); // Call function to remove from fieldset
+                if (person.type === 'personPhysique') {
+                    deletePersonFromFieldset(person.cin); // Remove personPhysique from the fieldset
+                } else if (person.type === 'personMorale') {
+                    deletePersonFromFieldset(person.companyIF); // Remove personMorale from the fieldset
+                }
                 newRow.remove(); // Remove row from table
             });
         }
 
-        function deletePersonFromFieldset(cin) {
-            // Find the corresponding fieldset using the cin
-            const fieldsetToDelete = document.querySelector(`[data-cin="${cin}"]`);
+        function deletePersonFromFieldset(identifier) {
+            // Try to find the fieldset using the data-cin attribute
+            let fieldsetToDelete = document.querySelector(`[data-cin="${identifier}"]`);
+
+            // If not found, try finding it using the data-if attribute (for personMorale)
+            if (!fieldsetToDelete) {
+                fieldsetToDelete = document.querySelector(`[data-if="${identifier}"]`);
+            }
 
             if (fieldsetToDelete) {
                 fieldsetToDelete.remove(); // Remove the fieldset from the DOM
             } else {
-                console.error('No matching fieldset found for CIN:', cin);
+                console.error('No matching fieldset found for identifier:', identifier);
             }
         }
 
-        function addToFieldsetPersonMorale(){
+        function addToFieldsetPersonMorale(personData){
+            const container = document.getElementById('contrat_pmorale');
+            const prototype = container.getAttribute('data-prototype');  // Get the prototype
+            const newFieldset = document.createElement('div');  // Create a new div for the fieldset
 
+            // Get the current number of fields and replace placeholders in the prototype
+            const index = container.children.length;
+            const uniquePrototype = prototype.replace(/__name__/g, index);  // Replace placeholders with index
+
+            // Add the fieldset's data-cin attribute to link the fieldset with the person
+            newFieldset.setAttribute('data-if', personData.companyIF);
+
+            // Set the new fieldset's content
+            newFieldset.innerHTML = uniquePrototype;
+
+            // Append the new fieldset to the container
+            container.appendChild(newFieldset);
+
+            // Select the newly created fieldset using the correct id
+            const newPersonFieldset = newFieldset.querySelector(`#contrat_pmorale_${index}`);
+
+            // Populate the new fieldset with the client data
+            newPersonFieldset.querySelector('[name$="[name]"]').value = personData.companyName;
+            newPersonFieldset.querySelector('[name$="[RC]"]').value = personData.companyRC;
+            newPersonFieldset.querySelector('[name$="[identifiant_fiscal]"]').value = personData.companyIF;
+            newPersonFieldset.querySelector('[name$="[iCE]"]').value = personData.companyICE;
+            newPersonFieldset.querySelector('[name$="[ville]"]').value = personData.companyVille;
+            newPersonFieldset.querySelector('[name$="[adresse]"]').value = personData.companyAddress;
+            newPersonFieldset.querySelector('[name$="[description]"]').value = personData.companyDescription;
+
+            // Add the selected role to the roles fieldset
+            const rolesContainer = newPersonFieldset.querySelector(`#contrat_pmorale_${index}_roles`);
+            if (rolesContainer && selectedRole) {
+                const rolePrototype = rolesContainer.getAttribute('data-prototype');
+                const roleIndex = rolesContainer.children.length;
+
+                // Replace placeholders in the roles prototype
+                const newRole = rolePrototype
+                    .replace(/__name__/g, roleIndex)
+                    .replace(/__name__label__/g, `Role ${roleIndex + 1}`);
+
+                // Create a new div for the role and append it
+                const roleDiv = document.createElement('div');
+                roleDiv.innerHTML = newRole;
+
+                // Set the role name field value to the selected role
+                roleDiv.querySelector(`[name$="[name]"]`).value = selectedRole;
+
+                // Append the new role to the roles fieldset
+                rolesContainer.appendChild(roleDiv);
+            }
+
+            // Append the new fieldset to the container
+            container.appendChild(newFieldset);
+
+            // Optionally, you can reset the form or handle any other UI logic after adding the new fieldset
+            document.getElementById('personneMoraleForm').reset();
+
+            // Optionally, display the person data in a table or any other structure
+            displayPersonInTable(personData);
+
+            // Hide the modal after adding the person
+            const modalElement = document.getElementById('newClientModal2');
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            modal.hide();
         }
 
         function showAlert(message) {

@@ -3,6 +3,7 @@
 {% block title %}Log In!{% endblock %}
 
 {% block body %}
+
     <link rel="stylesheet" href="{{ asset('asset/css/login.css') }}">
     <link rel="stylesheet" href="{{ asset('asset/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('asset/css/fonts.min.css') }}">
@@ -26,36 +27,39 @@
             background-attachment: fixed;
             font-family: Arial, sans-serif;
         }
+        .avatar-img{
+            border-radius: 50%;
+            width: 100px;
+            height: 90px;
+        }
+        .logo-container {
+            position: absolute; /* Position logo absolutely */
+            top: -30px; /* Move it upwards so half is outside */
+            left: 50%; /* Center it horizontally */
+            transform: translateX(-50%); /* Adjust for perfect centering */
+            z-index: 1; /* Ensure it appears above other elements */
+        }
     </style>
-    {% if error %}
-        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
 
-{#    <form action="{{ path('app_login') }}" method="post">#}
-{#        <label for="username">Username:</label>#}
-{#        <input type="text" id="username" name="_username" value="{{ last_username }}" required>#}
-
-{#        <label for="password">Password:</label>#}
-{#        <input type="password" id="password" name="_password" required>#}
-
-{#         If you want to control the URL the user is redirected to on success#}
-{#        <input type="hidden" name="_target_path" value="/account"> #}
-
-{#        <button type="submit">login</button>#}
-{#    </form>#}
     <div class="wrapp">
         <div class="form-container sign-in">
             <form action="{{ path('app_login') }}" method="post">
-                <div class="text-center"><i class="fas fa-user-circle fs-1" ></i></div>
-                <div class="text-center">
+                {#<div class="text-center"><i class="fas fa-user-circle fs-1" ></i></div>#}
+                <div class="text-center logo-container">
                     <img src="{{ asset('asset/img/logo.jpg') }}" alt="image profile" class="avatar-img"/>
                 </div>
 
-                <h2>Login</h2>
+                <h2 class="mt-3">Login</h2>
 
                 {% if error %}
                     <div class="alertModal alert-danger"><i class="mdi mdi-information-outline mr-2"></i>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                 {% endif %}
+
+                {#    {% if app.user %}#}
+                {#        <div class="mb-3">#}
+                {#            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>#}
+                {#        </div>#}
+                {#    {% endif %}#}
 
                 <div class="form-group">
                     <input type="text" name="username" value="{{ last_username }}" id="inputUsername" autocomplete="username" required>
@@ -76,9 +80,7 @@
                         <input type="checkbox" name="_remember_me"> Remember me
                     </label>
                 </div>
-                <input type="hidden" name="_csrf_token"
-                        value="{{ csrf_token('authenticate') }}"
-                >
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                 <button type="submit" class="btn_submit">
                     <span class="span_Sing_in">
                         <span class="label_Sing_in">Sign In</span>
@@ -104,51 +106,3 @@
     </script>
 
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    {# <form method="post">
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
-
-        {% if app.user %}
-            <div class="mb-3">
-                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
-            </div>
-        {% endif %}
-
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        <label for="inputUsername">Username</label>
-        <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" autocomplete="username" required autofocus>
-        <label for="inputPassword">Password</label>
-        <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-
-        <input type="hidden" name="_csrf_token"
-            value="{{ csrf_token('authenticate') }}"
-        >
-
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" name="_remember_me"> Remember me
-            </label>
-        </div>
-
-        <button class="btn btn-lg btn-primary" type="submit">
-            Sign in
-        </button>
-    </form> #}
-

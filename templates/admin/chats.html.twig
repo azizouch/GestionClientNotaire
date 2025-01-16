@@ -4,9 +4,10 @@
 
 {% block body %}
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* General Styles */
-        .message-item:hover {
+        .message-item:hover,.message-item-exist:hover {
             background-color: #f1f1f1;
             cursor: pointer;
         }
@@ -20,7 +21,6 @@
             padding: 10px;
             background-color: #f8f9fa;
             overflow-y: auto;
-            max-height: 700px; /* Adjust based on design */
         }
 
         /* Base Styles for Messages */
@@ -70,7 +70,7 @@
             margin-left: 5px;
             text-align: right; /* Align timestamp for sent messages */
         }
-        .message-item img,.chat-header img,.chat-footer img{
+        .message-item img,.message-item-exist img,.chat-header img,.chat-footer img{
             display: inline-flex;
             width: 40px;
             height: 40px;
@@ -80,6 +80,7 @@
             background: #eee;
             border-radius: 50%;
         }
+
         .chat-list-header {
             position: sticky;
             top: 0;
@@ -102,6 +103,7 @@
             height: 35px !important;
             margin-left: 10px; /* Space between title and input */
         }
+
         #chatMessages {
             background-image: url('{{asset('asset/img/background_chat.png')}}'); /* Replace with your image path */
             background-size: cover; /* Make the image cover the entire div */
@@ -226,7 +228,19 @@
                 display: block;
             }
         }
+        .fa-comment-medical:before {
+            content: "\f7f5";
+        }
+        .card-body {
+            height: 100%; /* Ensure the body takes full height */
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
 
+        }
+        .listmessage {
+            height: 75vh; /* Full viewport height */
+        }
 
     </style>
 
@@ -236,85 +250,67 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body pb-0">
-                            <div class="d-flex listmessage pb-3" style="height: 580px;">
+                            <div class="d-flex listmessage pb-3">
                                 <!-- Messages List (Left) -->
                                 <div class="messages-list scrollbar scrollbar-inner"  style="position: relative; width: 30%; border-right: 1px solid #ccc; overflow: auto;padding-right: 21px">
                                     <!-- Chat List Header -->
                                     <div class="chat-list-header d-flex align-items-center p-3">
+                                        <button class="btn p-2 border-0 d-none" type="button" style="border-radius: 15px;" id="buttonBackTochat">
+                                            <i class="fa fa-arrow-left fa-fw fa-lg text-muted"></i>
+                                        </button>
                                         <h5 class="mb-0 me-3">Chats</h5>
                                         <input type="text" class="form-control" placeholder="Search..." id="Inputsearch">
-                                    </div>
-                                    <div class="message-item shadow-sm d-flex align-items-center p-2 border-bottom" onclick="openChat('John Doe','{{ asset('asset/img/jm_denis.jpg') }}')">
-                                        <img src="{{ asset('asset/img/jm_denis.jpg') }}" class="rounded-circle me-3" alt="User">
-                                        <div class="message-info">
-                                            <h6 class="mb-0">John Doe</h6>
-                                            <small class="text-muted">Last message...</small>
-                                        </div>
-                                        <span class="text-muted ms-auto" style="font-size: 12px;">10:45 AM</span>
-                                    </div>
-                                    <div class="message-item shadow-sm d-flex align-items-center p-2 border-bottom" onclick="openChat('Jane Smith','{{ asset('asset/img/chadengle.jpg') }}')">
-                                        <img src="{{ asset('asset/img/chadengle.jpg') }}" class="rounded-circle me-3" alt="User">
-                                        <div class="message-info">
-                                            <h6 class="mb-0">Jane Smith</h6>
-                                            <small class="text-muted">How are you?</small>
-                                        </div>
-                                        <span class="text-muted ms-auto" style="font-size: 12px;">Yesterday</span>
-                                    </div>
-                                    <div class="message-item shadow-sm d-flex align-items-center p-2 border-bottom" onclick="openChat('John Doe','{{ asset('asset/img/talha.jpg') }}')">
-                                        <img src="{{ asset('asset/img/talha.jpg') }}" class="rounded-circle me-3" alt="User">
-                                        <div class="message-info">
-                                            <h6 class="mb-0">Jimmy Denis</h6>
-                                            <small class="text-muted">Last message...</small>
-                                        </div>
-                                        <span class="text-muted ms-auto" style="font-size: 12px;">10:45 AM</span>
-                                    </div>
-                                    <div class="message-item shadow-sm d-flex align-items-center p-2 border-bottom" onclick="openChat('Talha','{{ asset('asset/img/mlane.jpg') }}')">
-                                        <img src="{{ asset('asset/img/mlane.jpg') }}" class="rounded-circle me-3" alt="User">
-                                        <div class="message-info">
-                                            <h6 class="mb-0">Jimmy Denis</h6>
-                                            <small class="text-muted">Last message...</small>
-                                        </div>
-                                        <span class="text-muted ms-auto" style="font-size: 12px;">10:45 AM</span>
+                                        <button class="btn p-2 bg-success" type="button" style="border-radius: 15px;margin-left: 10px" id="buttonAddChat">
+                                            <i class="fa fa-comment-medical fa-fw fa-lg text-muted"></i>
+                                        </button>
                                     </div>
 
-                                    <div class="message-item shadow-sm d-flex align-items-center p-2 border-bottom" onclick="openChat('John Doe','{{ asset('asset/img/jm_denis.jpg') }}')">
-                                        <img src="{{ asset('asset/img/jm_denis.jpg') }}" class="rounded-circle me-3" alt="User">
-                                        <div class="message-info">
-                                            <h6 class="mb-0">John Doe</h6>
-                                            <small class="text-muted">Last message...</small>
-                                        </div>
-                                        <span class="text-muted ms-auto" style="font-size: 12px;">10:45 AM</span>
+                                    <div class="users-active-container" id="usersActiveContainer">
+                                        {% for user in usersWithMessages %}
+                                            <div class="message-item-exist shadow-sm d-flex align-items-center p-2 border-bottom"
+                                                 data-id="{{ user.id }}"
+                                                 data-name="{{ user.username }}"
+                                                 data-img="{{ asset(user.image ?: 'asset/img/avatar.png') }}">
+                                                <img src="{{ asset(user.image ?: 'asset/img/avatar.png') }}" class="rounded-circle me-3" alt="User">
+                                                <div class="message-info">
+                                                    <h6 class="mb-0">{{ user.username }}</h6>
+                                                    <small class="text-muted">{{ user.lastMessage }}</small>
+                                                </div>
+                                                {% if user.lastMessageTime is defined %}
+                                                    <span class="text-muted ms-auto" style="font-size: 12px;">{{ user.lastMessageTime|date('h:i A') }}</span>
+                                                {% endif %}
+                                            </div>
+                                        {% else %}
+                                            <p class="text-muted text-center">No messages yet.</p>
+                                        {% endfor %}
                                     </div>
-                                    <div class="message-item shadow-sm d-flex align-items-center p-2 border-bottom" onclick="openChat('Jane Smith','{{ asset('asset/img/chadengle.jpg') }}')">
-                                        <img src="{{ asset('asset/img/chadengle.jpg') }}" class="rounded-circle me-3" alt="User">
-                                        <div class="message-info">
-                                            <h6 class="mb-0">Jane Smith</h6>
-                                            <small class="text-muted">How are you?</small>
-                                        </div>
-                                        <span class="text-muted ms-auto" style="font-size: 12px;">Yesterday</span>
-                                    </div>
-                                    <div class="message-item shadow-sm d-flex align-items-center p-2 border-bottom" onclick="openChat('John Doe','{{ asset('asset/img/talha.jpg') }}')">
-                                        <img src="{{ asset('asset/img/talha.jpg') }}" class="rounded-circle me-3" alt="User">
-                                        <div class="message-info">
-                                            <h6 class="mb-0">Jimmy Denis</h6>
-                                            <small class="text-muted">Last message...</small>
-                                        </div>
-                                        <span class="text-muted ms-auto" style="font-size: 12px;">10:45 AM</span>
-                                    </div>
-                                    <div class="message-item shadow-sm d-flex align-items-center p-2 border-bottom" onclick="openChat('Talha','{{ asset('asset/img/mlane.jpg') }}')">
-                                        <img src="{{ asset('asset/img/mlane.jpg') }}" class="rounded-circle me-3" alt="User">
-                                        <div class="message-info">
-                                            <h6 class="mb-0">Jimmy Denis</h6>
-                                            <small class="text-muted">Last message...</small>
-                                        </div>
-                                        <span class="text-muted ms-auto" style="font-size: 12px;">10:45 AM</span>
+
+                                    <div class="users-exist-container d-none" id="usersExistContainer">
+                                        {% for user in users %}
+                                            {% if user.id != currentUser.id %}
+                                                <div class="message-item shadow-sm d-flex align-items-center p-2 border-bottom"
+                                                     data-id="{{ user.id }}"
+                                                     data-name="{{ user.username }}"
+                                                     data-img="{% if user.image %}{{ asset(user.image) }}{% else %}{{ asset('asset/img/avatar.png') }}{% endif %}">
+                                                    {% if user.image %}
+                                                        <img src="{{ asset(user.image) }}" class="rounded-circle me-3" alt="{{ user.username }}">
+                                                    {% else %}
+                                                        <img src="{{ asset('asset/img/avatar.png') }}" class="rounded-circle me-3" alt="{{ user.username }}">
+                                                    {% endif %}
+                                                    <div class="message-info">
+                                                        <h6 class="mb-0">{{ user.username }}</h6>
+                                                        <small class="text-muted">Click to start chat</small>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
                                     </div>
                                 </div>
-
                                 <!-- Chat Area (Right) -->
-                                <div class="chat-area flex-grow-1 d-flex flex-column" style="padding-left: 1.5rem !important;padding-bottom: 1.5rem !important;">
+                                <div class="chat-area flex-grow-1 d-flex flex-column" style="padding-left: 1.5rem !important;padding-bottom: 1.5rem !important;min-height: 100%;">
                                     <!-- Chat Header -->
-                                    <div class="chat-header d-flex align-items-center pt-0 pb-1">
+                                    <div id="chatHeader" class="chat-header d-flex align-items-center pt-0 pb-1">
+                                        <input type="hidden" id="currentUserId" value="{{ currentUser.id }}">
                                         <img src="{{ asset('asset/img/user.png') }}" class="rounded-circle me-3" alt="User">
                                         <h6 class="mb-0" id="chatName">Select a Chat</h6>
                                         <div class="header-search ms-auto">
@@ -328,20 +324,11 @@
 
                                     <!-- Chat Messages -->
                                     <div id="chatMessages" class="chat-messages flex-grow-1 p-3 overflow-auto scrollbar scrollbar-inner"  id="chatMessages"  style="background-color: #f8f9fa;">
-                                        <!-- Example of Receiver's Message -->
-{#                                        <div class="chat-message received">#}
-{#                                            <span class="message-content">Hello! How are you?</span>#}
-{#                                            <span class="message-time ml-1">10:45 AM</span>#}
-{#                                        </div>#}
-{#                                        <!-- Example of Sender's Message -->#}
-{#                                        <div class="chat-message sent">#}
-{#                                            <span class="message-content">I'm good, thanks! How about you?</span>#}
-{#                                            <span class="message-time ml-1">10:46 AM</span>#}
-{#                                        </div>#}
                                     </div>
 
                                     <!-- Chat Input -->
                                     <div id="chatInputContainer" class="chat-input align-items-center border-top" style="display: none">
+                                        <span id="selectedUserId" class="d-none" ></span>
                                         <div class="chat-footer">
                                             <img src="{{ asset('asset/img/profile.jpg') }}" class="rounded-circle" alt="User">
                                         </div>
@@ -390,8 +377,243 @@
             </div>
         </div>
     </div>
+
     <script src="{{asset('asset/js/core/jquery-3.7.1.min.js')}}"></script>
+
     <script>
+        const $buttonAddChat = $('#buttonAddChat');
+        const $buttonBackToChat = $('#buttonBackTochat');
+        const $usersActiveContainer = $('#usersActiveContainer');
+        const $usersExistContainer = $('#usersExistContainer');
+        const currentUserId = parseInt(document.getElementById('currentUserId').value, 10);
+        let selectedUserId = null;
+
+        $(document).ready(function () {
+
+            // Show the `users-exist-container` and hide the `users-active-container`
+            $buttonAddChat.on('click', function () {
+                $usersActiveContainer.addClass('d-none');
+                $usersExistContainer.removeClass('d-none');
+                $buttonBackToChat.removeClass('d-none');
+                $buttonAddChat.addClass('d-none');
+
+                // Populate the `users-exist-container` only if it is empty
+                if ($usersExistContainer.html().trim() === '') {
+                    $usersExistContainer.find('.message-item').each(function () {
+                        const $item = $(this);
+                        const userName = $item.data('name');
+                        const userImg = $item.data('img');
+                        const userId = $item.data('id');
+
+                        const userItem = `
+                            <div class="message-item shadow-sm d-flex align-items-center p-2 border-bottom" onclick="selectUser('${userName}', '${userImg}', '${userId}')">
+                                <img src="${userImg}" class="rounded-circle me-3" alt="User">
+                                <div class="message-info">
+                                    <h6 class="mb-0">${userName}</h6>
+                                    <small class="text-muted">Click to start chat</small>
+                                </div>
+                            </div>
+                        `;
+                        $usersExistContainer.append(userItem);
+                    });
+                }
+            });
+
+            // Event listener for the back button
+            $buttonBackToChat.on('click', function () {
+                $usersExistContainer.addClass('d-none');
+                $usersActiveContainer.removeClass('d-none');
+                $buttonBackToChat.addClass('d-none');
+                $buttonAddChat.removeClass('d-none');
+            });
+
+            $(document).on('click', '.message-item', function () {
+                const $item = $(this);
+                const userName = $item.data('name');
+                const userImg = $item.data('img');
+                const selecteduserId = $item.data('id');
+
+                // Call the selectUser function
+                selectUser(userName, userImg, selecteduserId);
+            });
+
+            $(document).on('click', '.message-item-exist', function () {
+                const $item = $(this);
+                const userName = $item.data('name');
+                const userImg = $item.data('img');
+                const selecteduserId = $item.data('id');
+
+                // Call the openChat function
+                openChat(userName, userImg, selecteduserId);
+            });
+        });
+
+        // Function to select a user and switch to chat
+        function selectUser(userName, imageUrl, selecteduserId) {
+            const existingUser = $usersActiveContainer.children().filter(function () {
+                const $nameElement = $(this).find('.message-info h6');
+                return $nameElement.text().trim() === userName;
+            });
+
+            if (existingUser.length) {
+                toggleChatContainers(true);
+                openChat(userName, imageUrl, selecteduserId);
+                return;
+            }
+
+            const userItem = `
+                    <div class="message-item shadow-sm d-flex align-items-center p-2 border-bottom">
+                        <img src="${imageUrl}" class="rounded-circle me-3" alt="User">
+                        <div class="message-info">
+                            <h6 class="mb-0">${userName}</h6>
+                            <small class="text-muted">Last message...</small>
+                        </div>
+                        <span class="text-muted ms-auto" style="font-size: 12px;">10:45 AM</span>
+                    </div>
+                `;
+            $usersActiveContainer.append(userItem);
+
+            toggleChatContainers(true);
+
+            openChat(userName, imageUrl, selecteduserId);
+        }
+
+        // Utility function to toggle visibility
+        function toggleChatContainers(showActiveContainer = true) {
+            if (showActiveContainer) {
+                $usersExistContainer.addClass('d-none');
+                $usersActiveContainer.removeClass('d-none');
+            } else {
+                $usersExistContainer.removeClass('d-none');
+                $usersActiveContainer.addClass('d-none');
+            }
+            $buttonBackToChat.addClass('d-none');
+            $buttonAddChat.removeClass('d-none');
+        }
+
+        const fetchAndDisplayMessages = async (currentUserId, otherUserId) => {
+            const messageContainer = document.getElementById('chatMessages');
+
+            try {
+                const response = await fetch(`/messages/${currentUserId}/${otherUserId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch messages');
+                }
+                const data = await response.json();
+
+                // Clear the existing content
+                messageContainer.innerHTML = '';
+
+                // Loop through messages and create elements
+                data.forEach((message) => {
+                    // Compare senderId with the current user's ID to determine the type
+                    const type = message.senderId === currentUserId ? 'sent' : 'received';
+                    console.log(`senderUserId:${message.senderId},receiverUserId:${message.receiverId},Message ID: ${message.id}, Type: ${type}`); // Debugging to verify the type
+                    appendMessage(type, message.content, message.timestamp);
+                });
+            } catch (error) {
+                console.error('Error fetching messages:', error);
+            }
+        };
+
+        function openChat(userName, userImg, userId) {
+            selectedUserId = userId; // Store the selected user's ID
+            const $chatMessages = $('#chatMessages');
+            const $chatHeader = $('#chatHeader');
+            const $chatInputContainer = $('#chatInputContainer');
+
+            // Clear chat messages
+            $chatMessages.empty();
+
+            // Show the chat input when a chat is selected
+            $chatInputContainer.css('display', 'flex');
+
+            // Update chat header
+            $chatHeader.html(`
+                    <img src="${userImg}" alt="${userName}" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                    <span>${userName}</span>
+                `);
+
+            // Hide "No messages yet" message in the usersActiveContainer
+            const $noMessagesParagraph = $usersActiveContainer.find('.text-muted.text-center');
+            if ($noMessagesParagraph.length) {
+                $noMessagesParagraph.hide();
+            }
+
+            // Fetch and display previous messages for the selected user
+            fetchAndDisplayMessages(currentUserId, userId);
+        }
+
+        async function sendMessage() {
+            const $input = $('#messageInput');
+            const messageContent = $input.val().trim();
+            if (messageContent !== '') {
+                const time = new Date();
+
+                // Append the message locally
+                appendMessage('sent', messageContent, time);
+
+                // Clear the input field
+                $input.val('');
+                const bodyData = {
+                    receiver_id: selectedUserId,
+                    content: messageContent
+                };
+                try {
+                    let response = await fetch('/api/messages/send', {
+                        method: 'POST',
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-Requested-With": "XMLHttpRequest"
+                        },
+                        body: JSON.stringify(bodyData),
+                    });
+
+                    let responseAjax = await response.json();
+                    // const messageDiv = document.getElementById("message-status"); // Element to show the status of the message
+                    //
+                    // if (responseAjax.success) {
+                    //     messageDiv.innerHTML = responseAjax.message; // Display success message
+                    // } else {
+                    //     messageDiv.innerHTML = responseAjax.error; // Display error message
+                    // }
+                } catch (error) {
+                    console.error("Error sending message:", error);
+                }
+            }
+        }
+
+        function appendMessage(type, text, timestamp) {
+            const $chatMessages = $('#chatMessages');
+
+            // Format the timestamp to show only the time
+            const time = new Date(timestamp).toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+            });
+
+            // Create the message div
+            const $messageDiv = $('<div></div>')
+                .addClass('chat-message')
+                .addClass(type);
+
+            // Create the message content span
+            const $messageContent = $('<span></span>')
+                .addClass('message-content')
+                .text(text);
+
+            // Create the message time span
+            const $messageTime = $('<span></span>')
+                .addClass('message-time')
+                .text(time);
+
+            // Append the content and time to the message div
+            $messageDiv.append($messageContent);
+            $messageDiv.append($messageTime);
+
+            // Append the message div to the chat messages container
+            $chatMessages.append($messageDiv);
+        }
 
         function selectFile(type) {
             const fileInput = document.createElement('input');
@@ -453,62 +675,6 @@
             };
 
             reader.readAsDataURL(file); // Read the file as a data URL
-        }
-
-        function openChat(userName, imageUrl) {
-            document.getElementById('chatName').innerText = userName;
-            const chatMessages = document.getElementById('chatMessages');
-            chatMessages.innerHTML = ''; // Clear existing messages
-
-            // Update the profile image in the chat header
-            const profileImage = document.querySelector('.chat-header img');
-            profileImage.src = imageUrl; // Change the image source to the selected user's image
-
-            // Example: Load chat history
-            const messages = [
-                { type: 'received', text: 'Hello! How are you?', time: '10:45 AM' },
-                { type: 'sent', text: 'I\'m good, thanks! How about you?', time: '10:46 AM' },
-            ];
-
-            messages.forEach((message) => {
-                appendMessage(message.type, message.text, message.time);
-            });
-
-            // Show the chat input when a chat is selected
-            document.getElementById('chatInputContainer').style.display = 'flex';
-        }
-
-        function sendMessage() {
-            const input = document.getElementById('messageInput');
-            const chatMessages = document.getElementById('chatMessages');
-
-            if (input.value.trim() !== '') {
-                const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                appendMessage('sent', input.value, time);
-                input.value = '';
-
-                // Scroll to the bottom
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-        }
-
-        function appendMessage(type, text, time) {
-            const chatMessages = document.getElementById('chatMessages');
-
-            const messageDiv = document.createElement('div');
-            messageDiv.classList.add('chat-message', type);
-
-            const messageContent = document.createElement('span');
-            messageContent.classList.add('message-content');
-            messageContent.innerText = text;
-
-            const messageTime = document.createElement('span');
-            messageTime.classList.add('message-time');
-            messageTime.innerText = time;
-
-            messageDiv.appendChild(messageContent);
-            messageDiv.appendChild(messageTime);
-            chatMessages.appendChild(messageDiv);
         }
 
         $(document).ready(function () {
@@ -617,4 +783,233 @@
 
     </script>
 
+    {#    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>#}
+
+{#    // const socket = io('http://localhost:3000'); // Make sure this matches your Node.js server URL#}
+{#    // async function sendMessage() {#}
+{#    //     const $input = $('#messageInput');#}
+{#    //     const messageContent = $input.val().trim();#}
+{#    //#}
+{#    //     if (messageContent !== '') {#}
+{#    //         const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});#}
+{#    //#}
+{#    //         // Append the message locally#}
+{#    //         appendMessage('sent', messageContent, time);#}
+{#    //#}
+{#    //         // Clear the input field#}
+{#    //         $input.val('');#}
+{#    //#}
+{#    //         const bodyData = {#}
+{#    //             receiver_id: selectedUserId,#}
+{#    //             content: messageContent#}
+{#    //         };#}
+{#    //#}
+{#    //         console.log(bodyData);#}
+{#    //#}
+{#    //         try {#}
+{#    //             // Send the message via the API#}
+{#    //             let response = await fetch('/api/messages/send', {#}
+{#    //                 method: 'POST',#}
+{#    //                 headers: {#}
+{#    //                     "Content-Type": "application/json",#}
+{#    //                     "X-Requested-With": "XMLHttpRequest"#}
+{#    //                 },#}
+{#    //                 body: JSON.stringify(bodyData),#}
+{#    //             });#}
+{#    //#}
+{#    //             let responseAjax = await response.json();#}
+{#    //#}
+{#    //             if (responseAjax.success) {#}
+{#    //                 // Emit the message through Socket.IO to notify the receiver#}
+{#    //                 socket.emit('sendMessage', {#}
+{#    //                     senderId: currentUserId, // Current user ID#}
+{#    //                     receiverId: selectedUserId, // ID of the user receiving the message#}
+{#    //                     content: messageContent,#}
+{#    //                     timestamp: new Date().toISOString(), // Timestamp for the message#}
+{#    //                 });#}
+{#    //             } else {#}
+{#    //                 console.error(responseAjax.error); // Handle error if the message wasn't sent successfully#}
+{#    //             }#}
+{#    //         } catch (error) {#}
+{#    //             console.error("Error sending message:", error);#}
+{#    //         }#}
+{#    //     }#}
+{#    // }#}
+{#    // // Listen for incoming messages#}
+{#    // socket.on('receiveMessage', (message) => {#}
+{#    //     const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});#}
+{#    //     appendMessage('received', message.content, time);#}
+{#    // });#}
+{#    //#}
+{#    // // Listen for new messages#}
+{#    // socket.on('sendMessage', (message) => {#}
+{#    //     // Emit the message to the other user#}
+{#    //     socket.broadcast.emit('receiveMessage', message);#}
+{#    // });#}
+
+
+{#    // const currentUserId = parseInt(document.getElementById('currentUserId').value, 10);#}
+{#    // const otherUserId = selectedUserId /* ID of the other user in chat */;#}
+{#    //#}
+{#    // // Function to fetch new messages#}
+{#    // function fetchNewMessages() {#}
+{#    //     fetch(`/messages/new/${currentUserId}`)#}
+{#    //         .then(response => response.json())#}
+{#    //         .then(data => {#}
+{#    //             data.forEach(message => {#}
+{#    //                 const type = message.senderId === currentUserId ? 'sent' : 'received';#}
+{#    //                 appendMessage(type, message.content, message.timestamp);#}
+{#    //             });#}
+{#    //         })#}
+{#    //         .catch(error => console.error('Error fetching new messages:', error));#}
+{#    // }#}
+{#    //#}
+{#    // // Poll for new messages every 2 seconds#}
+{#    // setInterval(fetchNewMessages, 2000);#}
+
+{#    function longPoll() {#}
+{#    fetch(`/messages/${currentUserId}/${selectedUserId}`)#}
+{#    .then(response => response.json())#}
+{#    .then(data => {#}
+{#    data.messages.forEach(message => {#}
+{#    const type = message.senderId === currentUserId ? 'sent' : 'received';#}
+{#    appendMessage(type, message.content, message.timestamp);#}
+{#    console.log(message)#}
+{#    });#}
+{#    // Call longPoll again to keep listening for new messages#}
+{#    longPoll();#}
+{#    })#}
+{#    .catch(error => {#}
+{#    console.error("Error during long polling:", error);#}
+{#    setTimeout(longPoll, 5000); // Retry after 5 seconds if there's an error#}
+{#    });#}
+{#    }#}
+{#    if(selectedUserId != null){#}
+{#    longPoll(); // Start long polling#}
+
+{#    // setInterval(async () => {#}
+{#    //     try {#}
+{#    //         const response = await fetch(`/messages/${currentUserId}/${selectedUserId}`);#}
+{#    //         const data = await response.json();#}
+{#    //         data.messages.forEach(message => {#}
+{#    //             const type = message.senderId === currentUserId ? 'sent' : 'received';#}
+{#    //             appendMessage(type, message.content, message.timestamp);#}
+{#    //         });#}
+{#    //     } catch (error) {#}
+{#    //         console.error("Error fetching messages:", error);#}
+{#    //     }#}
+{#    // }, 5000); // Fetch new messages every 5 seconds#}
+{#    }#}
+
+
+
+{#    // const fetMessages = async (userId, otherUserId) => {#}
+{#    //     try {#}
+{#    //         const response = await fetch(`/messages/${userId}/${otherUserId}`);#}
+{#    //         if (!response.ok) {#}
+{#    //             throw new Error('Failed to fetch messages');#}
+{#    //         }#}
+{#    //         const messages = await response.json();#}
+{#    //         console.log(messages); // Display or process the messages#}
+{#    //     } catch (error) {#}
+{#    //         console.error('Error:', error);#}
+{#    //     }#}
+{#    // };#}
+{#    //#}
+{#    // // Call the function with userId and otherUserId#}
+{#    // fetMessages(9, 8); // Replace with actual user IDs#}
+
+{#    // async function fetchMessages(userId) {#}
+{#    //     const messageContainer = document.getElementById("chatMessages");#}
+{#    //     messageContainer.innerHTML = 'Loading messages...';#}
+{#    //#}
+{#    //     try {#}
+{#    //         const response = await fetch(`/messages/${userId}/${otherUserId}`);#}
+{#    //#}
+{#    //         if (!response.ok) {#}
+{#    //             const errorText = await response.text();#}
+{#    //             console.error(`Response status: ${response.status}`, errorText);#}
+{#    //             messageContainer.innerHTML = `<span class="text-danger">Error fetching messages: ${response.status}</span>`;#}
+{#    //             return;#}
+{#    //         }#}
+{#    //#}
+{#    //         const data = await response.json();#}
+{#    //#}
+{#    //         if (data.success) {#}
+{#    //             messageContainer.innerHTML = ''; // Clear loading message#}
+{#    //             data.messages.forEach((message) => {#}
+{#    //                 const messageElement = document.createElement('div');#}
+{#    //                 messageElement.className = message.sender === userId ? 'sent-message' : 'received-message';#}
+{#    //                 messageElement.innerHTML = `#}
+{#    //             <div>${message.content}</div>#}
+{#    //             <small>${new Date(message.timestamp).toLocaleTimeString()}</small>#}
+{#    //         `;#}
+{#    //                 messageContainer.appendChild(messageElement);#}
+{#    //             });#}
+{#    //         } else {#}
+{#    //             console.error(data.error);#}
+{#    //             messageContainer.innerHTML = `<span class="text-danger">${data.error}</span>`;#}
+{#    //         }#}
+{#    //     } catch (error) {#}
+{#    //         console.error('Error fetching messages:', error);#}
+{#    //         messageContainer.innerHTML = `<span class="text-danger">Error fetching messages.</span>`;#}
+{#    //     }#}
+{#    // }#}
+{#    #}
+
+{#    // function appendMessage(type, text, time) {#}
+{#    //     const $chatMessages = $('#chatMessages');#}
+{#    //#}
+{#    //     // Create the message div#}
+{#    //     const $messageDiv = $('<div></div>')#}
+{#    //         .addClass('chat-message')#}
+{#    //         .addClass(type);#}
+{#    //#}
+{#    //     // Create the message content span#}
+{#    //     const $messageContent = $('<span></span>')#}
+{#    //         .addClass('message-content')#}
+{#    //         .text(text);#}
+{#    //#}
+{#    //     // Create the message time span#}
+{#    //     const $messageTime = $('<span></span>')#}
+{#    //         .addClass('message-time')#}
+{#    //         .text(time);#}
+{#    //#}
+{#    //     // Append the content and time to the message div#}
+{#    //     $messageDiv.append($messageContent);#}
+{#    //     $messageDiv.append($messageTime);#}
+{#    //#}
+{#    //     // Append the message div to the chat messages container#}
+{#    //     $chatMessages.append($messageDiv);#}
+{#    // }#}
+
+
+
+    {#                                        <div class="message-item shadow-sm d-flex align-items-center p-2 border-bottom" onclick="openChat('John Doe','{{ asset('asset/img/jm_denis.jpg') }}')">#}
+    {#                                            <img src="{{ asset('asset/img/jm_denis.jpg') }}" class="rounded-circle me-3" alt="User">#}
+    {#                                            <div class="message-info">#}
+    {#                                                <h6 class="mb-0">John Doe</h6>#}
+    {#                                                <small class="text-muted">Last message...</small>#}
+    {#                                            </div>#}
+    {#                                            <span class="text-muted ms-auto" style="font-size: 12px;">10:45 AM</span>#}
+    {#                                        </div>#}
+
+
+    {#                                <div class="avatar me-3" style="width: 40px; height: 40px; border-radius: 50%; background-color: #007bff; color: white; display: flex; justify-content: center; align-items: center;margin: 10px;">#}
+    {#                                    <strong>{{ user.username|first|upper }}</strong>#}
+    {#                                </div>#}
+
+
+    <!-- Example of Receiver's Message -->
+    {#                                        <div class="chat-message received">#}
+    {#                                            <span class="message-content">Hello! How are you?</span>#}
+    {#                                            <span class="message-time ml-1">10:45 AM</span>#}
+    {#                                        </div>#}
+    {#                                        <!-- Example of Sender's Message -->#}
+    {#                                        <div class="chat-message sent">#}
+    {#                                            <span class="message-content">I'm good, thanks! How about you?</span>#}
+    {#                                            <span class="message-time ml-1">10:46 AM</span>#}
+    {#                                        </div>#}
+
 {% endblock %}
+

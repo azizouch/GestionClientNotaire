@@ -33,6 +33,21 @@ class PersonneMorale
     #[ORM\Column(length: 2000)]
     private ?string $description = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $RC = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $identifiant_fiscal = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $iCE = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $ville = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $adresse = null;
+
     public function __construct()
     {
         $this->roles = new ArrayCollection();
@@ -118,6 +133,66 @@ class PersonneMorale
     public function setDescription(string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getRC(): ?string
+    {
+        return $this->RC;
+    }
+
+    public function setRC(string $RC): static
+    {
+        $this->RC = $RC;
+
+        return $this;
+    }
+
+    public function getIdentifiantFiscal(): ?string
+    {
+        return $this->identifiant_fiscal;
+    }
+
+    public function setIdentifiantFiscal(string $identifiant_fiscal): static
+    {
+        $this->identifiant_fiscal = $identifiant_fiscal;
+
+        return $this;
+    }
+
+    public function getICE(): ?string
+    {
+        return $this->iCE;
+    }
+
+    public function setICE(string $iCE): static
+    {
+        $this->iCE = $iCE;
+
+        return $this;
+    }
+
+    public function getVille(): ?string
+    {
+        return $this->ville;
+    }
+
+    public function setVille(string $ville): static
+    {
+        $this->ville = $ville;
+
+        return $this;
+    }
+
+    public function getAdresse(): ?string
+    {
+        return $this->adresse;
+    }
+
+    public function setAdresse(string $adresse): static
+    {
+        $this->adresse = $adresse;
 
         return $this;
     }

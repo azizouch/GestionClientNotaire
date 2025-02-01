@@ -15,7 +15,15 @@ class PersonneMoraleRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, PersonneMorale::class);
     }
-
+    // In PersonneMoraleRepository
+    public function findBySearch(string $search)
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.name LIKE :search OR p.RC LIKE :search OR p.identifiant_fiscal LIKE :search OR p.iCE LIKE :search')
+            ->setParameter('search', '%' . $search . '%')
+            ->getQuery()
+            ->getResult();
+    }
 //    /**
 //     * @return PersonneMorale[] Returns an array of PersonneMorale objects
 //     */

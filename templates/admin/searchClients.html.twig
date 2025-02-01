@@ -1,0 +1,86 @@
+{% extends '_base.html.twig' %}
+
+{% block title %}Résultats de Recherche{% endblock %}
+
+{% block body %}
+    <link rel="stylesheet" href="{{ asset('asset/css/comune.css') }}" />
+
+    <div class="container">
+        <div class="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center">
+                                <h4 class="card-title">Résultats de recherche pour "{{ searchTerm }}"</h4>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            {% if persons is empty %}
+                                <div class="alert-search alert_warning text-center">Aucun résultat trouvé.</div>
+                            {% else %}
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>Nom</th>
+                                            <th>Prénom</th>
+                                            <th>CIN</th>
+                                            <th>Contrats</th>
+                                            <th>Procurations</th>
+                                            <th>Desistements</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for person in persons %}
+                                            <tr>
+                                                <td>{{ person.LastName }}</td>
+                                                <td>{{ person.FirstName }}</td>
+                                                <td>{{ person.cin }}</td>
+                                                <td>
+                                                    {% if person.contrats is not empty %}
+                                                        <ul>
+                                                            {% for contrat in person.contrats %}
+                                                                <li>{{ contrat.type }} (ID: {{ contrat.id }}, Date: {{ contrat.dateSignature|date('Y-m-d') }})</li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    {% else %}
+                                                        Aucun
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if person.procurations is not empty %}
+                                                        <ul>
+                                                            {% for procuration in person.procurations %}
+                                                                <li>ID: {{ procuration.id }}, Date: {{ procuration.dateSignature|date('Y-m-d') }}</li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    {% else %}
+                                                        Aucun
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if person.desistements is not empty %}
+                                                        <ul>
+                                                            {% for desistement in person.desistements %}
+                                                                <li>ID: {{ desistement.id }}, Date: {{ desistement.dateSignature|date('Y-m-d') }}</li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    {% else %}
+                                                        Aucun
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

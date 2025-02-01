@@ -33,6 +33,37 @@ class ContratRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function countByMonth(int $year, string $type): array
+    {
+        $monthlyData = array_fill(1, 12, 0); // Initialize an array with 12 months
+
+        // Loop through each month to count entries
+        for ($month = 1; $month <= 12; $month++) {
+            $startDate = new \DateTime("$year-$month-01");
+            $endDate = (clone $startDate)->modify('first day of next month');
+
+            $qb = $this->createQueryBuilder('c');
+            $qb->select('COUNT(c.id) as count')
+                ->where('c.createdAt >= :start')
+                ->andWhere('c.createdAt < :end')
+                ->andWhere('c.type = :type') // Filter by type
+                ->setParameter('start', $startDate)
+                ->setParameter('end', $endDate)
+                ->setParameter('type', $type);
+
+            $result = $qb->getQuery()->getSingleScalarResult();
+            $monthlyData[$month] = (int) $result; // Store the count for the current month
+        }
+
+        return array_values($monthlyData); // Return values indexed 0-11 for the frontend
+    }
+
+
+
+
+
+
+
 //    /**
 //     * @return Contrat[] Returns an array of Contrat objects
 //     */

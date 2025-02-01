@@ -3,49 +3,12 @@
 {% block title %}Liste ventes{% endblock %}
 
 {% block body %}
-    <style>
-        .badge {
-            --bs-badge-padding-x: 0.65em;
-            --bs-badge-padding-y: 0.35em;
-            --bs-badge-font-size: 0.75em;
-            --bs-badge-font-weight: 700;
-            --bs-badge-color: #fff;
-            --bs-badge-border-radius: 0.3125rem;
-            display: inline-block;
-            padding: var(--bs-badge-padding-y) var(--bs-badge-padding-x);
-            font-size: var(--bs-badge-font-size);
-            font-weight: var(--bs-badge-font-weight);
-            line-height: 1;
-            color: var(--bs-badge-color);
-            text-align: center;
-            white-space: nowrap;
-            vertical-align: baseline;
-            border-radius: var(--bs-badge-border-radius);
-        }
-        .bg-soft-dark {
-            background-color: rgba(19, 33, 68, .1) !important;
-        }
-        .table thead th {
-            font-size: 1.1rem;
-            text-transform: capitalize;
-            font-weight: 900;
-            color: #2a2f5b;
-            font-family: 'Public Sans', sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
-        .table tfoot th span{
-            background-color: rgba(72, 171, 247, .1);
-            border: #0dcaf0 2px solid ;
-            padding: 5px;
-            border-radius: 12px;
-            text-transform: uppercase;
-            color:#0dcaf0;
-        }
-    </style>
+
+    <link rel="stylesheet" href="{{ asset('asset/css/comune.css') }}"/>
 
     <div class="container">
-        <div class="page-inner">
-            <div class="page-header">
+        <div class="page-inner pt-3">
+            <div class="page-header m-0">
                 <h3 class="fw-bold mb-3">Liste ventes</h3>
                 <ul class="breadcrumbs mb-3">
                     <li class="nav-home">
@@ -73,7 +36,7 @@
                         <div class="card-header">
                             <div class="d-flex align-items-center">
                                 <h4 class="card-title">Ventes <span class="badge bg-soft-dark text-dark ms-2">0</span></h4>
-                                <button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal" data-bs-target="#addRowModal">
+                                <button class="btn btn-primary btn-round ms-auto"onclick="window.location.href='{{ path('app_add_new_vente') }}'">
                                     <i class="fa fa-plus"></i>
                                     Nouveau vente
                                 </button>
@@ -173,4 +136,5 @@
             });
         });
     </script>
+
 {% endblock %}

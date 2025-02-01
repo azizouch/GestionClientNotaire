@@ -3,61 +3,12 @@
 {% block title %}Liste clients{% endblock %}
 
 {% block body %}
-    <style>
-        .head th{
-            color:  #313539;
-            background-color: #bccee4;
-            font-family: 'Public Sans', sans-serif;
-            text-transform: capitalize;
-        }
-        .badge {
-            --bs-badge-padding-x: 0.65em;
-            --bs-badge-padding-y: 0.35em;
-            --bs-badge-font-size: 0.75em;
-            --bs-badge-font-weight: 700;
-            --bs-badge-color: #fff;
-            --bs-badge-border-radius: 0.3125rem;
-            display: inline-block;
-            padding: var(--bs-badge-padding-y) var(--bs-badge-padding-x);
-            font-size: var(--bs-badge-font-size);
-            font-weight: var(--bs-badge-font-weight);
-            line-height: 1;
-            color: var(--bs-badge-color);
-            text-align: center;
-            white-space: nowrap;
-            vertical-align: baseline;
-            border-radius: var(--bs-badge-border-radius);
-        }
-        .bg-soft-dark {
-            background-color: rgba(19, 33, 68, .1) !important;
-        }
-        .badge {
-            line-height: normal;
-            vertical-align: middle;
-        }
-        .ms-2 {
-            margin-left: .75rem !important;
-        }
-        #multi-filter-select a.btn:hover,#multi-filter-select form button:hover{
-            background: white;
-            opacity: 1;
-        }
-        .modal-body{
-            margin-left: 4rem;
-        }
-        .modal-body p{
-            color: #808B96;
-        }
-        .modal-body p strong{
-            font-weight: 800;
-            color: #586570 ;
-        }
 
-    </style>
+    <link rel="stylesheet" href="{{ asset('asset/css/comune.css') }}"/>
 
     <div class="container">
-        <div class="page-inner">
-            <div class="page-header">
+        <div class="page-inner pt-3">
+            <div class="page-header m-0">
                 <h3 class="fw-bold mb-3">Liste Clients</h3>
                 <ul class="breadcrumbs mb-3">
                     <li class="nav-home">
@@ -155,7 +106,7 @@
                                                     </a>
                                                     <form id="delete-client-form-{{ client.id }}" action="{{ path('app_delete_client', { id: client.id }) }}" method="POST">
                                                         <button type="button" class="btn btn-icon mx-2 delete-client-btn" data-client-id="{{ client.id }}">
-                                                            <i class="fas fa-trash-alt fa-sm text-danger"></i>
+                                                            <i class="fas fa-trash-alt fa-sm text-dark"></i>
                                                         </button>
                                                     </form>
                                                     <div class="card-tools">
@@ -189,97 +140,6 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
-                                <!-- Modal -->
-                                <div class="modal fade" id="clientModal" tabindex="-1" role="dialog" aria-labelledby="clientModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-xl" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="clientModalLabel">Client Details</h5>
-                                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="row container">
-                                                    <div class="col-md-2">
-                                                        <p><strong>Nom :</strong></p>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <p><span id="clientLastName"></span></p>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <p><strong>Prénom :</strong></p>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <p><span id="clientFirstName"></span></p>
-                                                    </div>
-                                                </div>
-                                                <div class="row container">
-                                                    <div class="col-md-2">
-                                                        <p><strong>Prénom du père :</strong></p>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <p><span class="ml-2" id="clientFatherFirstName"></span></p>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <p><strong>Prénom du mère :</strong></p>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <p><span class="ml-2" id="clientMotherFirstName"></span></p>
-                                                    </div>
-                                                </div>
-                                                <div class="row container">
-                                                    <div class="col-md-2">
-                                                        <p><strong>Situation :</strong></p>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <p><span id="clientSituation"></span></p>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <p><strong>Genre :</strong></p>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <p><span class="ml-2" id="clientGenre"></span></p>
-                                                    </div>
-                                                </div>
-                                                <div class="row container">
-                                                    <div class="col-md-2">
-                                                        <p><strong>CIN :</strong></p>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <p><span class="ml-2" id="clientCin"></span></p>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <p><strong>Telephone :</strong></p>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <p><span class="ml-2" id="clientTelephone"></span></p>
-                                                    </div>
-                                                </div>
-                                                <div class="row container">
-                                                    <div class="col-md-2">
-                                                        <p><strong>Adresse :</strong></p>
-                                                    </div>
-                                                    <div class="col-md-10">
-                                                        <p><span class="ml-2" id="clientAddress"></span></p>
-                                                    </div>
-                                                </div>
-                                                <div class="row container">
-                                                    <div class="col-md-2">
-                                                        <p><strong>Email :</strong></p>
-                                                    </div>
-                                                    <div class="col-md-10">
-                                                        <p><span class="ml-2" id="clientEmail"></span></p>
-                                                    </div>
-                                                </div>
-                                                <div id="partnerInfo"></div> <!-- Partner info will be populated here -->
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -287,8 +147,6 @@
             </div>
         </div>
     </div>
-
-
 
     <script src="{{ asset('asset/js/core/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('asset/js/plugin/datatables/datatables.min.js') }}"></script>
@@ -299,7 +157,6 @@
                 checkbox.checked = source.checked;
             });
         }
-
         $(document).ready(function () {
             // Event delegation for clicking on table rows
             $('#multi-filter-select tbody').on('click', 'tr', function(e) {

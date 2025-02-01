@@ -77,7 +77,7 @@ class CommitmentController extends AbstractController
 
         // Render the HTML using the Twig template
         $projectDir = $this->getParameter('kernel.project_dir');
-        $logoPath = $projectDir . '/public/img/logo.jpg';
+        $logoPath = $projectDir . '/public/asset/img/commitment/logo.jpg';
         $logoData = base64_encode(file_get_contents($logoPath));
 
         $html = $this->renderView('commitments/demandeDouja.html.twig', [
@@ -119,7 +119,7 @@ class CommitmentController extends AbstractController
 
         // Render the HTML using the Twig template
         $projectDir = $this->getParameter('kernel.project_dir');
-        $logoPath = $projectDir . '/public/img/logo.jpg';
+        $logoPath = $projectDir . '/public/asset/img/commitment/logo.jpg';
         $logoData = base64_encode(file_get_contents($logoPath));
 
         $html = $this->renderView('commitments/demandeImmolog.html.twig', [

@@ -3,65 +3,8 @@
 {% block title %}Kaiadmin | Dashboard{% endblock %}
 
 {% block body %}
-    <style>
-        .card-stats .icon-big{
-            font-size: 2em;
-            min-height: 45px;
-        }
-        .card-stats .col-icon {
-            width: 45px;
-            height: 45px;
-            margin-left: 10px;
-        }
-        .card-stats .col-stats{
-            padding-left: 10px;
-            padding-right: 0;
-        }
-        .card-stats .icon-big.icon-yellow{
-            background: #fff046;
-            border-radius: 5px;
-        }
-        .card-stats .icon-big.icon-yellow i {
-            color: #fff !important;
-        }
-        @media (min-width: 768px) {
-            .row>* {
-                padding-right: calc(var(--bs-gutter-x)* .2);
-                padding-left: calc(var(--bs-gutter-x)* .2);
-            }
-        }
-        @media (min-width: 576px) {
-            .row>* {
-                padding-right: calc(var(--bs-gutter-x)* .2);
-                padding-left: calc(var(--bs-gutter-x)* .2);
-            }
-        }
-        .card-stats .card-body{
-            height: auto;
-        }
 
-        /* For screens between 768px and 1200px */
-        @media (max-width: 1200px) {
-            .card-stats .card-body {
-                height: 160px;
-            }
-            .card-stats .col-stats{
-                padding-right: 6px;
-            }
-        }
-        /* For screens smaller than 768px */
-        @media (max-width: 1023px) {
-            .card-stats .card-body {
-                height: 120px !important;
-            }
-            .card-stats .col-stats{
-                padding-right: 6px;
-            }
-        }
-
-
-    </style>
-{% if is_granted('ROLE_ADMIN') %}
+    <link rel="stylesheet" href="{{ asset('asset/css/indexx.css') }}" />
     <div class="container">
         <div class="page-inner">
             <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
@@ -69,8 +12,11 @@
                     <h3 class="fw-bold mb-3">Dashboard</h3>
                 </div>
                 <div class="ms-md-auto py-2 py-md-0">
-                    <a href="#" class="btn btn-label-info btn-round me-2">Manage</a>
-                    <a href="#" class="btn btn-primary btn-round">Add Customer</a>
+                    <a href="#" class="btn btn-label-info btn-round me-2">Dossiers</a>
+                    <a href="#" class="btn btn-primary btn-round">
+                        <i class="fa fa-print"></i>
+                        repport
+                    </a>
                 </div>
             </div>
             <div class="row">
@@ -86,7 +32,7 @@
                                 <div class="col col-stats ms-3 ms-sm-0">
                                     <div class="numbers">
                                         <p class="card-category">Ventes</p>
-                                        <h4 class="card-title">1,294</h4>
+                                        <h4 class="card-title">{{ ventes|length }}</h4>
                                     </div>
                                 </div>
                             </div>
@@ -105,7 +51,7 @@
                                 <div class="col col-stats ms-3 ms-sm-0">
                                     <div class="numbers">
                                         <p class="card-category">Compromis</p>
-                                        <h4 class="card-title">1303</h4>
+                                        <h4 class="card-title">{{ compromis|length }}</h4>
                                     </div>
                                 </div>
                             </div>
@@ -124,7 +70,7 @@
                                 <div class="col col-stats ms-3 ms-sm-0">
                                     <div class="numbers">
                                         <p class="card-category">Compromis Bank</p>
-                                        <h4 class="card-title">$ 1,345</h4>
+                                        <h4 class="card-title">0</h4>
                                     </div>
                                 </div>
                             </div>
@@ -143,7 +89,7 @@
                                 <div class="col col-stats ms-3 ms-sm-0">
                                     <div class="numbers">
                                         <p class="card-category">Dossiers Bureau</p>
-                                        <h4 class="card-title">$ 1,345</h4>
+                                        <h4 class="card-title">0</h4>
                                     </div>
                                 </div>
                             </div>
@@ -162,7 +108,7 @@
                                 <div class="col col-stats ms-3 ms-sm-0">
                                     <div class="numbers">
                                         <p class="card-category">Desistements</p>
-                                        <h4 class="card-title">576</h4>
+                                        <h4 class="card-title">{{ desistements|length }}</h4>
                                     </div>
                                 </div>
                             </div>
@@ -181,7 +127,7 @@
                                 <div class="col col-stats ms-3 ms-sm-0">
                                     <div class="numbers">
                                         <p class="card-category">Procurations</p>
-                                        <h4 class="card-title">576</h4>
+                                        <h4 class="card-title">{{ procurations|length }}</h4>
                                     </div>
                                 </div>
                             </div>
@@ -194,11 +140,11 @@
                     <div class="card card-round">
                         <div class="card-header">
                             <div class="card-head-row">
-                                <div class="card-title">User Statistics</div>
+                                <div class="card-title">Dossiers Statistiques</div>
                                 <div class="card-tools">
                                     <a href="#" class="btn btn-label-success btn-round btn-sm me-2">
                                         <span class="btn-label">
-                                            <i class="fa fa-pencil"></i>
+                                            <i class="fa fa-file-excel"></i>
                                         </span>
                                         Export
                                     </a>
@@ -220,7 +166,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card card-primary card-round">
+                    <div class="card card-primary card-round mb-4">
                         <div class="card-header">
                             <div class="card-head-row">
                                 <div class="card-title">Daily Sales</div>
@@ -265,7 +211,7 @@
                     <div class="card card-round">
                         <div class="card-header">
                             <div class="card-head-row card-tools-still-right">
-                                <h4 class="card-title">Users Geolocation</h4>
+                                <h4 class="card-title">Géolocalisation des entreprises</h4>
                                 <div class="card-tools">
                                     <button class="btn btn-icon btn-link btn-primary btn-xs">
                                         <span class="fa fa-angle-down"></span>
@@ -279,7 +225,7 @@
                                 </div>
                             </div>
                             <p class="card-category">
-                                Map of the distribution of users around the world
+                                Carte de la répartition des entreprises à travers le pays
                             </p>
                         </div>
                         <div class="card-body">
@@ -289,62 +235,32 @@
                                         <table class="table">
                                             <tbody>
                                             <tr>
-                                                <td>
-                                                    <div class="flag">
-                                                        <img src="{{ asset('asset/img/flags/id.png') }}" alt="indonesia"/>
-                                                    </div>
-                                                </td>
-                                                <td>Indonesia</td>
+                                                <td>Immolog</td>
                                                 <td class="text-end">2.320</td>
                                                 <td class="text-end">42.18%</td>
                                             </tr>
                                             <tr>
-                                                <td>
-                                                    <div class="flag">
-                                                        <img src="{{ asset('asset/img/flags/us.png') }}" alt="united states"/>
-                                                    </div>
-                                                </td>
-                                                <td>USA</td>
+                                                <td>Kojimmo</td>
                                                 <td class="text-end">240</td>
                                                 <td class="text-end">4.36%</td>
                                             </tr>
                                             <tr>
-                                                <td>
-                                                    <div class="flag">
-                                                        <img src="{{ asset('asset/img/flags/au.png') }}" alt="australia"/>
-                                                    </div>
-                                                </td>
-                                                <td>Australia</td>
+                                                <td>Douja</td>
                                                 <td class="text-end">119</td>
                                                 <td class="text-end">2.16%</td>
                                             </tr>
                                             <tr>
-                                                <td>
-                                                    <div class="flag">
-                                                        <img src="{{ asset('asset/img/flags/ru.png') }}" alt="russia"/>
-                                                    </div>
-                                                </td>
-                                                <td>Russia</td>
+                                                <td>Immolog</td>
                                                 <td class="text-end">1.081</td>
                                                 <td class="text-end">19.65%</td>
                                             </tr>
                                             <tr>
-                                                <td>
-                                                    <div class="flag">
-                                                        <img src="{{ asset('asset/img/flags/cn.png') }}" alt="china"/>
-                                                    </div>
-                                                </td>
-                                                <td>China</td>
+                                                <td>Kojimmo</td>
                                                 <td class="text-end">1.100</td>
                                                 <td class="text-end">20%</td>
                                             </tr>
                                             <tr>
-                                                <td>
-                                                    <div class="flag">
-                                                        <img src="{{ asset('asset/img/flags/br.png') }}" alt="brazil"/>
-                                                    </div>
-                                                </td>
-                                                <td>Brasil</td>
+                                                <td>Douja</td>
                                                 <td class="text-end">640</td>
                                                 <td class="text-end">11.63%</td>
                                             </tr>
@@ -363,12 +279,11 @@
                 </div>
             </div>
             <div class="row">
-                {#the div in bottom exit here#}
-                <div class="col-md-12">
-                    <div class="card card-round">
+                <div class="col-md-6">
+                    <div class="card card-round recents">
                         <div class="card-header">
                             <div class="card-head-row card-tools-still-right">
-                                <div class="card-title">Transaction History</div>
+                                <div class="card-title">Dossiers récents</div>
                                 <div class="card-tools">
                                     <div class="dropdown">
                                         <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -383,265 +298,257 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body p-0">
-                            <div class="table-responsive">
-                                <!-- Projects table -->
-                                <table class="table align-items-center mb-0">
-                                    <thead class="thead-light">
-                                    <tr>
-                                        <th scope="col">Payment Number</th>
-                                        <th scope="col" class="text-end">Date & Time</th>
-                                        <th scope="col" class="text-end">Amount</th>
-                                        <th scope="col" class="text-end">Status</th>
-                                    </tr>
-                                    </thead>
+                        <div class="card-body scrollbar scrollbar-inner">
+                            <div style="height: 300px">
+                            <!-- Projects table -->
+                                <table class="table table-responsive align-items-center mb-0">
+{#                                    <thead class="thead-light">#}
+{#                                    <tr>#}
+{#                                        <th scope="col">Payment Number</th>#}
+{#                                        <th scope="col" class="text-end">Date & Time</th>#}
+{#                                        <th scope="col" class="text-end">Amount</th>#}
+{#                                        <th scope="col" class="text-end">Status</th>#}
+{#                                    </tr>#}
+{#                                    </thead>#}
                                     <tbody>
-                                    <tr>
-                                        <th scope="row">
-                                            <button class="btn btn-icon btn-round btn-success btn-sm me-2">
-                                                <i class="fa fa-check"></i>
-                                            </button>
-                                            Payment from #10231
-                                        </th>
-                                        <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                        <td class="text-end">$250.00</td>
-                                        <td class="text-end">
-                                            <span class="badge badge-success">Completed</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <button class="btn btn-icon btn-round btn-success btn-sm me-2">
-                                                <i class="fa fa-check"></i>
-                                            </button>
-                                            Payment from #10231
-                                        </th>
-                                        <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                        <td class="text-end">$250.00</td>
-                                        <td class="text-end">
-                                            <span class="badge badge-success">Completed</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <button class="btn btn-icon btn-round btn-success btn-sm me-2">
-                                                <i class="fa fa-check"></i>
-                                            </button>
-                                            Payment from #10231
-                                        </th>
-                                        <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                        <td class="text-end">$250.00</td>
-                                        <td class="text-end">
-                                            <span class="badge badge-success">Completed</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <button class="btn btn-icon btn-round btn-success btn-sm me-2">
-                                                <i class="fa fa-check"></i>
-                                            </button>
-                                            Payment from #10231
-                                        </th>
-                                        <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                        <td class="text-end">$250.00</td>
-                                        <td class="text-end">
-                                            <span class="badge badge-success">Completed</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <button class="btn btn-icon btn-round btn-success btn-sm me-2">
-                                                <i class="fa fa-check"></i>
-                                            </button>
-                                            Payment from #10231
-                                        </th>
-                                        <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                        <td class="text-end">$250.00</td>
-                                        <td class="text-end">
-                                            <span class="badge badge-success">Completed</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <button class="btn btn-icon btn-round btn-success btn-sm me-2">
-                                                <i class="fa fa-check"></i>
-                                            </button>
-                                            Payment from #10231
-                                        </th>
-                                        <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                        <td class="text-end">$250.00</td>
-                                        <td class="text-end">
-                                            <span class="badge badge-success">Completed</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <button class="btn btn-icon btn-round btn-success btn-sm me-2">
-                                                <i class="fa fa-check"></i>
-                                            </button>
-                                            Payment from #10231
-                                        </th>
-                                        <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                        <td class="text-end">$250.00</td>
-                                        <td class="text-end">
-                                            <span class="badge badge-success">Completed</span>
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <th scope="row">
+                                                <button class="btn btn-icon btn-round btn-success btn-sm me-2">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                                Payment #10231
+                                            </th>
+                                            <td class="text-end">Mar 19, 2020, 2.45pm</td>
+                                            <td class="text-end">$250.00</td>
+                                            <td class="text-end">
+                                                <span class="badge badge-success">Completed</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                                <button class="btn btn-icon btn-round btn-success btn-sm me-2">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                                Payment #10231
+                                            </th>
+                                            <td class="text-end">Mar 19, 2020, 2.45pm</td>
+                                            <td class="text-end">$250.00</td>
+                                            <td class="text-end">
+                                                <span class="badge badge-success">Completed</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                                <button class="btn btn-icon btn-round btn-success btn-sm me-2">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                                Payment #10231
+                                            </th>
+                                            <td class="text-end">Mar 19, 2020, 2.45pm</td>
+                                            <td class="text-end">$250.00</td>
+                                            <td class="text-end">
+                                                <span class="badge badge-success">Completed</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                                <button class="btn btn-icon btn-round btn-success btn-sm me-2">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                                Payment #10231
+                                            </th>
+                                            <td class="text-end">Mar 19, 2020, 2.45pm</td>
+                                            <td class="text-end">$250.00</td>
+                                            <td class="text-end">
+                                                <span class="badge badge-success">Completed</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                                <button class="btn btn-icon btn-round btn-success btn-sm me-2">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                                Payment #10231
+                                            </th>
+                                            <td class="text-end">Mar 19, 2020, 2.45pm</td>
+                                            <td class="text-end">$250.00</td>
+                                            <td class="text-end">
+                                                <span class="badge badge-success">Completed</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                                <button class="btn btn-icon btn-round btn-success btn-sm me-2">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                                Payment #10231
+                                            </th>
+                                            <td class="text-end">Mar 19, 2020, 2.45pm</td>
+                                            <td class="text-end">$250.00</td>
+                                            <td class="text-end">
+                                                <span class="badge badge-success">Completed</span>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
+                        <div class="card-footer">
+                            <a class="see-all" href="#">
+                                Voir toutes les dossiers
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </div>
                     </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card activites">
+                        <div class="card-header">
+                            <div class="row align-items-center">
+                                <div class="card-head-row card-tools-still-right">
+                                    <div class="card-title">Activités</div>
+                                    <div class="card-tools">
+                                        <div class="dropdown">
+                                            <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fas fa-ellipsis-h"></i>
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a class="dropdown-item" href="#">Action</a>
+                                                <a class="dropdown-item" href="#">Another action</a>
+                                                <a class="dropdown-item" href="#">Something else here</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>  <!--end row-->
+                        </div><!--end card-header-->
+                        <div class="card-body scrollbar scrollbar-inner" style="overflow: auto">
+                            <div class="analytic-dash-activity " data-simplebar="init">
+                                <div class="simplebar-content" style="padding: 0px;">
+                                    <div class="activity">
+                                        <div class="activity-info">
+                                            <div class="icon-info-activity">
+                                                <i class="fas fa-user-clock bg-soft-primary"></i>
+                                            </div>
+                                            <div class="activity-info-text">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <p class="text-muted mb-0 font-13 w-75"><span>Donald</span>
+                                                        updated the status of <a href="">Refund #1234</a> to awaiting customer response
+                                                    </p>
+                                                    <small class="text-muted">10 Min ago</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="activity-info">
+                                            <div class="icon-info-activity">
+                                                <i class="fas fa-times bg-soft-primary"></i>
+                                            </div>
+                                            <div class="activity-info-text">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <p class="text-muted mb-0 font-13 w-75"><span>Lucy Peterson</span>
+                                                        was added to the group, group name is <a href="">Overtake</a>
+                                                    </p>
+                                                    <small class="text-muted">50 Min ago</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="activity-info">
+                                            <div class="icon-info-activity">
+                                                <img src="{{ asset('asset/img/profile2.jpg') }}" alt="" class="rounded-circle thumb-sm">
+                                            </div>
+                                            <div class="activity-info-text">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <p class="text-muted mb-0 font-13 w-75"><span>Joseph Rust</span>
+                                                        opened new showcase <a href="">Mannat #112233</a> with theme market
+                                                    </p>
+                                                    <small class="text-muted">10 hours ago</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="activity-info">
+                                            <div class="icon-info-activity">
+                                                <i class="fas fa-clock bg-soft-primary"></i>
+                                            </div>
+                                            <div class="activity-info-text">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <p class="text-muted mb-0 font-13 w-75"><span>Donald</span>
+                                                        updated the status of <a href="">Refund #1234</a> to awaiting customer response
+                                                    </p>
+                                                    <small class="text-muted">Yesterday</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="activity-info">
+                                            <div class="icon-info-activity">
+                                                <i class="fas fa-info bg-soft-primary"></i>
+                                            </div>
+                                            <div class="activity-info-text">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <p class="text-muted mb-0 font-13 w-75"><span>Lucy Peterson</span>
+                                                        was added to the group, group name is <a href="">Overtake</a>
+                                                    </p>
+                                                    <small class="text-muted">14 Nov 2019</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="activity-info">
+                                            <div class="icon-info-activity">
+                                                <img src="{{ asset('asset/img/profile.jpg') }}" alt="" class="rounded-circle thumb-sm">
+                                            </div>
+                                            <div class="activity-info-text">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <p class="text-muted mb-0 font-13 w-75"><span>Joseph Rust</span>
+                                                        opened new showcase <a href="">Mannat #112233</a> with theme market
+                                                    </p>
+                                                    <small class="text-muted">15 Nov 2019</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div><!--end activity-->
+                                </div>
+                            </div><!--end analytics-dash-activity-->
+                        </div>  <!--end card-body-->
+                        <div class="card-footer">
+                            <a class="see-all" href="#">
+                                Voir toutes les activités
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </div>
+                    </div><!--end card-->
                 </div>
             </div>
         </div>
-    <div>
-        {% endif %}
+    </div>
+    <script src="{{asset('asset/js/core/jquery-3.7.1.min.js')}}"></script>
+    <script>
+        $(document).ready(function () {
+
+            var activites = $('.activites .scrollbar');
+
+            if (activites.length > 0) {
+                activites.scrollbar();
+            }
+
+            var recents = $('.recents .scrollbar');
+
+            if (recents.length > 0) {
+                recents.scrollbar();
+            }
+        });
+        $.ajax({
+            url: '/api/statistics', // Correct URL
+            type: 'GET', // Use 'GET' method to fetch data
+            dataType: 'json', // Expect JSON response
+            success: function(response) {
+                console.log(response); // Log response for debugging
+                statisticsChart.data.datasets[0].data = response.desistements; // Update Desistements
+                statisticsChart.data.datasets[1].data = response.procurations; // Update Procurations
+                statisticsChart.data.datasets[2].data = response.compromis; // Update Compromis
+                statisticsChart.update(); // Update the chart
+            },
+            error: function(error) {
+                console.error('Error fetching statistics:', error);
+            }
+        });
+    </script>
 {% endblock %}
-
-
-
-
-{#            <div class="col-md-4">#}
-{#                <div class="card card-round">#}
-{#                    <div class="card-body">#}
-{#                        <div class="card-head-row card-tools-still-right">#}
-{#                            <div class="card-title">New Customers</div>#}
-{#                            <div class="card-tools">#}
-{#                                <div class="dropdown">#}
-{#                                    <button#}
-{#                                            class="btn btn-icon btn-clean me-0"#}
-{#                                            type="button"#}
-{#                                            id="dropdownMenuButton"#}
-{#                                            data-bs-toggle="dropdown"#}
-{#                                            aria-haspopup="true"#}
-{#                                            aria-expanded="false"#}
-{#                                    >#}
-{#                                        <i class="fas fa-ellipsis-h"></i>#}
-{#                                    </button>#}
-{#                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">#}
-{#                                        <a class="dropdown-item" href="#">Action</a>#}
-{#                                        <a class="dropdown-item" href="#">Another action</a>#}
-{#                                        <a class="dropdown-item" href="#"#}
-{#                                        >Something else here</a#}
-{#                                        >#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                        <div class="card-list py-4">#}
-{#                            <div class="item-list">#}
-{#                                <div class="avatar">#}
-{#                                    <img#}
-{#                                            src="{{ asset('asset/img/jm_denis.jpg') }}"#}
-{#                                            alt="..."#}
-{#                                            class="avatar-img rounded-circle"#}
-{#                                    />#}
-{#                                </div>#}
-{#                                <div class="info-user ms-3">#}
-{#                                    <div class="username">Jimmy Denis</div>#}
-{#                                    <div class="status">Graphic Designer</div>#}
-{#                                </div>#}
-{#                                <button class="btn btn-icon btn-link op-8 me-1">#}
-{#                                    <i class="far fa-envelope"></i>#}
-{#                                </button>#}
-{#                                <button class="btn btn-icon btn-link btn-danger op-8">#}
-{#                                    <i class="fas fa-ban"></i>#}
-{#                                </button>#}
-{#                            </div>#}
-{#                            <div class="item-list">#}
-{#                                <div class="avatar">#}
-{#                          <span#}
-{#                                  class="avatar-title rounded-circle border border-white"#}
-{#                          >CF</span#}
-{#                          >#}
-{#                                </div>#}
-{#                                <div class="info-user ms-3">#}
-{#                                    <div class="username">Chandra Felix</div>#}
-{#                                    <div class="status">Sales Promotion</div>#}
-{#                                </div>#}
-{#                                <button class="btn btn-icon btn-link op-8 me-1">#}
-{#                                    <i class="far fa-envelope"></i>#}
-{#                                </button>#}
-{#                                <button class="btn btn-icon btn-link btn-danger op-8">#}
-{#                                    <i class="fas fa-ban"></i>#}
-{#                                </button>#}
-{#                            </div>#}
-{#                            <div class="item-list">#}
-{#                                <div class="avatar">#}
-{#                                    <img#}
-{#                                            src="{{ asset('asset/img/talha.jpg') }}"#}
-{#                                            alt="..."#}
-{#                                            class="avatar-img rounded-circle"#}
-{#                                    />#}
-{#                                </div>#}
-{#                                <div class="info-user ms-3">#}
-{#                                    <div class="username">Talha</div>#}
-{#                                    <div class="status">Front End Designer</div>#}
-{#                                </div>#}
-{#                                <button class="btn btn-icon btn-link op-8 me-1">#}
-{#                                    <i class="far fa-envelope"></i>#}
-{#                                </button>#}
-{#                                <button class="btn btn-icon btn-link btn-danger op-8">#}
-{#                                    <i class="fas fa-ban"></i>#}
-{#                                </button>#}
-{#                            </div>#}
-{#                            <div class="item-list">#}
-{#                                <div class="avatar">#}
-{#                                    <img#}
-{#                                            src="{{ asset('asset/img/chadengle.jpg') }}"#}
-{#                                            alt="..."#}
-{#                                            class="avatar-img rounded-circle"#}
-{#                                    />#}
-{#                                </div>#}
-{#                                <div class="info-user ms-3">#}
-{#                                    <div class="username">Chad</div>#}
-{#                                    <div class="status">CEO Zeleaf</div>#}
-{#                                </div>#}
-{#                                <button class="btn btn-icon btn-link op-8 me-1">#}
-{#                                    <i class="far fa-envelope"></i>#}
-{#                                </button>#}
-{#                                <button class="btn btn-icon btn-link btn-danger op-8">#}
-{#                                    <i class="fas fa-ban"></i>#}
-{#                                </button>#}
-{#                            </div>#}
-{#                            <div class="item-list">#}
-{#                                <div class="avatar">#}
-{#                          <span#}
-{#                                  class="avatar-title rounded-circle border border-white bg-primary"#}
-{#                          >H</span#}
-{#                          >#}
-{#                                </div>#}
-{#                                <div class="info-user ms-3">#}
-{#                                    <div class="username">Hizrian</div>#}
-{#                                    <div class="status">Web Designer</div>#}
-{#                                </div>#}
-{#                                <button class="btn btn-icon btn-link op-8 me-1">#}
-{#                                    <i class="far fa-envelope"></i>#}
-{#                                </button>#}
-{#                                <button class="btn btn-icon btn-link btn-danger op-8">#}
-{#                                    <i class="fas fa-ban"></i>#}
-{#                                </button>#}
-{#                            </div>#}
-{#                            <div class="item-list">#}
-{#                                <div class="avatar">#}
-{#                          <span#}
-{#                                  class="avatar-title rounded-circle border border-white bg-secondary"#}
-{#                          >F</span#}
-{#                          >#}
-{#                                </div>#}
-{#                                <div class="info-user ms-3">#}
-{#                                    <div class="username">Farrah</div>#}
-{#                                    <div class="status">Marketing</div>#}
-{#                                </div>#}
-{#                                <button class="btn btn-icon btn-link op-8 me-1">#}
-{#                                    <i class="far fa-envelope"></i>#}
-{#                                </button>#}
-{#                                <button class="btn btn-icon btn-link btn-danger op-8">#}
-{#                                    <i class="fas fa-ban"></i>#}
-{#                                </button>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}

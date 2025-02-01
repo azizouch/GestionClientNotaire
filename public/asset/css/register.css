@@ -82,20 +82,16 @@ INPUT:-webkit-autofill, SELECT:-webkit-autofill, TEXTAREA:-webkit-autofill {
 .form-outline .form-control:focus {
     box-shadow: none !important;
 }
-
-
 .form-control:focus {
     box-shadow: none;
     transition: all .1s linear;
     border-color: #3b71ca;
     box-shadow: inset 0px 0px 0px 1px #3b71ca;
 }
-.form-outline .form-control:focus~.form-label {
-    color: #3b71ca;
-}
 .form-outline .form-control:focus~.form-label, .form-outline .form-control.active~.form-label {
     transform: translateY(-1rem) translateY(0.1rem) scale(0.8);
 }
+
 .form-outline .form-control:focus~.form-notch .form-notch-leading {
     border-color: #3b71ca;
     box-shadow: -1px 0 0 0 #3b71ca, 0 1px 0 0 #3b71ca, 0 -1px 0 0 #3b71ca;
@@ -118,4 +114,7 @@ INPUT:-webkit-autofill, SELECT:-webkit-autofill, TEXTAREA:-webkit-autofill {
 .form-outline .form-control:focus~.form-notch .form-notch-trailing {
     border-color: #3b71ca;
     box-shadow: 1px 0 0 0 #3b71ca, 0 -1px 0 0 #3b71ca, 0 1px 0 0 #3b71ca;
+}
+.form-outline .form-control:focus~.form-label {
+    color: #3b71ca;
 }

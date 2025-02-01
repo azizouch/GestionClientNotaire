@@ -3,6 +3,7 @@
 {% block title %}Creer nouveau compromis{% endblock %}
 
 {% block body %}
+
     <style>
         .form-control{
             border: 0.5px solid lightgrey;
@@ -39,11 +40,20 @@
             75% { transform: translateX(-5px); }
             100% { transform: translateX(0); }
         }
+        .basetable thead th{
+            text-transform: capitalize;
+            background-color: #d0ece7;
+        }
+        #clientsTables tbody tr {
+            cursor: pointer;
+        }
+
 
     </style>
+
     <div class="container">
-        <div class="page-inner">
-            <div class="page-header">
+        <div class="page-inner pt-3">
+            <div class="page-header m-0">
                 <h3 class="fw-bold mb-3">Ajouter compromis</h3>
                 <ul class="breadcrumbs mb-3">
                     <li class="nav-home">
@@ -274,7 +284,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            {{ form_row(form.Submit) }}
+                                            {{ form_row(form.Submit, { 'label': 'Creer compromis' }) }}
                                         </div>
                                         {{ form_end(form) }}
                                         <!-- Modal for Client Selection -->
@@ -282,37 +292,40 @@
                                             <div class="modal-dialog modal-lg">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="newClientModalLabel">Choisir un client</h5>
+                                                        <h5 class="modal-title" id="newClientModalLabel">Ajouter</h5>
+
+                                                        <input type="text" id="searchInputPerson" class="form-control" placeholder="Search for a person..." style="margin-right: 20px;margin-left: 20px">
+
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <table class="table table-hover" id="clientsTables">
+                                                        <table class="table table-hover basetable" id="clientsTables">
                                                             <thead>
-                                                            <tr>
-                                                                <th>Prenom</th>
-                                                                <th>Nom</th>
-                                                                <th>CIN</th>
+                                                            <tr style="text-transform: capitalize">
+                                                                <th>Denomination/Nom/Prenom</th>
+                                                                <th>Identifiant</th>
+                                                                <th>Ville</th>
+                                                                <th>Telephone</th>
+                                                                <th>Email</th>
                                                             </tr>
                                                             </thead>
-                                                            <tbody>
-                                                            {% for personne in PersonnesPhysiques %}
-                                                                <tr data-client-info='{
-                                                            "firstName": "{{ personne.firstName }}",
-                                                            "lastName": "{{ personne.lastName }}",
-                                                            "cin": "{{ personne.cin }}",
-                                                            "phone": "{{ personne.telephone }}",
-                                                            "address": "{{ personne.address }}",
-                                                            "situation": "{{ personne.situation }}",
-                                                            "email": "{{ personne.email }}",
-{#                                                            "role": "{{ personne.role }}"#}
-                                                        }'>
-                                                                    <td>{{ personne.firstName }}</td>
-                                                                    <td>{{ personne.lastName }}</td>
-                                                                    <td>{{ personne.cin }}</td>
+                                                            <tbody class="tablebody">
+                                                            {% for person in PersonnesPhysiques %}
+                                                                <tr data-id="{{ person.id }}" data-cin="{{ person.cin }}" data-type="personPhysique">
+                                                                    <td>{{ person.firstName }} {{ person.lastName }}</td>
+                                                                    <td>CIN: {{ person.cin }}</td>
+                                                                    <td>{{ person.city }}</td>
+                                                                    <td>{{ person.telephone }}</td>
+                                                                    <td>{{ person.email }}</td>
                                                                 </tr>
-                                                            {% else %}
-                                                                <tr>
-                                                                    <td colspan="3">No personne available.</td>
+                                                            {% endfor %}
+                                                            {% for personne in PersonnesMorales %}
+                                                                <tr data-id="{{ person.id }}" data-cin="{{ person.cin }}" data-type="personMorale">
+                                                                    <td>{{ person.name }}</td>
+                                                                    <td>RC: {{ person.RC }}</td>
+                                                                    <td>{{ person.city }}</td>
+                                                                    <td>{{ person.telephone }}</td>
+                                                                    <td>{{ person.email }}</td>
                                                                 </tr>
                                                             {% endfor %}
                                                             </tbody>
@@ -348,6 +361,21 @@
                                                         </div>
                                                         <!-- Personne Physique Form -->
                                                         <form class="container" id="personnePhysiqueForm">
+                                                            <div class="row mb-3 justify-content-center">
+                                                                <div class="d-flex justify-content-center align-items-center col-md-8">
+                                                                    <div class="col-md-2">
+                                                                        <label class="form-label mb-0" for="civilite" >Civilité</label>
+                                                                    </div>
+                                                                    <div class="col-md-10">
+                                                                        <select id="civilite" class="form-select" required>
+                                                                            <option value="" disabled selected>Choisissez une civilité...</option>
+                                                                            <option value="Monsieur">Monsieur</option>
+                                                                            <option value="Madame">Madame</option>
+                                                                            <option value="Mademoiselle">Mademoiselle</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                             <div class="row mb-3">
                                                                 <div class="col-md-6">
                                                                     <label for="firstName" class="form-label required" >Prenom</label>
@@ -374,37 +402,37 @@
                                                                     <input type="text" class="form-control" id="cin" required>
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <label for="ville" class="form-label required">Ville</label>
-                                                                    <input type="text" class="form-control" id="ville" required>
+                                                                    <label for="birth_place" class="form-label required">Lieu de naissance</label>
+                                                                    <input type="text" class="form-control" id="birth_place" required>
                                                                 </div>
                                                             </div>
                                                             <div class="row mb-3">
-                                                                <div class="col-md-6">
-                                                                    <label for="DateNaissance" class="form-label required">Date de naissance</label>
-                                                                    <input type="date" class="form-control" id="DateNaissance" required>
-                                                                </div>
                                                                 <div class="col-md-6">
                                                                     <label for="DateExpiration" class="form-label required">Date d'expiration du CIN</label>
                                                                     <input type="date" class="form-control" id="DateExpiration" required>
                                                                 </div>
+                                                                <div class="col-md-6">
+                                                                    <label for="DateNaissance" class="form-label required">Date de naissance</label>
+                                                                    <input type="date" class="form-control" id="DateNaissance" required>
+                                                                </div>
                                                             </div>
                                                             <div class="row mb-3">
                                                                 <div class="col-md-6">
+                                                                    <label for="genre" class="form-label required">Genre</label>
+                                                                    <select id="genre" class="form-select" required>
+                                                                        <option value="" disabled selected>Choisissez une genre...</option>
+                                                                        <option value="Male">Male</option>
+                                                                        <option value="Femelle">Femelle</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-md-6">
                                                                     <label for="situation" class="form-label required">Situation familiale</label>
                                                                     <select id="situation" class="form-select" required>
-                                                                        <option value="" disabled selected>Choose a situation...</option>
+                                                                        <option value="" disabled selected>Choisissez une situation...</option>
                                                                         <option value="Célibataire">Célibataire</option>
                                                                         <option value="Marié">Marié</option>
                                                                         <option value="Veuf">Veuf</option>
                                                                         <option value="Veuve">Veuve</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <label for="genre" class="form-label required">Genre</label>
-                                                                    <select id="genre" class="form-select" required>
-                                                                        <option value="" disabled selected>Choose a gender...</option>
-                                                                        <option value="Male">Male</option>
-                                                                        <option value="Femelle">Femelle</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -424,23 +452,36 @@
                                                                 </div>
                                                                 <div class="row mb-3">
                                                                     <div class="col-md-6">
-                                                                        <label for="mariagePlace" class="form-label required">Lieu de Marriage</label>
+                                                                        <label for="mariagePlace" class="form-label required">Lieu de mariage</label>
                                                                         <input type="text" class="form-control" id="mariagePlace" required>
                                                                     </div>
                                                                     <div class="col-md-6">
-                                                                        <label for="mariageDate" class="form-label required">Date de Marriage</label>
-                                                                        <input type="date" class="form-control" id="mariageDate" required>
+                                                                        <label for="mariageYear" class="form-label required">Année de mariage</label>
+                                                                        <input type="number" class="form-control" id="mariageYear" min="1900" max="2024"  required>
+                                                                        <small id="mariageYearMessage" class="text-danger" style="display: none;">
+                                                                            L'année doit être comprise entre 1900 et l'année actuelle.
+                                                                        </small>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             <div class="row mb-3">
                                                                 <div class="col-md-6">
-                                                                    <label for="email" class="form-label">Email</label>
-                                                                    <input type="email" class="form-control" id="email">
+                                                                    <label for="nationality" class="form-label">Nationalité</label>
+                                                                    <input type="text" class="form-control" id="nationality" required>
                                                                 </div>
+                                                                <div class="col-md-6">
+                                                                    <label for="ville" class="form-label required">Ville</label>
+                                                                    <input type="text" class="form-control" id="ville" required>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row mb-3">
                                                                 <div class="col-md-6">
                                                                     <label for="phone" class="form-label">Téléphone</label>
                                                                     <input type="text" class="form-control" id="phone">
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label for="email" class="form-label">Email</label>
+                                                                    <input type="email" class="form-control" id="email">
                                                                 </div>
                                                             </div>
                                                             <div class="row mb-3">
@@ -529,11 +570,27 @@
             </div>
         </div>
     </div>
+
     <script src="{{ asset('asset/js/core/jquery-3.7.1.min.js') }}"></script>
-
     <script>
-
         let selectedRole = ''; // Store the role from the button click
+        let selectedPersons = [];
+        const mariageYearInput = document.getElementById('mariageYear');
+        const mariageYearMessage = document.getElementById('mariageYearMessage');
+
+        mariageYearInput.addEventListener('input', () => {
+            const year = parseInt(mariageYearInput.value, 10);
+            const currentYear = new Date().getFullYear();
+            const minYear = 1900;
+
+            if (year < minYear || year > currentYear) {
+                mariageYearMessage.style.display = 'block';
+                mariageYearInput.setCustomValidity('Invalid');
+            } else {
+                mariageYearMessage.style.display = 'none';
+                mariageYearInput.setCustomValidity('');
+            }
+        });
 
         document.addEventListener('DOMContentLoaded', function () {
             const newClientModal = new bootstrap.Modal(document.getElementById('newClientModal'), {
@@ -553,6 +610,58 @@
 
         document.getElementById('ajouterBeneficiaire').addEventListener('click', () => {
             selectedRole = 'Bénéficiaire'; // Set the role to "Bénéficiaire"
+        });
+
+        $(document).ready(function () {
+            $('#searchInputPerson').on('keypress', function (event) {
+                // Check if the Enter key was pressed
+                if (event.which === 13) { // 13 is the keycode for Enter
+                    event.preventDefault(); // Prevent default form submission
+
+                    const query = $(this).val().trim(); // Get the input value and trim whitespace
+
+                    // Send AJAX request
+                    $.ajax({
+                        url: query ? `/ajax/search-persons/${query}` : '/ajax/search-persons', // Adjust URL based on input
+                        method: 'GET',
+                        success: function (data) {
+                            const tableBody = $('#clientsTables tbody');
+                            tableBody.empty();
+                            console.log(data);
+                            if (data.length > 0) {
+                                data.forEach(person => {
+                                    if (person.type === 'PersonPhysique'){
+                                        tableBody.append(`
+                                        <tr data-id="${ person.id }" data-cin="${ person.cin }" data-type="personPhysique">
+                                            <td>${ person.first_name } ${ person.last_name }</td>
+                                            <td>CIN: ${ person.cin }</td>
+                                            <td>${ person.city }</td>
+                                            <td>${ person.phone || ''}</td>
+                                            <td>${ person.email || ''}</td>
+                                        </tr>
+                                    `);
+                                    }else if (person.type === 'PersonMorale'){
+                                        tableBody.append(`
+                                        <tr data-id="${ person.id }" data-cin="${ person.cin }" data-type="personMorale">
+                                            <td>${ person.name }</td>
+                                            <td>RC: ${ person.RC }</td>
+                                            <td>${ person.city }</td>
+                                            <td>${ person.phone || '' }</td>
+                                            <td>${ person.email || '' }</td>
+                                        </tr>
+                                    `);
+                                    }
+                                });
+                            } else {
+                                tableBody.append('<tr><td colspan="5" class="text-center">No results found</td></tr>');
+                            }
+                        },
+                        error: function () {
+                            alert('An error occurred while fetching persons. Please try again.');
+                        }
+                    });
+                }
+            });
         });
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -628,10 +737,10 @@
                         partnerData = {}
                     }
                     // Collect data from Personne Physique form and validate fields
-                    const requiredFields = ['firstName', 'lastName', 'firstNameFather', 'firstNameMother', 'cin', 'situation', 'genre', 'address','ville','DateNaissance','DateExpiration'];
-                    requiredFields.forEach(id => validateField(document.getElementById(id)));
+                    const requiredFields = ['firstName', 'lastName', 'firstNameFather', 'firstNameMother', 'cin', 'situation', 'genre', 'address','ville','DateNaissance','DateExpiration','civilite','birth_place','nationality'];                    requiredFields.forEach(id => validateField(document.getElementById(id)));
                     // Collect data from Personne Physique form
                     formData = {
+                        civilite: document.getElementById('civilite').value,
                         firstName: document.getElementById('firstName').value,
                         lastName: document.getElementById('lastName').value,
                         firstNameFather: document.getElementById('firstNameFather').value,
@@ -645,6 +754,8 @@
                         address: document.getElementById('address').value,
                         dateNaissance: document.getElementById('DateNaissance').value,
                         dateExpiration: document.getElementById('DateExpiration').value,
+                        birth_place: document.getElementById('birth_place').value,
+                        nationality: document.getElementById('nationality').value,
                         role: selectedRole,
                         partnerData: partnerData,
                         type:"personPhysique"
@@ -696,7 +807,6 @@
             const index = container.children.length;
             const uniquePrototype = prototype.replace(/__name__/g, index);  // Replace placeholders with index
 
-            // Add the fieldset's data-cin attribute to link the fieldset with the person
             newFieldset.setAttribute('data-cin', personData.cin);
 
             // Insert the new fieldset HTML into the new div
@@ -706,6 +816,7 @@
             const newPersonFieldset = newFieldset.querySelector(`#contrat_pphysique_${index}`);
 
             // Populate the new fieldset with the client data
+            newPersonFieldset.querySelector('[name$="[civilite]"]').value = personData.civilite;
             newPersonFieldset.querySelector('[name$="[first_name]"]').value = personData.firstName;
             newPersonFieldset.querySelector('[name$="[last_name]"]').value = personData.lastName;
             newPersonFieldset.querySelector('[name$="[prenom_pere]"]').value = personData.firstNameFather;
@@ -719,6 +830,8 @@
             newPersonFieldset.querySelector('[name$="[address]"]').value = personData.address;
             newPersonFieldset.querySelector('[name$="[birth_date]"]').value = personData.dateNaissance;
             newPersonFieldset.querySelector('[name$="[expiration_cin]"]').value = personData.dateExpiration;
+            newPersonFieldset.querySelector('[name$="[birth_place]"]').value = personData.birth_place;
+            newPersonFieldset.querySelector('[name$="[nationality]"]').value = personData.nationality;
 
             // Add the selected role to the roles fieldset
             const rolesContainer = newPersonFieldset.querySelector(`#contrat_pphysique_${index}_roles`);
@@ -772,81 +885,28 @@
 
             // Reset other related fields if needed
             document.getElementById('partnerFields').style.display = 'none';
+            const newPersonData = {
+                type: personData.type,
+                name: personData.firstName +" "+ personData.lastName,
+                identifiant: "CIN: "+ personData.cin,
+                ville: personData.ville,
+                telephone: personData.phone,
+                email: personData.email,
+                cin: personData.cin,
+            }
 
             // Optionally, display the person data in a table or any other structure
-            displayPersonInTable(personData);
+            if(selectedRole === "Promettant"){
+                displayPersonInTable(newPersonData,'PromettantTable');
+            }else if(selectedRole === "Bénéficiaire"){
+                displayPersonInTable(newPersonData,'BeneficiaireTable');
+            }
+
 
             // Hide the modal after adding the person
             const modalElement = document.getElementById('newClientModal2');
             const modal = bootstrap.Modal.getInstance(modalElement);
             modal.hide();
-        }
-
-        function displayPersonInTable(person) {
-            let newRow;
-            // Check if it's a personPhysique or personMorale
-            if (person.type === 'personPhysique') {
-                newRow = $(`
-                    <tr data-cin="${person.cin}">
-                        <td>${person.firstName} ${person.lastName}</td>
-                        <td>${person.cin}</td>
-                        <td>${person.ville}</td>
-                        <td>${person.phone}</td>
-                        <td>${person.email}</td>
-                        <td class="text-center"><button type="button" class="btn btn-danger btn-sm delete-client"><i class="fas fa-trash-alt"></i></button></td>
-                    </tr>
-                `);
-            } else if (person.type === 'personMorale') {
-                newRow = $(`
-                    <tr data-if="${person.companyIF}">
-                        <td>${person.companyName}</td>
-                        <td>${person.companyIF}</td>
-                        <td>${person.companyVille}</td>
-                        <td></td>
-                        <td></td>
-                        <td class="text-center"><button type="button" class="btn btn-danger btn-sm delete-client"><i class="fas fa-trash-alt"></i></button></td>
-                    </tr>
-                `);
-            } else {
-                console.error(`Unknown person type: ${person.type}`);
-                return; // Exit the function if the person type is unknown
-            }
-
-            // Append the row to the correct table based on the role
-            if (person.role === 'Promettant') {
-                $('#PromettantTable tbody').append(newRow);
-            } else if (person.role === 'Bénéficiaire') {
-                $('#BeneficiaireTable tbody').append(newRow);
-            } else {
-                console.error(`Unknown role: ${person.role}`);
-                return; // Exit the function if the role is unknown
-            }
-
-            // Add event listener to the delete button
-            newRow.find('.delete-client').on('click', function() {
-                if (person.type === 'personPhysique') {
-                    deletePersonFromFieldset(person.cin); // Remove personPhysique from the fieldset
-                } else if (person.type === 'personMorale') {
-                    deletePersonFromFieldset(person.companyIF); // Remove personMorale from the fieldset
-                }
-                newRow.remove(); // Remove row from table
-            });
-        }
-
-        function deletePersonFromFieldset(identifier) {
-            // Try to find the fieldset using the data-cin attribute
-            let fieldsetToDelete = document.querySelector(`[data-cin="${identifier}"]`);
-
-            // If not found, try finding it using the data-if attribute (for personMorale)
-            if (!fieldsetToDelete) {
-                fieldsetToDelete = document.querySelector(`[data-if="${identifier}"]`);
-            }
-
-            if (fieldsetToDelete) {
-                fieldsetToDelete.remove(); // Remove the fieldset from the DOM
-            } else {
-                console.error('No matching fieldset found for identifier:', identifier);
-            }
         }
 
         function addToFieldsetPersonMorale(personData){
@@ -916,6 +976,129 @@
             modal.hide();
         }
 
+        function displayPersonInTable(person, targetTable) {
+            let newRow;
+            // Check if it's a personPhysique or personMorale
+            if (person.type === 'personPhysique') {
+                newRow = $(`
+                <tr data-cin="${person.cin}">
+                    <td>${person.name}</td>
+                    <td>${person.identifiant}</td>
+                    <td>${person.ville}</td>
+                    <td>${person.telephone}</td>
+                    <td>${person.email}</td>
+                    <td class="text-center"><button type="button" class="btn btn-danger btn-sm delete-client"><i class="fas fa-trash-alt"></i></button></td>
+                </tr>
+            `);
+            } else if (person.type === 'personMorale') {
+                newRow = $(`
+                <tr data-if="${person.companyIF}">
+                    <td>${person.companyName}</td>
+                    <td>${person.companyIF}</td>
+                    <td>${person.companyVille}</td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-center"><button type="button" class="btn btn-danger btn-sm delete-client"><i class="fas fa-trash-alt"></i></button></td>
+                </tr>
+            `);
+            } else {
+                console.error(`Unknown person type: ${person.type}`);
+                return; // Exit the function if the person type is unknown
+            }
+
+            // Append the row to the specified table
+            $(`#${targetTable} tbody`).append(newRow);
+
+            // Add event listener to the delete button
+            newRow.find('.delete-client').on('click', function() {
+                if (person.type === 'personPhysique') {
+                    deletePersonFromFieldset(person.cin); // Remove personPhysique from the fieldset
+                } else if (person.type === 'personMorale') {
+                    deletePersonFromFieldset(person.companyIF); // Remove personMorale from the fieldset
+                }
+                newRow.remove(); // Remove row from table
+            });
+        }
+
+        function deletePersonFromFieldset(identifier) {
+            // Try to find the fieldset using the data-cin attribute
+            let fieldsetToDelete = document.querySelector(`[data-cin="${identifier}"]`);
+
+            // If not found, try finding it using the data-if attribute (for personMorale)
+            if (!fieldsetToDelete) {
+                fieldsetToDelete = document.querySelector(`[data-if="${identifier}"]`);
+            }
+
+            if (fieldsetToDelete) {
+                fieldsetToDelete.remove(); // Remove the fieldset from the DOM
+            } else {
+                // console.error('No matching fieldset found for identifier:', identifier);
+                return;
+            }
+        }
+
+        $(document).ready(function () {
+            // Add click event to table rows
+            $('#clientsTables tbody').on('click', 'tr', function () {
+                // Extract data attributes from the clicked row
+                const personId = $(this).data('id'); // Get the person's ID
+                const personType = $(this).data('type'); // Get the person's type
+
+                // Extract text from the correct table columns
+                const personName = $(this).find('td:nth-child(1)').text(); // Denomination/Nom/Prenom
+                const personIdentifiant = $(this).find('td:nth-child(2)').text(); // Identifiant (CIN or IF)
+                const personVille = $(this).find('td:nth-child(3)').text(); // Ville
+                const personTel = $(this).find('td:nth-child(4)').text(); // Telephone
+                const personEmail = $(this).find('td:nth-child(5)').text(); // Email
+                const cin = personIdentifiant.replace("CIN: ", "").trim();
+                // Create a person object to pass to the display function
+                const selectedPerson = {
+                    id: personId,
+                    type: personType,
+                    name: personName,
+                    identifiant: personIdentifiant,
+                    ville: personVille,
+                    telephone: personTel,
+                    email: personEmail,
+                    cin: cin
+                };
+
+                // Check if the person already exists in either table
+                if (checkPersonExists(cin)) {
+                    showAlert("La personne choisie existe déjà dans l'une des tables.");
+                } else {
+                    // Call the function to display this person in the target table
+                    if (selectedRole === "Promettant") {
+                        displayPersonInTable(selectedPerson, 'PromettantTable');
+                    } else if (selectedRole === "Bénéficiaire") {
+                        displayPersonInTable(selectedPerson, 'BeneficiaireTable');
+                    }
+                }
+
+                // Check if the person is already in the selected list
+                const exists = selectedPersons.some(p => p.id === personId && p.type === personType);
+                if (!exists) {
+                    selectedPersons.push(selectedPerson); // Add the person to the array
+                    $('#contrat [name="selectedPersons"]').val(JSON.stringify(selectedPersons));
+                } else {
+                    console.log(`This person is already selected: ${personName}`, 'warning'); // Optional: show a warning
+                }
+                console.log(selectedPerson);
+                // Hide the modal after adding the person
+                const modalElement = document.getElementById('newClientModal');
+                const modal = bootstrap.Modal.getInstance(modalElement);
+                modal.hide();
+            });
+
+        });
+
+        function checkPersonExists(cin) {
+            const existsInPromettant = $(`#PromettantTable tbody tr[data-cin="${cin}"]`).length > 0;
+            const existsInBeneficiaire = $(`#BeneficiaireTable tbody tr[data-cin="${cin}"]`).length > 0;
+
+            return existsInPromettant || existsInBeneficiaire;
+        }
+
         function showAlert(message) {
             swal("Warning!", message, {
                 icon: "warning",
@@ -928,27 +1111,7 @@
             });
         }
 
-        // document.addEventListener('DOMContentLoaded', () => {
-        // // Add click event listeners to rows
-        //     document.querySelectorAll('tr[data-client-info]').forEach((row) => {
-        //         row.addEventListener('click', function () {
-        //             const clientInfo = JSON.parse(this.getAttribute('data-client-info'));
-        //
-        //             const isSelected = this.getAttribute('data-selected') === 'true';
-        //             this.classList.toggle('selected', !isSelected);
-        //             this.setAttribute('data-selected', !isSelected);
-        //
-        //             if (!isSelected) {
-        //                 clientInfo.role = selectedRole; // Assign role dynamically
-        //                 addClientToFieldset(clientInfo);
-        //                 displayClientInTable(clientInfo);
-        //             } else {
-        //                 showAlert("La ligne choisie existe déjà dans l'une des tables.");
-        //             }
-        //         });
-        //     });
-        // });
-
     </script>
+
 {% endblock %}
 

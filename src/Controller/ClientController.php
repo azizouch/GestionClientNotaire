@@ -78,7 +78,7 @@ class ClientController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $personnePhysique = $form->getData();
-            dd($personnePhysique);
+//            dd($personnePhysique);
             $entityManager->persist($personnePhysique);
             $entityManager->flush();
 

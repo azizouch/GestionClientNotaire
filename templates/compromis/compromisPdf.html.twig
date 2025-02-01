@@ -2,18 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    {% set myMandant = "" %}
-    {% set myMandataire = "" %}
-    {% for person in procuration.persons %}
-        {% for role in person.getRoles %}
-            {% if role.name == 'Mandant' %}
-                {% set myMandant = person %}
-            {% elseif role.name == 'Mandataire' %}
-                {% set myMandataire = person %}
-            {% endif %}
-        {% endfor %}
-    {% endfor %}
-    <title>Procuration de {{ myMandant.FirstName }} {{ myMandant.LastName }} et {{ myMandataire.FirstName }} {{ myMandataire.LastName }}</title>{#<title>Procuration de {{ myMandant }} et {{ myMandataire }}</title>#}
+    <title>Compromis de ... et ...</title>{#<title>Procuration de {{ myMandant }} et {{ myMandataire }}</title>#}
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -237,23 +226,13 @@
         </thead>
         <tbody>
         <tr>
-            <td style="height: 100px; border: 1px solid #000; padding: 8px; text-align: center; font-family: 'Times New Roman'"><strong style="font-size: 18px;">
-                    {% if myMandant.Civilite == "Monsieur" %}
-                    Le MANDANT:<br> {{ myMandant.Civilite}} {{ myMandant.FirstName}} {{ myMandant.LastName}}  </strong>
-                {% else %}
-                    La MANDANTE:<br> {{ myMandant.Civilite}} {{ myMandant.FirstName}} {{ myMandant.LastName}}  </strong>
-                {% endif %}
+            <td style="height: 100px; border: 1px solid #000; padding: 8px; text-align: center; font-family: 'Times New Roman'">
             </td>
             <td style="border: 1px solid #000; padding: 8px; text-align: center;"></td>
             <td style="border: 1px solid #000; padding: 8px; text-align: center;"></td>
         </tr>
         <tr>
-            <td style="height: 100px; border: 1px solid #000; padding: 8px; text-align: center; font-family: 'Times New Roman'"><strong style="font-size: 18px;">
-                    {% if myMandataire.Civilite == "Monsieur" %}
-                    Le MANDANTAIRE:<br> {{ myMandataire.Civilite}} {{ myMandataire.FirstName}} {{ myMandataire.LastName}}  </strong>
-                {% else %}
-                    La MANDANTAIRE:<br> {{ myMandataire.Civilite}} {{ myMandataire.FirstName}} {{ myMandataire.LastName}}  </strong>
-                {% endif %}
+            <td style="height: 100px; border: 1px solid #000; padding: 8px; text-align: center; font-family: 'Times New Roman'">
             </td>
             <td style="border: 1px solid #000; padding: 8px; text-align: center;"></td>
             <td style="border: 1px solid #000; padding: 8px; text-align: center;"></td>

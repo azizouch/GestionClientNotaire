@@ -3,57 +3,8 @@
 {% block title %}Liste Utilisateur{% endblock %}
 
 {% block body %}
-    <style>
-        .head th{
-            color:  #313539;
-            background-color: #bccee4;
-            font-family: 'Public Sans', sans-serif;
-            text-transform: capitalize;
-        }
-        .badge {
-            --bs-badge-padding-x: 0.65em;
-            --bs-badge-padding-y: 0.35em;
-            --bs-badge-font-size: 0.75em;
-            --bs-badge-font-weight: 700;
-            --bs-badge-color: #fff;
-            --bs-badge-border-radius: 0.3125rem;
-            display: inline-block;
-            padding: var(--bs-badge-padding-y) var(--bs-badge-padding-x);
-            font-size: var(--bs-badge-font-size);
-            font-weight: var(--bs-badge-font-weight);
-            line-height: 1;
-            color: var(--bs-badge-color);
-            text-align: center;
-            white-space: nowrap;
-            vertical-align: baseline;
-            border-radius: var(--bs-badge-border-radius);
-        }
-        .bg-soft-dark {
-            background-color: rgba(19, 33, 68, .1) !important;
-        }
-        .badge {
-            line-height: normal;
-            vertical-align: middle;
-        }
-        .ms-2 {
-            margin-left: .75rem !important;
-        }
-        #multi-filter-select a.btn:hover,#multi-filter-select form button:hover{
-            background: white;
-            opacity: 1;
-        }
-        .modal-body{
-            margin-left: 4rem;
-        }
-        .modal-body p{
-            color: #808B96;
-        }
-        .modal-body p strong{
-            font-weight: 800;
-            color: #586570 ;
-        }
-
-    </style>
+    <link rel="stylesheet" href="{{ asset('asset/css/register.css') }}" />
+    <link rel="stylesheet" href="{{ asset('asset/css/comune.css') }}" />
 
     <div class="container">
         <div class="page-inner">
@@ -130,38 +81,16 @@
                                             <td>
                                                 <div class="form-button-action">
                                                     <a class="btn btn-icon" href="#">
+                                                        <i class="fas fa-eye fa-sm text-dark"></i>
+                                                    </a>
+                                                    <a class="btn btn-icon mx-2" href="#">
                                                         <i class="fas fa-edit fa-sm text-success"></i>
                                                     </a>
                                                     <form id="delete-client-form-{{ user.id }}" action="#" method="POST">
-                                                        <button type="button" class="btn btn-icon mx-2 delete-client-btn" data-client-id="{{ user.id }}">
+                                                        <button type="button" class="btn btn-icon delete-client-btn" data-client-id="{{ user.id }}">
                                                             <i class="fas fa-trash-alt fa-sm text-danger"></i>
                                                         </button>
                                                     </form>
-                                                    <div class="card-tools">
-                                                        <div class="dropdown">
-                                                            <button
-                                                                    class="btn btn-icon btn-clean me-0"
-                                                                    type="button"
-                                                                    id="dropdownMenuButton"
-                                                                    data-bs-toggle="dropdown"
-                                                                    aria-haspopup="true"
-                                                                    aria-expanded="false"
-                                                            >
-                                                                <i class="fas fa-ellipsis-h"></i>
-                                                            </button>
-                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                <a class="dropdown-item" href="#" target="_blank">
-                                                                    <i class="icon-printer"></i> PDF Demande du tva
-                                                                </a>
-                                                                <a class="dropdown-item" href="#" target="_blank">
-                                                                    <i class="icon-printer"></i> PDF Engagement du tva
-                                                                </a>
-                                                                <a class="dropdown-item" href="#">
-                                                                    Somthing else here
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -179,7 +108,7 @@
     <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content" style="border-radius: 25px;box-shadow: 2px 6px 15px 0 rgba(69, 65, 78, .1);border: 0;">
-                <div class="modal-body">
+                <div class="modal-body m-0">
                     <div class="container h-100">
                         <div class="row d-flex justify-content-center align-items-center h-100">
                             <div class="col-lg-12">
@@ -187,7 +116,7 @@
                                     <div class="d-flex justify-content-end align-items-center">
                                         <button type="button" class="btn-close text-right" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                    <div class="card-body ">
+                                    <div class="card-body p-0">
                                         <div class="row justify-content-center">
                                             <div class="col-md-10 col-lg-6 col-xl-6 order-2 order-lg-1">
 
@@ -303,13 +232,27 @@
     <script src="{{ asset('asset/js/core/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('asset/js/plugin/datatables/datatables.min.js') }}"></script>
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Select all input fields with the class "form-control"
+            const inputs = document.querySelectorAll(".form-control");
+
+            inputs.forEach(input => {
+                // Add event listener for "input" event
+                input.addEventListener("input", function () {
+                    if (this.value.trim() !== "") {
+                        this.classList.add("active");
+                    } else {
+                        this.classList.remove("active");
+                    }
+                });
+            });
+        });
         function toggleAll(source) {
             const checkboxes = document.querySelectorAll('.row-checkbox');
             checkboxes.forEach(checkbox => {
                 checkbox.checked = source.checked;
             });
         }
-
         $(document).ready(function () {
             // Event delegation for clicking on table rows
             $('#multi-filter-select tbody').on('click', 'tr', function(e) {

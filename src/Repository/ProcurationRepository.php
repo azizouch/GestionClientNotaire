@@ -16,6 +16,31 @@ class ProcurationRepository extends ServiceEntityRepository
         parent::__construct($registry, Procuration::class);
     }
 
+    public function countByMonth(int $year): array
+    {
+        $monthlyData = array_fill(1, 12, 0); // Initialize an array with 12 months
+
+        // Loop through each month to count entries
+        for ($month = 1; $month <= 12; $month++) {
+            $startDate = new \DateTime("$year-$month-01");
+            $endDate = (clone $startDate)->modify('first day of next month');
+
+            $qb = $this->createQueryBuilder('d');
+            $qb->select('COUNT(d.id) as count')
+                ->where('d.createdAt >= :start')
+                ->andWhere('d.createdAt < :end')
+                ->setParameter('start', $startDate)
+                ->setParameter('end', $endDate);
+
+            $result = $qb->getQuery()->getSingleScalarResult();
+            $monthlyData[$month] = (int) $result; // Store the count for the current month
+        }
+
+        return array_values($monthlyData); // Return values indexed 0-11 for the frontend
+    }
+
+
+
 //    /**
 //     * @return Procuration[] Returns an array of Procuration objects
 //     */

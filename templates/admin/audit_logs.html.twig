@@ -1,0 +1,49 @@
+{% extends '_base.html.twig' %}
+
+{% block title %}Audit Logs{% endblock %}
+
+{% block body %}
+    <h1>Audit Logs</h1>
+
+    <form method="get" action="{{ path('admin_audit_logs') }}">
+        <div class="form-group">
+            <label for="user">User</label>
+            <input type="text" name="user" id="user" class="form-control" value="{{ app.request.query.get('user') }}">
+        </div>
+        <div class="form-group">
+            <label for="action">Action</label>
+            <input type="text" name="action" id="action" class="form-control" value="{{ app.request.query.get('action') }}">
+        </div>
+        <div class="form-group">
+            <label for="dateFrom">From</label>
+            <input type="date" name="dateFrom" id="dateFrom" class="form-control" value="{{ app.request.query.get('dateFrom') }}">
+        </div>
+        <div class="form-group">
+            <label for="dateTo">To</label>
+            <input type="date" name="dateTo" id="dateTo" class="form-control" value="{{ app.request.query.get('dateTo') }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
+
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>User</th>
+            <th>Action</th>
+            <th>Details</th>
+            <th>Date & Time</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for log in auditLogs %}
+            <tr>
+                <td>{{ log.user.username }}</td> <!-- Display the user responsible -->
+                <td>{{ log.action }}</td>       <!-- The type of action -->
+                <td>{{ log.details }}</td>      <!-- The details of the change -->
+                <td>{{ log.timestamp|date('Y-m-d H:i:s') }}</td> <!-- Timestamp -->
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

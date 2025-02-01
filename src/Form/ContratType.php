@@ -9,6 +9,7 @@ use App\Entity\PersonneMorale;
 use App\Entity\PersonnePhysique;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -60,8 +61,11 @@ class ContratType extends AbstractType
                 'by_reference' => false,
                 'allow_delete' => true,
             ])
+            ->add('selectedPersons', HiddenType::class, [
+                'mapped' => false, // Not mapped to the Contrat entity
+                'required' => false,
+            ])
             ->add('Submit',SubmitType::class,[
-                'label' => 'Create Compromis',
                 'attr' => [
                     'class' => 'btn btn-primary mt-5',
                 ],

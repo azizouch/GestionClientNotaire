@@ -1,0 +1,124 @@
+.card-stats .icon-big{
+    font-size: 2em;
+    min-height: 45px;
+}
+.card-stats .col-icon {
+    width: 45px;
+    height: 45px;
+    margin-left: 10px;
+}
+.card-stats .col-stats{
+    padding-left: 10px;
+    padding-right: 0;
+}
+.card-stats .icon-big.icon-yellow{
+    background: #fff046;
+    border-radius: 5px;
+}
+.card-stats .icon-big.icon-yellow i {
+    color: #fff !important;
+}
+@media (min-width: 768px) {
+    .row>* {
+        padding-right: calc(var(--bs-gutter-x)* .2);
+        padding-left: calc(var(--bs-gutter-x)* .2);
+    }
+}
+@media (min-width: 576px) {
+    .row>* {
+        padding-right: calc(var(--bs-gutter-x)* .2);
+        padding-left: calc(var(--bs-gutter-x)* .2);
+    }
+}
+.card-stats .card-body{
+    height: auto;
+}
+
+/* For screens between 768px and 1200px */
+@media (max-width: 1200px) {
+    .card-stats .card-body {
+        height: 160px;
+    }
+    .card-stats .col-stats{
+        padding-right: 6px;
+    }
+}
+/* For screens smaller than 768px */
+@media (max-width: 1023px) {
+    .card-stats .card-body {
+        height: 120px !important;
+    }
+    .card-stats .col-stats{
+        padding-right: 6px;
+    }
+}
+
+.analytic-dash-activity {
+    height: 300px;
+}
+
+.font-13 {
+    font-size: 13px !important;
+}
+.activity .activity-info .activity-info-text a, .activity .activity-info .activity-info-text span {
+    color: #303e67;
+}
+.activity .activity-info {
+    display: flex
+;
+    margin: 5px 0;
+    position: relative;
+    min-height: 60px;
+}
+.simplebar-content:before, .simplebar-content:after {
+    content: ' ';
+    display: table;
+}
+.activity .activity-info::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    top: 42px;
+    left: 18px;
+    border-left: 2px dotted #e3ebf6;
+}
+.activity .activity-info .activity-info-text {
+    margin-left: 16px;
+    width: 100%;
+}
+.activity .activity-info .icon-info-activity i {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #a4abc5;
+    box-shadow: 0px 0px 1px 0.25px;
+    font-size: 18px;
+    border: 2px solid #fff;
+    margin-left: 2px;
+}
+.bg-soft-primary {
+    background-color: rgba(23, 97, 253, 0.08) !important;
+    color: #1761fd !important;
+}
+
+.thumb-sm {
+    height: 36px !important;
+    width: 36px !important;
+    font-size: 12px;
+    font-weight: 700;
+}
+.recents .table>tbody>tr>td,.recents .table>tbody>tr>th {
+    padding: 17px 10px !important;
+}
+.card-footer .see-all{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #555;
+    font-size: 13px;
+    font-weight: 400;
+    text-decoration: none;
+}

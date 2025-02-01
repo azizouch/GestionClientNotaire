@@ -9,7 +9,6 @@
         <link rel="stylesheet" href="{{ asset('asset/css/plugins.min.css') }}" />
         <link rel="stylesheet" href="{{ asset('asset/css/admin.min.css') }}" />
         <link rel="stylesheet" href="{{ asset('asset/css/demo.css') }}" />
-        <link rel="stylesheet" href="{{ asset('asset/css/registerr.css') }}" />
 
         <script src="{{ asset('asset/js/plugin/webfont/webfont.min.js') }}"></script>
         <script>
@@ -29,6 +28,7 @@
                 },
             });
         </script>
+
         <style>
             /******** loader style********/
             /* Fullscreen loader container */
@@ -236,7 +236,6 @@
                 background-color: #f8f9fa;
             }
 
-
         </style>
 
     </head>
@@ -337,7 +336,7 @@
                                 <div class="collapse" id="vente">
                                     <ul class="nav nav-collapse">
                                         <li>
-                                            <a href="#">
+                                            <a href="{{ path('app_add_new_vente') }}">
                                                 <span class="sub-item">Nouveau vente</span>
                                                 <span class="arrow"></span>
                                             </a>
@@ -360,7 +359,7 @@
                                 <div class="collapse" id="desistement">
                                     <ul class="nav nav-collapse">
                                         <li>
-                                            <a href="#">
+                                            <a href="{{ path('app_add_new_desistement') }}">
                                                 <span class="sub-item">Nouveau desistement</span>
                                                 <span class="arrow"></span>
                                             </a>
@@ -466,7 +465,7 @@
                                 <img src="{% if app.user.image %}{{ asset('uploads/'~app.user.image) }}{% else %}{{ asset('asset/img/avatar.png') }}{% endif %}" alt="image profile" class="avatar-img rounded">
                             </div>
                             <div class="u-text">
-                                <h6 class="m-0 mb-1">{{ app.user.getUserName() }}</h6>
+                                <h6 class="m-0 mb-1 text-capitalize">{{ app.user.getUserName() }}</h6>
                                 <a href="profile.html" class="btn btn-xs btn-secondary btn-sm">
                                     View Profile
                                 </a>
@@ -512,7 +511,7 @@
                                             <i class="fa fa-search search-icon"></i>
                                         </button>
                                     </div>
-                                    <input type="text" placeholder="Recherche un client ..." class="form-control"/>
+                                    <input type="text" id="searchClient" placeholder="Recherche un client ..." class="form-control" {% if searchTerm is defined and searchTerm is not empty %} value="{{ searchTerm }}"{% endif %}/>
                                 </div>
                             </nav>
 
@@ -549,48 +548,48 @@
                                         <li>
                                             <div class="message-notif-scroll scrollbar-outer">
                                                 <div class="notif-center">
-{#                                                    <a href="#">#}
-{#                                                        <div class="notif-img">#}
-{#                                                            <img src="{{ asset('asset/img/jm_denis.jpg') }}" alt="Img Profile"/>#}
-{#                                                        </div>#}
-{#                                                        <div class="notif-content">#}
-{#                                                            <span class="subject">Jimmy Denis</span>#}
-{#                                                            <span class="block"> How are you ? </span>#}
-{#                                                            <span class="time">5 minutes ago</span>#}
-{#                                                        </div>#}
-{#                                                    </a>#}
-{#                                                    <a href="#">#}
-{#                                                        <div class="notif-img">#}
-{#                                                            <img src="{{ asset('asset/img/chadengle.jpg') }}" alt="Img Profile"/>#}
-{#                                                        </div>#}
-{#                                                        <div class="notif-content">#}
-{#                                                            <span class="subject">Chad</span>#}
-{#                                                            <span class="block"> Ok, Thanks ! </span>#}
-{#                                                            <span class="time">12 minutes ago</span>#}
-{#                                                        </div>#}
-{#                                                    </a>#}
-{#                                                    <a href="#">#}
-{#                                                        <div class="notif-img">#}
-{#                                                            <img src="{{ asset('asset/img/mlane.jpg') }}" alt="Img Profile"/>#}
-{#                                                        </div>#}
-{#                                                        <div class="notif-content">#}
-{#                                                            <span class="subject">Jhon Doe</span>#}
-{#                                                            <span class="block">#}
-{#                                                                Ready for the meeting today...#}
-{#                                                            </span>#}
-{#                                                            <span class="time">12 minutes ago</span>#}
-{#                                                        </div>#}
-{#                                                    </a>#}
-{#                                                    <a href="#">#}
-{#                                                        <div class="notif-img">#}
-{#                                                            <img src="{{ asset('asset/img/talha.jpg') }}" alt="Img Profile"/>#}
-{#                                                        </div>#}
-{#                                                        <div class="notif-content">#}
-{#                                                            <span class="subject">Talha</span>#}
-{#                                                            <span class="block"> Hi, Apa Kabar ? </span>#}
-{#                                                            <span class="time">17 minutes ago</span>#}
-{#                                                        </div>#}
-{#                                                    </a>#}
+                                                    <a href="#">
+                                                        <div class="notif-img">
+                                                            <img src="{{ asset('asset/img/jm_denis.jpg') }}" alt="Img Profile"/>
+                                                        </div>
+                                                        <div class="notif-content">
+                                                            <span class="subject">Jimmy Denis</span>
+                                                            <span class="block"> How are you ? </span>
+                                                            <span class="time">5 minutes ago</span>
+                                                        </div>
+                                                    </a>
+                                                    <a href="#">
+                                                        <div class="notif-img">
+                                                            <img src="{{ asset('asset/img/chadengle.jpg') }}" alt="Img Profile"/>
+                                                        </div>
+                                                        <div class="notif-content">
+                                                            <span class="subject">Chad</span>
+                                                            <span class="block"> Ok, Thanks ! </span>
+                                                            <span class="time">12 minutes ago</span>
+                                                        </div>
+                                                    </a>
+                                                    <a href="#">
+                                                        <div class="notif-img">
+                                                            <img src="{{ asset('asset/img/mlane.jpg') }}" alt="Img Profile"/>
+                                                        </div>
+                                                        <div class="notif-content">
+                                                            <span class="subject">Jhon Doe</span>
+                                                            <span class="block">
+                                                                Ready for the meeting today...
+                                                            </span>
+                                                            <span class="time">12 minutes ago</span>
+                                                        </div>
+                                                    </a>
+                                                    <a href="#">
+                                                        <div class="notif-img">
+                                                            <img src="{{ asset('asset/img/talha.jpg') }}" alt="Img Profile"/>
+                                                        </div>
+                                                        <div class="notif-content">
+                                                            <span class="subject">Talha</span>
+                                                            <span class="block"> Hi, Apa Kabar ? </span>
+                                                            <span class="time">17 minutes ago</span>
+                                                        </div>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </li>
@@ -669,7 +668,7 @@
                                 </li>
                                 <li class="nav-item topbar-icon dropdown hidden-caret">
                                     <div class="dropdown">
-                                        <button class="btn  btn-light text-dark dropdown-toggle btn_lang" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: .5rem .5rem;">
+                                        <button class="btn dropdown-toggle btn_lang" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: .5rem .5rem;">
                                             <span id="lang_label">Francais</span>
                                             <span style="display: inline-block; margin-left: 0.255em; vertical-align: 0.255em; border-top: 0.3em solid; border-right: 0.3em solid transparent; border-bottom: 0; border-left: 0.3em solid transparent;"></span>
                                         </button>
@@ -689,25 +688,19 @@
                                     <ul class="dropdown-menu dropdown-user animated fadeIn">
                                         <div class="dropdown-user-scroll scrollbar-outer">
                                             <li>
-                                                <div class="user-box">
+                                                <div class="user-box align-items-center">
                                                     <div class="avatar-lg">
                                                         <img src="{% if app.user.image %}{{ asset('uploads/'~app.user.image) }}{% else %}{{ asset('asset/img/avatar.png') }}{% endif %}" alt="image profile" class="avatar-img rounded"/>
                                                     </div>
                                                     <div class="u-text">
-                                                        <h4>{{ app.user.getUserName() }}</h4>
-                                                        <p class="text-muted">{{ app.user.getEmail() }}</p>
-                                                        <a href="#" class="btn btn-xs btn-secondary btn-sm">
-                                                            View Profile
-                                                        </a>
+                                                        <h4 class="text-capitalize">{{ app.user.getUserName() }}</h4>
+                                                        <p class="text-muted m-0">{{ app.user.getEmail() }}</p>
                                                     </div>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="dropdown-divider"></div>
                                                 <a class="dropdown-item" href="#">My Profile</a>
-                                                <a class="dropdown-item" href="#">My Balance</a>
-                                                <a class="dropdown-item" href="#">Inbox</a>
-                                                <div class="dropdown-divider"></div>
                                                 <a class="dropdown-item" href="#">Account Setting</a>
                                                 <div class="dropdown-divider"></div>
                                                 <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">Logout</a>
@@ -721,10 +714,11 @@
                     <!-- End Navbar -->
                 </div>
 
-                {#<a class="nav-link " href="#" role="button" id="openModalBtn">#}
-                {#    <i class="fa fa-comment"></i>#}
-                {#</a>#}
+
                 <!-- modal chat -->
+{#                <a class="nav-link " href="#" role="button" id="openModalBtn">#}
+{#                    <i class="fa fa-comment"></i>#}
+{#                </a>#}
                 <div class="modal" id="chatModal" tabindex="-1" role="dialog">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
@@ -769,7 +763,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- modal logout -->
                 <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
@@ -790,14 +783,8 @@
                 <div id="loader">
                     <div class="spinner"></div>
                 </div>
+
                 {% block body %}{% endblock %}
-{#                <div class="container">#}
-{#                    <!-- Loader -->#}
-{#                    <div id="loader">#}
-{#                        <div class="spinner"></div>#}
-{#                    </div>#}
-{#                    {% block body %}{% endblock %}#}
-{#                </div>#}
 
                 <footer class="footer">
                     <div class="container-fluid d-flex justify-content-center">
@@ -817,183 +804,51 @@
                         <div class="switch-block">
                             <h4>Logo Header</h4>
                             <div class="btnSwitch">
-                                <button
-                                        type="button"
-                                        class="selected changeLogoHeaderColor"
-                                        data-color="dark"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="changeLogoHeaderColor"
-                                        data-color="blue"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="changeLogoHeaderColor"
-                                        data-color="purple"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="changeLogoHeaderColor"
-                                        data-color="light-blue"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="changeLogoHeaderColor"
-                                        data-color="green"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="changeLogoHeaderColor"
-                                        data-color="orange"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="changeLogoHeaderColor"
-                                        data-color="red"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="changeLogoHeaderColor"
-                                        data-color="white"
-                                ></button>
+                                <button type="button" class="selected changeLogoHeaderColor" data-color="dark"></button>
+                                <button type="button" class="changeLogoHeaderColor" data-color="blue"></button>
+                                <button type="button" class="changeLogoHeaderColor" data-color="purple"></button>
+                                <button type="button" class="changeLogoHeaderColor" data-color="light-blue"></button>
+                                <button type="button" class="changeLogoHeaderColor" data-color="green"></button>
+                                <button type="button" class="changeLogoHeaderColor" data-color="orange"></button>
+                                <button type="button" class="changeLogoHeaderColor" data-color="red"></button>
+                                <button type="button" class="changeLogoHeaderColor" data-color="white"></button>
                                 <br />
-                                <button
-                                        type="button"
-                                        class="changeLogoHeaderColor"
-                                        data-color="dark2"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="changeLogoHeaderColor"
-                                        data-color="blue2"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="changeLogoHeaderColor"
-                                        data-color="purple2"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="changeLogoHeaderColor"
-                                        data-color="light-blue2"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="changeLogoHeaderColor"
-                                        data-color="green2"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="changeLogoHeaderColor"
-                                        data-color="orange2"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="changeLogoHeaderColor"
-                                        data-color="red2"
-                                ></button>
+                                <button type="button" class="changeLogoHeaderColor" data-color="dark2"></button>
+                                <button type="button" class="changeLogoHeaderColor" data-color="blue2"></button>
+                                <button type="button" class="changeLogoHeaderColor" data-color="purple2"></button>
+                                <button type="button" class="changeLogoHeaderColor" data-color="light-blue2"></button>
+                                <button type="button" class="changeLogoHeaderColor" data-color="green2"></button>
+                                <button type="button" class="changeLogoHeaderColor" data-color="orange2"></button>
+                                <button type="button" class="changeLogoHeaderColor" data-color="red2"></button>
                             </div>
                         </div>
                         <div class="switch-block">
                             <h4>Navbar Header</h4>
                             <div class="btnSwitch">
-                                <button
-                                        type="button"
-                                        class="changeTopBarColor"
-                                        data-color="dark"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="changeTopBarColor"
-                                        data-color="blue"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="changeTopBarColor"
-                                        data-color="purple"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="changeTopBarColor"
-                                        data-color="light-blue"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="changeTopBarColor"
-                                        data-color="green"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="changeTopBarColor"
-                                        data-color="orange"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="changeTopBarColor"
-                                        data-color="red"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="selected changeTopBarColor"
-                                        data-color="white"
-                                ></button>
+                                <button type="button" class="changeTopBarColor" data-color="dark"></button>
+                                <button type="button" class="changeTopBarColor" data-color="blue"></button>
+                                <button type="button" class="changeTopBarColor" data-color="purple"></button>
+                                <button type="button" class="changeTopBarColor" data-color="light-blue"></button>
+                                <button type="button" class="changeTopBarColor" data-color="green"></button>
+                                <button type="button" class="changeTopBarColor" data-color="orange"></button>
+                                <button type="button" class="changeTopBarColor" data-color="red"></button>
+                                <button type="button" class="selected changeTopBarColor" data-color="white"></button>
                                 <br />
-                                <button
-                                        type="button"
-                                        class="changeTopBarColor"
-                                        data-color="dark2"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="changeTopBarColor"
-                                        data-color="blue2"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="changeTopBarColor"
-                                        data-color="purple2"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="changeTopBarColor"
-                                        data-color="light-blue2"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="changeTopBarColor"
-                                        data-color="green2"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="changeTopBarColor"
-                                        data-color="orange2"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="changeTopBarColor"
-                                        data-color="red2"
-                                ></button>
+                                <button type="button" class="changeTopBarColor" data-color="dark2"></button>
+                                <button type="button" class="changeTopBarColor" data-color="blue2"></button>
+                                <button type="button" class="changeTopBarColor" data-color="purple2"></button>
+                                <button type="button" class="changeTopBarColor" data-color="light-blue2"></button>
+                                <button type="button" class="changeTopBarColor" data-color="green2"></button>
+                                <button type="button" class="changeTopBarColor" data-color="orange2"></button>
+                                <button type="button" class="changeTopBarColor" data-color="red2"></button>
                             </div>
                         </div>
                         <div class="switch-block">
                             <h4>Sidebar</h4>
                             <div class="btnSwitch">
-                                <button
-                                        type="button"
-                                        class="changeSideBarColor"
-                                        data-color="white"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="selected changeSideBarColor"
-                                        data-color="dark"
-                                ></button>
-                                <button
-                                        type="button"
-                                        class="changeSideBarColor"
-                                        data-color="dark2"
-                                ></button>
+                                <button type="button" class="changeSideBarColor" data-color="white"></button>
+                                <button type="button" class="selected changeSideBarColor" data-color="dark"></button>
+                                <button type="button" class="changeSideBarColor" data-color="dark2"></button>
                             </div>
                         </div>
                     </div>
@@ -1029,8 +884,17 @@
         <script src="{{ asset('asset/js/kaiadmin.min.js') }}"></script>
         <!-- Kaiadmin DEMO methods, don't include it in your project! -->
         <script src="{{ asset('asset/js/setting-demoo.js') }}"></script>
-        <script src="{{ asset('asset/js/demo.js') }}"></script>
+        <script src="{{ asset('asset/js/demo00.js') }}"></script>
         <script>
+
+            document.getElementById('searchClient').addEventListener('keyup', function() {
+                let searchValue = this.value.trim();
+                if (searchValue === '') {
+                    window.location.href = "{{ path('app_admin') }}"; // Redirect to admin if empty
+                } else {
+                    window.location.href = "{{ path('search_client') }}?query=" + encodeURIComponent(searchValue);
+                }
+            });
 
             // Select the dropdown menu and button elements
             const dropdownMenu = document.querySelector('#dropdownMenuButton + .dropdown-menu');
@@ -1115,6 +979,7 @@
 
                             // Add 'active' class to the parent <li>
                             const parentNavItem = parentSubmenu.closest(".nav-item");
+                            parentNavItem.classList.add("submenu");
                             if (parentNavItem) {
                                 parentNavItem.querySelector("a[data-bs-toggle]").classList.add("active");
                             }
@@ -1326,9 +1191,6 @@
         //
         // // Call this function with the specific userId
         // fetchNewMessages(9); // Replace `specificUserId` with the actual user ID you want to use
-
-
-
 
         // Fetch messages when the dropdown is clicked
         // messageDropdown.addEventListener('click', fetchNewMessages);

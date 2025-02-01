@@ -48,10 +48,23 @@ class PersonneMorale
     #[ORM\Column(length: 255)]
     private ?string $adresse = null;
 
+    /**
+     * @var Collection<int, Desistement>
+     */
+    #[ORM\ManyToMany(targetEntity: Desistement::class, mappedBy: 'pmorale')]
+    private Collection $desistements;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $telephone = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $email = null;
+
     public function __construct()
     {
         $this->roles = new ArrayCollection();
         $this->contrats = new ArrayCollection();
+        $this->desistements = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -193,6 +206,57 @@ class PersonneMorale
     public function setAdresse(string $adresse): static
     {
         $this->adresse = $adresse;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Desistement>
+     */
+    public function getDesistements(): Collection
+    {
+        return $this->desistements;
+    }
+
+    public function addDesistement(Desistement $desistement): static
+    {
+        if (!$this->desistements->contains($desistement)) {
+            $this->desistements->add($desistement);
+            $desistement->addPmorale($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDesistement(Desistement $desistement): static
+    {
+        if ($this->desistements->removeElement($desistement)) {
+            $desistement->removePmorale($this);
+        }
+
+        return $this;
+    }
+
+    public function getTelephone(): ?string
+    {
+        return $this->telephone;
+    }
+
+    public function setTelephone(?string $telephone): static
+    {
+        $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): static
+    {
+        $this->email = $email;
 
         return $this;
     }

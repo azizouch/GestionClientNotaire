@@ -95,12 +95,19 @@ class PersonnePhysique
     #[ORM\Column(length: 255)]
     private ?string $nationality = null;
 
+    /**
+     * @var Collection<int, Desistement>
+     */
+    #[ORM\ManyToMany(targetEntity: Desistement::class, mappedBy: 'pphysique')]
+    private Collection $desistements;
+
     public function __construct()
     {
         $this->roles = new ArrayCollection();
         $this->partenaires = new ArrayCollection();
         $this->contrats = new ArrayCollection();
         $this->procurations = new ArrayCollection();
+        $this->desistements = new ArrayCollection();
     }
 
     public function getFirstName(): ?string
@@ -402,6 +409,33 @@ class PersonnePhysique
     public function setNationality(string $nationality): static
     {
         $this->nationality = $nationality;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Desistement>
+     */
+    public function getDesistements(): Collection
+    {
+        return $this->desistements;
+    }
+
+    public function addDesistement(Desistement $desistement): static
+    {
+        if (!$this->desistements->contains($desistement)) {
+            $this->desistements->add($desistement);
+            $desistement->addPphysique($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDesistement(Desistement $desistement): static
+    {
+        if ($this->desistements->removeElement($desistement)) {
+            $desistement->removePphysique($this);
+        }
 
         return $this;
     }

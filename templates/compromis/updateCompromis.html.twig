@@ -1,6 +1,6 @@
 {% extends '_base.html.twig' %}
 
-{% block title %}Creer nouveau compromis{% endblock %}
+{% block title %}Modifier compromis{% endblock %}
 
 {% block body %}
 
@@ -106,6 +106,9 @@
                             <ul class="nav nav-tabs nav-line nav-color-secondary" id="line-tab" role="tablist">
                                 <li class="nav-item submenu" role="presentation">
                                     <a class="nav-link active" id="line-social-tab" data-bs-toggle="pill" href="#line-social" role="tab" aria-controls="pills-home" aria-selected="true">Compromis social</a>
+                                </li>
+                                <li class="nav-item submenu" role="presentation">
+                                    <a class="nav-link" id="line-social-bank-tab" data-bs-toggle="pill" href="#line-social-bank" role="tab" aria-controls="pills-home" aria-selected="false">Compromis social bank</a>
                                 </li>
                                 <li class="nav-item submenu" role="presentation">
                                     <a class="nav-link" id="line-social-tva" data-bs-toggle="pill" href="#line-tva" role="tab" aria-controls="pills-home" aria-selected="false">Compromis social sans TVA</a>
@@ -249,21 +252,21 @@
                                                     </div>
                                                     <div class="card-body">
                                                         <div class="table-responsive">
-                                                        <table class="table table-hover" id="PromettantTable">
-                                                            <thead>
-                                                            <tr>
-                                                                <th scope="col" class="text-capitalize">Dénomination/Nom Prenom</th>
-                                                                <th scope="col" class="text-capitalize">Identifiant</th>
-                                                                <th scope="col" class="text-capitalize">Ville</th>
-                                                                <th scope="col" class="text-capitalize">Telephone</th>
-                                                                <th scope="col" class="text-capitalize">Email</th>
-                                                                <th scope="col" class="text-capitalize">Actions</th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            <!-- Client entries will go here -->
-                                                            </tbody>
-                                                        </table>
+                                                            <table class="table table-hover" id="PromettantTable">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th scope="col" class="text-capitalize">Dénomination/Nom Prenom</th>
+                                                                    <th scope="col" class="text-capitalize">Identifiant</th>
+                                                                    <th scope="col" class="text-capitalize">Ville</th>
+                                                                    <th scope="col" class="text-capitalize">Telephone</th>
+                                                                    <th scope="col" class="text-capitalize">Email</th>
+                                                                    <th scope="col" class="text-capitalize">Actions</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <!-- Client entries will go here -->
+                                                                </tbody>
+                                                            </table>
                                                         </div>
                                                     </div>
                                                     <div class="card-footer">
@@ -284,21 +287,21 @@
                                                     </div>
                                                     <div class="card-body">
                                                         <div class="table-responsive">
-                                                        <table class="table table-hover" id="BeneficiaireTable">
-                                                            <thead>
-                                                            <tr>
-                                                                <th scope="col" class="text-capitalize">Dénomination/Nom Prenom</th>
-                                                                <th scope="col" class="text-capitalize">Identifiant</th>
-                                                                <th scope="col" class="text-capitalize">Ville</th>
-                                                                <th scope="col" class="text-capitalize">Telephone</th>
-                                                                <th scope="col" class="text-capitalize">Email</th>
-                                                                <th scope="col" class="text-capitalize">Actions</th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            <!-- Client entries will go here -->
-                                                            </tbody>
-                                                        </table>
+                                                            <table class="table table-hover" id="BeneficiaireTable">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th scope="col" class="text-capitalize">Dénomination/Nom Prenom</th>
+                                                                    <th scope="col" class="text-capitalize">Identifiant</th>
+                                                                    <th scope="col" class="text-capitalize">Ville</th>
+                                                                    <th scope="col" class="text-capitalize">Telephone</th>
+                                                                    <th scope="col" class="text-capitalize">Email</th>
+                                                                    <th scope="col" class="text-capitalize">Actions</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <!-- Client entries will go here -->
+                                                                </tbody>
+                                                            </table>
                                                         </div>
                                                     </div>
                                                     <div class="card-footer">
@@ -312,7 +315,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            {{ form_row(form.Submit, { 'label': 'Creer compromis' }) }}
+                                            {{ form_row(form.Submit, { 'label': 'Modifier' }) }}
                                         </div>
                                         {{ form_end(form) }}
                                         <!-- Modal for Client Selection -->
@@ -328,37 +331,37 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <div class="table-responsive">
-                                                        <table class="table table-hover basetable" id="clientsTables">
-                                                            <thead>
-                                                            <tr style="text-transform: capitalize">
-                                                                <th>Denomination/Nom/Prenom</th>
-                                                                <th>Identifiant</th>
-                                                                <th>Ville</th>
-                                                                <th>Telephone</th>
-                                                                <th>Email</th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody class="tablebody">
-                                                            {% for person in PersonnesPhysiques %}
-                                                                <tr data-id="{{ person.id }}" data-cin="{{ person.cin }}" data-type="personPhysique">
-                                                                    <td>{{ person.firstName }} {{ person.lastName }}</td>
-                                                                    <td>CIN: {{ person.cin }}</td>
-                                                                    <td>{{ person.city }}</td>
-                                                                    <td>{{ person.telephone }}</td>
-                                                                    <td>{{ person.email }}</td>
+                                                            <table class="table table-hover basetable" id="clientsTables">
+                                                                <thead>
+                                                                <tr style="text-transform: capitalize">
+                                                                    <th>Denomination/Nom/Prenom</th>
+                                                                    <th>Identifiant</th>
+                                                                    <th>Ville</th>
+                                                                    <th>Telephone</th>
+                                                                    <th>Email</th>
                                                                 </tr>
-                                                            {% endfor %}
-                                                            {% for personne in PersonnesMorales %}
-                                                                <tr data-id="{{ personne.id }}" data-if="{{ personne.RC }}" data-type="personMorale">
-                                                                    <td>{{ personne.name }}</td>
-                                                                    <td>RC: {{ personne.RC }}</td>
-                                                                    <td>{{ personne.Ville }}</td>
-                                                                    <td>{{ personne.telephone }}</td>
-                                                                    <td>{{ personne.email }}</td>
-                                                                </tr>
-                                                            {% endfor %}
-                                                            </tbody>
-                                                        </table>
+                                                                </thead>
+                                                                <tbody class="tablebody">
+                                                                {% for person in PersonnesPhysiques %}
+                                                                    <tr data-id="{{ person.id }}" data-cin="{{ person.cin }}" data-type="personPhysique">
+                                                                        <td>{{ person.firstName }} {{ person.lastName }}</td>
+                                                                        <td>CIN: {{ person.cin }}</td>
+                                                                        <td>{{ person.city }}</td>
+                                                                        <td>{{ person.telephone }}</td>
+                                                                        <td>{{ person.email }}</td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                                {% for personne in PersonnesMorales %}
+                                                                    <tr data-id="{{ personne.id }}" data-if="{{ personne.RC }}" data-type="personMorale">
+                                                                        <td>{{ personne.name }}</td>
+                                                                        <td>RC: {{ personne.RC }}</td>
+                                                                        <td>{{ personne.Ville }}</td>
+                                                                        <td>{{ personne.telephone }}</td>
+                                                                        <td>{{ personne.email }}</td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                                </tbody>
+                                                            </table>
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
@@ -582,8 +585,11 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="tab-pane fade" id="line-social-bank" role="tabpanel" aria-labelledby="line-social-bank-tab">
+                                    <p>Compromis social bank</p>
+                                </div>
                                 <div class="tab-pane fade" id="line-tva" role="tabpanel" aria-labelledby="line-social-tva">
-                                   <p>Compromis social sans TVA</p>
+                                    <p>Compromis social sans TVA</p>
                                 </div>
                                 <div class="tab-pane fade" id="line-bureau" role="tabpanel" aria-labelledby="line-bureau-tab">
                                     <p>Compromis bureau</p>
@@ -599,8 +605,96 @@
         </div>
     </div>
 
+
     <script src="{{ asset('asset/js/core/jquery-3.7.1.min.js') }}"></script>
     <!-- JavaScript Code -->
+    <script>
+        function populateTables() {
+            const benefTableBody = document.querySelector('#BeneficiaireTable tbody');
+            const promettantTableBody = document.querySelector('#PromettantTable tbody');
+
+            // Helper function to append rows based on role
+            function appendRowToTable(values, newRow, fieldset) {
+                newRow.find('.delete-client').on('click', function () {
+                    newRow.remove(); // Remove row from table
+                    fieldset.remove(); // Remove associated fieldset
+                });
+
+                if (values.roles.includes('Promettant')) {
+                    promettantTableBody.appendChild(newRow[0]);
+                } else if (values.roles.includes('Bénéficiaire')) {
+                    benefTableBody.appendChild(newRow[0]);
+                }
+            }
+
+            // Clear existing rows in both tables
+            benefTableBody.innerHTML = '';
+            promettantTableBody.innerHTML = '';
+
+            // Get fieldsets for both persons
+            const fieldsetsPhysique = document.querySelectorAll('#contrat_pphysique > fieldset');
+            const fieldsetsMorale = document.querySelectorAll('#contrat_pmorale > fieldset');
+
+            // Process physical persons
+            fieldsetsPhysique.forEach(fieldset => {
+                const values = {
+                    name: fieldset.querySelector('input[name*="[first_name]"]').value + ' ' + fieldset.querySelector('input[name*="[last_name]"]').value,
+                    identifiant: fieldset.querySelector('input[name*="[cin]"]').value,
+                    ville: fieldset.querySelector('input[name*="[city]"]').value,
+                    telephone: fieldset.querySelector('input[name*="[telephone]"]').value,
+                    email: fieldset.querySelector('input[name*="[email]"]').value,
+                    roles: Array.from(fieldset.querySelectorAll('input[name*="[roles]"]')).map(role => role.value).join(', '), // Collect roles
+                };
+
+                const newRow = $(`
+                    <tr data-cin="${values.identifiant}">
+                        <td>${values.name}</td>
+                        <td>CIN: ${values.identifiant}</td>
+                        <td>${values.ville}</td>
+                        <td>${values.telephone}</td>
+                        <td>${values.email}</td>
+                        <td class="text-center"><button type="button" class="btn btn-danger btn-sm delete-client"><i class="fas fa-trash-alt"></i></button></td>
+                    </tr>
+                `);
+                fieldset.setAttribute('data-cin', values.identifiant);
+
+                // Add to the appropriate table based on the role
+                // Use the helper function to append the row
+                appendRowToTable(values, newRow, fieldset);
+            });
+
+            // Process moral persons
+            fieldsetsMorale.forEach(fieldset => {
+                const values = {
+                    name: fieldset.querySelector('input[name*="[name]"]').value, // Adjust based on your input names
+                    identifiant: fieldset.querySelector('input[name*="[RC]"]').value,
+                    ville: fieldset.querySelector('input[name*="[ville]"]').value,
+                    telephone: "",
+                    email: "",
+                    roles: Array.from(fieldset.querySelectorAll('input[name*="[roles]"]')).map(role => role.value).join(', '), // Collect roles
+                };
+
+                const newRow = $(`
+                    <tr data-if="${values.identifiant}">
+                        <td>${values.name}</td>
+                        <td>RC: ${values.identifiant}</td>
+                        <td>${values.ville}</td>
+                        <td>${values.telephone}</td>
+                        <td>${values.email}</td>
+                        <td class="text-center"><button type="button" class="btn btn-danger btn-sm delete-client"><i class="fas fa-trash-alt"></i></button></td>
+                    </tr>
+                `);
+                fieldset.setAttribute('data-if', values.identifiant);
+                // Add to the appropriate table based on the role
+                // Use the helper function to append the row
+                appendRowToTable(values, newRow, fieldset);
+            });
+        }
+
+        // Call populateTables when needed (e.g., on form submission or button click)
+        populateTables(); // Uncomment to run this function
+    </script>
+
     <script>
 
         let selectedRole = ''; // Store the role from the button click
@@ -630,21 +724,6 @@
         document.getElementById('ajouterBeneficiaire').addEventListener('click', () => {
             selectedRole = 'Bénéficiaire'; // Set the role to "Bénéficiaire"
         });
-
-        // Function to remove the person from selectedPersons
-        function removeFromSelectedPersons(identifier) {
-            console.log("Identifier to remove:", identifier);
-            console.log("Before removal:", selectedPersons);
-
-            selectedPersons = selectedPersons.filter(function(person) {
-                return String(person.companyRC) !== String(identifier) && String(person.identifiant) !== String(identifier);
-            });
-
-            console.log("After removal:", selectedPersons);
-
-            // Update the hidden input with the updated selectedPersons array
-            $('#contrat_selectedPersons').val(JSON.stringify(selectedPersons));
-        }
 
         // Function to renumber partner labels dynamically
         function renumberPartners() {
@@ -1057,7 +1136,6 @@
                 // Remove the row from the DOM
                 $row.remove();
             });
-
         });
 
         // Function to keep only the first partner field
@@ -1072,20 +1150,67 @@
             }
         }
 
+        // Function to remove the person from selectedPersons
+        function removeFromSelectedPersons(identifier) {
+            console.log("Identifier to remove:", identifier);
+            console.log("Before removal:", selectedPersons);
+
+            selectedPersons = selectedPersons.filter(function(person) {
+                return String(person.companyRC) !== String(identifier) && String(person.identifiant) !== String(identifier);
+            });
+
+            console.log("After removal:", selectedPersons);
+
+            // Update the hidden input with the updated selectedPersons array
+            $('#contrat_selectedPersons').val(JSON.stringify(selectedPersons));
+        }
+
+        // Function to update inner fieldset indices
+        function updateInnerFieldsetIndices(outerFieldset, outerIndex) {
+            const rolesContainer = outerFieldset.querySelector('[id$="_roles"]');
+            const partnersContainer = outerFieldset.querySelector('[id$="_partenaire"]');
+
+            // Update roles fieldsets
+            if (rolesContainer) {
+                const rolesPrototype = rolesContainer.getAttribute('data-prototype');
+                const rolesIndex = rolesContainer.children.length; // Count current roles
+                const uniqueRolesPrototype = rolesPrototype.replace(/__name__/g, rolesIndex);
+                const rolesTemplate = document.createElement('template');
+                rolesTemplate.innerHTML = uniqueRolesPrototype.trim();
+                rolesContainer.appendChild(rolesTemplate.content.firstElementChild);
+            }
+
+            // Update partners fieldsets
+            if (partnersContainer) {
+                const partnersPrototype = partnersContainer.getAttribute('data-prototype');
+                const partnersIndex = partnersContainer.children.length; // Count current partners
+                const uniquePartnersPrototype = partnersPrototype.replace(/__name__/g, partnersIndex);
+                const partnersTemplate = document.createElement('template');
+                partnersTemplate.innerHTML = uniquePartnersPrototype.trim();
+                partnersContainer.appendChild(partnersTemplate.content.firstElementChild);
+            }
+        }
+
         function addToFieldsetPersonPhysique(personData) {
 
             const container = document.getElementById('contrat_pphysique');
             const prototype = container.getAttribute('data-prototype');
-            const newFieldset = document.createElement('div');
 
             // Get the current number of fields and replace placeholders in the prototype
-            const index = container.children.length;
-            const uniquePrototype = prototype.replace(/__name__/g, index);
+            const outerIndex  = container.children.length;
+            const uniquePrototype = prototype.replace(/__name__/g, outerIndex );
+            // Convert the uniquePrototype string into an actual DOM element
+            const template = document.createElement('template');
+            template.innerHTML = uniquePrototype.trim(); // Trim to avoid unwanted spaces
 
-            newFieldset.setAttribute('data-cin', personData.cin);
+            // Get the fieldset element from the template
+            const newOuterFieldset  = template.content.firstElementChild;
 
-            newFieldset.innerHTML = uniquePrototype;
-            const newPersonFieldset = newFieldset.querySelector(`#contrat_pphysique_${index}`);
+            newOuterFieldset .setAttribute('data-cin', personData.cin);
+            // Now handle the inner fieldsets (roles and partners)
+            updateInnerFieldsetIndices(newOuterFieldset, outerIndex);
+
+            const newPersonFieldset = newOuterFieldset.querySelector(`#contrat_pphysique_${outerIndex}`);
 
             if (newPersonFieldset) {
                 newPersonFieldset.querySelector('[name$="[civilite]"]').value = personData.civilite;
@@ -1106,7 +1231,7 @@
                 newPersonFieldset.querySelector('[name$="[nationality]"]').value = personData.nationality;
 
                 // Add the selected role to the roles fieldset
-                const rolesContainer = newPersonFieldset.querySelector(`#contrat_pphysique_${index}_roles`);
+                const rolesContainer = newPersonFieldset.querySelector(`#contrat_pphysique_${outerIndex}_roles`);
                 if (rolesContainer && selectedRole) {
                     const rolePrototype = rolesContainer.getAttribute('data-prototype');
                     const roleIndex = rolesContainer.children.length;
@@ -1129,7 +1254,7 @@
                 // Add partner data if it exists
                 // Assuming 'index' is defined correctly based on your context
                 if (personData.partnerData && Array.isArray(personData.partnerData)) {
-                    const partnerContainer = newPersonFieldset.querySelector(`#contrat_pphysique_${index}_partenaire`);
+                    const partnerContainer = newPersonFieldset.querySelector(`#contrat_pphysique_${outerIndex}_partenaire`);
                     const partnerPrototype = partnerContainer.getAttribute('data-prototype');
 
                     personData.partnerData.forEach((partner, idx) => {
@@ -1144,7 +1269,7 @@
                         newPartnerFieldset.innerHTML = uniquePartnerPrototype;
 
                         // Update the ID of the new partner fieldset
-                        const partnerFieldsetDiv = newPartnerFieldset.querySelector(`[id^="contrat_pphysique_${index}_partenaire_"]`);
+                        const partnerFieldsetDiv = newPartnerFieldset.querySelector(`[id^="contrat_pphysique_${outerIndex}_partenaire_"]`);
                         if (partnerFieldsetDiv) {
                             partnerFieldsetDiv.id = `contrat_pphysique_${index}_partenaire_${partnerIndex}`; // Set unique ID
                         }
@@ -1164,7 +1289,7 @@
             }
 
             // Append the new fieldset to the container
-            container.appendChild(newFieldset);
+            container.appendChild(newOuterFieldset);
 
             // Optionally, you can reset the form or handle any other UI logic after adding the new fieldset
             document.getElementById('personnePhysiqueForm').reset();
@@ -1179,7 +1304,7 @@
             const newPersonData = {
                 type: personData.type,
                 name: personData.firstName + " " + personData.lastName,
-                identifiant: "CIN: " + personData.cin,
+                identifiant:personData.cin,
                 ville: personData.ville,
                 telephone: personData.phone,
                 email: personData.email,
@@ -1315,9 +1440,6 @@
 
             if (fieldsetToDelete) {
                 fieldsetToDelete.remove(); // Remove the fieldset from the DOM
-            } else {
-                // console.error('No matching fieldset found for identifier:', identifier);
-                return;
             }
         }
 

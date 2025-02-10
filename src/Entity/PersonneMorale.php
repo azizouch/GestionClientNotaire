@@ -18,7 +18,7 @@ class PersonneMorale
     /**
      * @var Collection<int, Role>
      */
-    #[ORM\ManyToMany(targetEntity: Role::class, mappedBy: 'pmorale')]
+    #[ORM\ManyToMany(targetEntity: Role::class, mappedBy: 'pmorale',cascade: ['persist'])]
     private Collection $roles;
 
     /**

@@ -29,10 +29,6 @@ class PartnerType extends AbstractType
                     'max' => date('Y'),
                 ],
             ])
-//            ->add('mariage_date',DateType::class,[
-//                'label' => 'Date de mariage',
-//                'widget' => 'single_text',
-//            ])
             ->add('mariage_place',TextType::class,[
                 'label' => 'Lieu de mariage',
             ])

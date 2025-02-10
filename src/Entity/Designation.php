@@ -27,9 +27,6 @@ class Designation
     private ?int $superficie = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $superficie_text = null;
-
-    #[ORM\Column(length: 255)]
     private ?string $numero_divise = null;
 
     #[ORM\Column(length: 255)]
@@ -47,20 +44,12 @@ class Designation
     #[ORM\Column]
     private ?float $montant_TTC = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $montant_TTC_text = null;
 
     #[ORM\Column]
     private ?float $TVA = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $TVA_text = null;
-
     #[ORM\Column]
     private ?float $montant_HT = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $montant_HT_text = null;
 
     #[ORM\Column]
     private ?int $delai = null;
@@ -127,18 +116,6 @@ class Designation
     public function setSuperficie(int $superficie): static
     {
         $this->superficie = $superficie;
-
-        return $this;
-    }
-
-    public function getSuperficieText(): ?string
-    {
-        return $this->superficie_text;
-    }
-
-    public function setSuperficieText(string $superficie_text): static
-    {
-        $this->superficie_text = $superficie_text;
 
         return $this;
     }
@@ -215,18 +192,6 @@ class Designation
         return $this;
     }
 
-    public function getMontantTTCText(): ?string
-    {
-        return $this->montant_TTC_text;
-    }
-
-    public function setMontantTTCText(string $montant_TTC_text): static
-    {
-        $this->montant_TTC_text = $montant_TTC_text;
-
-        return $this;
-    }
-
     public function getTVA(): ?float
     {
         return $this->TVA;
@@ -239,18 +204,6 @@ class Designation
         return $this;
     }
 
-    public function getTVAText(): ?string
-    {
-        return $this->TVA_text;
-    }
-
-    public function setTVAText(string $TVA_text): static
-    {
-        $this->TVA_text = $TVA_text;
-
-        return $this;
-    }
-
     public function getMontantHT(): ?float
     {
         return $this->montant_HT;
@@ -259,18 +212,6 @@ class Designation
     public function setMontantHT(float $montant_HT): static
     {
         $this->montant_HT = $montant_HT;
-
-        return $this;
-    }
-
-    public function getMontantHTText(): ?string
-    {
-        return $this->montant_HT_text;
-    }
-
-    public function setMontantHTText(string $montant_HT_text): static
-    {
-        $this->montant_HT_text = $montant_HT_text;
 
         return $this;
     }
@@ -334,6 +275,4 @@ class Designation
 
         return $this;
     }
-
-
 }

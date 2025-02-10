@@ -12,6 +12,7 @@ use App\Form\RegistrationFormType;
 use App\Repository\ContratRepository;
 use App\Repository\DesistementRepository;
 use App\Repository\MessageRepository;
+use App\Repository\PersonneMoraleRepository;
 use App\Repository\PersonnePhysiqueRepository;
 use App\Repository\ProcurationRepository;
 use App\Repository\UserRepository;
@@ -29,17 +30,23 @@ use Symfony\Component\Routing\Attribute\Route;
 class AdminController extends AbstractController
 {
     #[Route('/admin', name: 'app_admin')]
-    public function index(ContratRepository $contratRepository,DesistementRepository $desistementRepository,ProcurationRepository $procurationRepository): Response
+    public function index(ContratRepository $contratRepository,DesistementRepository $desistementRepository,ProcurationRepository $procurationRepository,PersonneMoraleRepository $personMoraleRepository): Response
     {
         $ventes = $contratRepository->findVentes();
         $compromis = $contratRepository->findCompromis();
         $desistements = $desistementRepository->findAll();
         $procurations = $procurationRepository->findAll();
+
+        $personMorales = $personMoraleRepository->findAllWithContractsCount();
+        $totalContracts = $contratRepository->count([]); // Get the total number of contracts
+
         return $this->render('admin/index.html.twig', [
             'compromis' => $compromis,
             'procurations' => $procurations,
             'desistements' => $desistements,
             'ventes' => $ventes,
+            'personMorales' => $personMorales,
+            'totalContracts' => $totalContracts,
         ]);
     }
 

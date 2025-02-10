@@ -67,7 +67,7 @@ class ContratType extends AbstractType
             ])
             ->add('Submit',SubmitType::class,[
                 'attr' => [
-                    'class' => 'btn btn-primary mt-5',
+                    'class' => 'btn btn-primary m-0',
                 ],
             ])
         ;

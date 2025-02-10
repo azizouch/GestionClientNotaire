@@ -18,16 +18,19 @@ use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\Shared\Html;
 use PhpOffice\PhpWord\Shared\ZipArchive;
 use App\service\DateFormatterService;
+use App\service\GeneratePdf;
 
 
 
 class ProcurationController extends AbstractController
 {
     private DateFormatterService $dateFormatter;
+    private GeneratePdf $generatePdf;
 
-    public function __construct(DateFormatterService $dateFormatter)
+    public function __construct(DateFormatterService $dateFormatter,GeneratePdf $generatePdf)
     {
         $this->dateFormatter = $dateFormatter;
+        $this->generatePdf = $generatePdf;
     }
     #[Route('/procurations', name: 'app_procurations')]
     public function index(ProcurationRepository $procurationRepository): Response
@@ -103,24 +106,9 @@ class ProcurationController extends AbstractController
         ]);
 
         // Generate and return the PDF
-        return $this->generatePdfResponse($html, 'procuration.pdf');
+        return $this->generatePdf->generatePdfResponse($html, 'procuration.pdf');
     }
 
-    private function generatePdfResponse(string $html, string $filename): Response
-    {
-        $pdfOptions = new Options();
-        $pdfOptions->set('defaultFont', 'Arial');
-
-        $dompdf = new Dompdf($pdfOptions);
-        $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4', 'portrait');
-        $dompdf->render();
-
-        return new Response($dompdf->output(), 200, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="' . $filename . '"',
-        ]);
-    }
     // code for word document
 
 //    #[Route('/procuration/{id}/word-eng', name: 'app_procuration_word_eng')]
@@ -241,9 +229,9 @@ class ProcurationController extends AbstractController
         }
 
         // Format the dates
-        $formattedDateMaitre = $this->formatDateTimeInFrench($procuration->getDateMaitre());
-        $formattedDateMandant = $this->formatDateTimeInFrench($procuration->getDateMandant());
-        $formattedDateMandataire = $this->formatDateTimeInFrench($procuration->getDateMandataire());
+        $formattedDateMaitre = $this->dateFormatter->formatDateTimeInFrench($procuration->getDateMaitre());
+        $formattedDateMandant = $this->dateFormatter->formatDateTimeInFrench($procuration->getDateMandant());
+        $formattedDateMandataire = $this->dateFormatter->formatDateTimeInFrench($procuration->getDateMandataire());
 
         // Render the HTML for the Word document
         $html = $this->renderView('procurations/procurationPdf.html.twig', [

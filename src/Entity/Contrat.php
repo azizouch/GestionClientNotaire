@@ -50,13 +50,13 @@ class Contrat
     /**
      * @var Collection<int, PersonnePhysique>
      */
-    #[ORM\ManyToMany(targetEntity: PersonnePhysique::class, inversedBy: 'contrats')]
+    #[ORM\ManyToMany(targetEntity: PersonnePhysique::class, inversedBy: 'contrats',cascade: ['persist'])]
     private Collection $pphysique;
 
     /**
      * @var Collection<int, PersonneMorale>
      */
-    #[ORM\ManyToMany(targetEntity: PersonneMorale::class, inversedBy: 'contrats')]
+    #[ORM\ManyToMany(targetEntity: PersonneMorale::class, inversedBy: 'contrats',cascade: ['persist'])]
     private Collection $pmorale;
 
     public function __construct()

@@ -64,8 +64,7 @@
     color: #303e67;
 }
 .activity .activity-info {
-    display: flex
-;
+    display: flex;
     margin: 5px 0;
     position: relative;
     min-height: 60px;
@@ -122,3 +121,111 @@
     font-weight: 400;
     text-decoration: none;
 }
+.map-container {
+    position: relative;
+    width: 100%; /* Ensures responsiveness */
+    height: 320px; /* Your fixed height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Prevents any overflow */
+    border-left: 1px solid #ebecec !important;
+    background: rgba(151, 144, 238, 0.1);
+}
+/*.map-container svg {*/
+/*    height: 100%; !* Take full height *!*/
+/*    width: 100%;*/
+/*    transform: scale(1); !* Adjust scale as needed *!*/
+/*    transition: transform 0.3s ease-in-out; !* Smooth zoom effect *!*/
+/*    transform-origin: center center; !* Keeps zoom centered *!*/
+/*}*/
+.mapsvg-region:hover {
+    fill: #d8e0e6 !important;
+    transition: fill 0.3s ease-in-out;
+}
+.custom-tooltip {
+    position: absolute;
+    background-color: rgba(51, 51, 51, 0.9);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    white-space: nowrap; /* Prevents text from breaking */
+    display: none; /* Initially hidden */
+    z-index: 9999;
+    pointer-events: none; /* Prevents tooltip from interfering with cursor */
+}
+.mapsvg-buttons.right {
+    right: 0;
+}
+
+.mapsvg-buttons {
+    margin: 10px;
+    position: absolute;
+    top: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    z-index: 2;
+}
+.mapsvg-btn-group {
+    box-shadow: 0 0 5px #999;
+    margin-bottom: 10px;
+}
+.mapsvg-btn-map.mapsvg-in {
+    border-bottom: 1px solid #ddd;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.mapsvg-btn-map.mapsvg-out {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+.mapsvg-btn-group>.mapsvg-btn-map {
+    box-shadow: none;
+}
+
+.mapsvg-btn-map {
+    box-shadow: 0 0 5px #999;
+    overflow: hidden;
+}
+.mapsvg-btn, .mapsvg-btn-map {
+    background-color: #fff;
+    border-radius: 2px;
+    cursor: pointer;
+    display: block;
+    height: 24px;
+    line-height: 24px;
+    padding: 0;
+    position: relative;
+    width: 24px;
+}
+.mapsvg-btn-map.mapsvg-in:before, .mapsvg-btn-map.mapsvg-out:before {
+    background-color: #999;
+    content: "";
+    display: block;
+    height: 1px;
+    left: 6px;
+    pointer-events: none;
+    position: absolute;
+    top: 11px;
+    width: 12px;
+}
+.mapsvg-btn-map.mapsvg-in:after {
+    background-color: #999;
+    content: "";
+    display: block;
+    height: 12px;
+    left: 11px;
+    pointer-events: none;
+    position: absolute;
+    top: 6px;
+    width: 1px;
+}
+.mapsvg-btn-map:hover, .mapsvg-btn:hover {
+    background-color: #f2f2f2;
+}
+
+
+
+

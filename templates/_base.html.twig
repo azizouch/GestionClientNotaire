@@ -83,9 +83,9 @@
 
             .sidebar-info {
                 margin-top: auto;
-                margin-left: 30px;
                 display: flex;
                 align-items: center;
+                justify-content: space-around;
             }
 
             .sidebar-info .u-text{
@@ -235,6 +235,29 @@
                 font-weight: bold;
                 background-color: #f8f9fa;
             }
+            .scroll-top-btn {
+                position: fixed;
+                bottom: 50px;
+                right: 20px;
+                width: 40px;
+                height: 40px;
+                background-color: black;
+                color: white;
+                border: none;
+                border-radius: 50%;
+                display: none;
+                justify-content: center;
+                align-items: center;
+                font-size: 20px;
+                cursor: pointer;
+                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+                transition: opacity 0.3s, visibility 0.3s;
+            }
+
+            .scroll-top-btn:hover {
+                background-color: #0056b3;
+            }
+
 
         </style>
 
@@ -247,9 +270,9 @@
                     <!-- Logo Header -->
                     <div class="logo-header" data-background-color="dark">
                         <a href="{{ path('app_admin') }}" class="logo">
-                            <img src="{{ asset('asset/img/kaiadmin/logo_light.svg') }}" alt="navbar brand" class="navbar-brand" height="20"
-                                 data-logo-light="{{ asset('asset/img/kaiadmin/logo_light.svg') }}"
-                                 data-logo-dark="{{ asset('asset/img/kaiadmin/logo_dark.svg') }}"
+                            <img src="{{ asset('asset/img/logo-light.png') }}" alt="navbar brand" class="navbar-brand" height="40"
+                                 data-logo-light="{{ asset('asset/img/logo-light.png') }}"
+                                 data-logo-dark="{{ asset('asset/img/logo-dark.png') }}"
                             />
                         </a>
                         <div class="nav-toggle">
@@ -461,19 +484,31 @@
                             {% endif %}
                         </ul>
                         <div class="sidebar-info">
-                            <div class="avatar-lg">
-                                <img src="{% if app.user.image %}{{ asset('uploads/'~app.user.image) }}{% else %}{{ asset('asset/img/avatar.png') }}{% endif %}" alt="image profile" class="avatar-img rounded">
+                            <div class=" d-flex align-items-center mx-1">
+                                <div class="avatar">
+                                    <img src="{% if app.user.image %}{{ asset('uploads/'~app.user.image) }}{% else %}{{ asset('asset/img/avatar.png') }}{% endif %}" alt="image profile" class="avatar-img rounded">
+                                </div>
+                                <h6 class="m-0 text-capitalize mx-1">{{ app.user.getUserName() }}</h6>
                             </div>
-                            <div class="u-text">
-                                <h6 class="m-0 mb-1 text-capitalize">{{ app.user.getUserName() }}</h6>
-                                <a href="profile.html" class="btn btn-xs btn-secondary btn-sm">
-                                    View Profile
-                                </a>
-                            </div>
-                            <div class="log_out ml-4">
-                                <i class="fas fa-power-off fa-lg" data-bs-toggle="modal" data-bs-target="#logoutModal"></i>
-                            </div>
+                            <a href="#" class="btn btn-xs btn-secondary btn-sm mx-1">
+                                View Profile
+                            </a>
+
                         </div>
+{#                        <div class="sidebar-info">#}
+{#                            <div class="avatar-lg">#}
+{#                                <img src="{% if app.user.image %}{{ asset('uploads/'~app.user.image) }}{% else %}{{ asset('asset/img/avatar.png') }}{% endif %}" alt="image profile" class="avatar-img rounded">#}
+{#                            </div>#}
+{#                            <div class="u-text">#}
+{#                                <h6 class="m-0 mb-1 text-capitalize">{{ app.user.getUserName() }}</h6>#}
+{#                                <a href="profile.html" class="btn btn-xs btn-secondary btn-sm">#}
+{#                                    View Profile#}
+{#                                </a>#}
+{#                            </div>#}
+{#                            <div class="log_out ml-4">#}
+{#                                <i class="fas fa-power-off fa-lg" data-bs-toggle="modal" data-bs-target="#logoutModal"></i>#}
+{#                            </div>#}
+{#                        </div>#}
                     </div>
                 </div>
             </div>
@@ -786,6 +821,7 @@
 
                 {% block body %}{% endblock %}
 
+
                 <footer class="footer">
                     <div class="container-fluid d-flex justify-content-center">
                         <div class="copyright">
@@ -795,7 +831,9 @@
                 </footer>
 
             </div>
-
+            <button id="scrollTopBtn" class="scroll-top-btn">
+                <i class="fas fa-arrow-up" style="font-size: .7em;"></i>
+            </button>
             <!-- Custom template | don't include it in your project! -->
             <div class="custom-template">
                 <div class="title">Settings</div>
@@ -895,6 +933,30 @@
                     window.location.href = "{{ path('search_client') }}?query=" + encodeURIComponent(searchValue);
                 }
             });
+            document.addEventListener("DOMContentLoaded", function () {
+                const scrollTopBtn = document.getElementById("scrollTopBtn");
+
+                window.addEventListener("scroll", function () {
+                    if (window.scrollY > 200) {
+                        scrollTopBtn.style.display = "flex";
+                    } else {
+                        scrollTopBtn.style.display = "none";
+                    }
+                });
+                if (window.scrollY > 200) {
+                    scrollTopBtn.style.display = "flex";
+                } else {
+                    scrollTopBtn.style.display = "none";
+                }
+
+                scrollTopBtn.addEventListener("click", function () {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "smooth"
+                    });
+                });
+            });
+
 
             // Select the dropdown menu and button elements
             const dropdownMenu = document.querySelector('#dropdownMenuButton + .dropdown-menu');

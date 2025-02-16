@@ -72,6 +72,9 @@
             scrollbar-width: thin; /* Make the scrollbar thin */
             scrollbar-color: #888 #f1f1f1; /* Color of the scrollbar thumb and track */
         }
+        .AdditionTable thead tr th{
+            background-color: #e0e0e0;
+        }
 
     </style>
 
@@ -249,7 +252,7 @@
                                                     </div>
                                                     <div class="card-body">
                                                         <div class="table-responsive">
-                                                        <table class="table table-hover" id="PromettantTable">
+                                                        <table class="table table-hover AdditionTable" id="PromettantTable">
                                                             <thead>
                                                             <tr>
                                                                 <th scope="col" class="text-capitalize">Dénomination/Nom Prenom</th>
@@ -284,7 +287,7 @@
                                                     </div>
                                                     <div class="card-body">
                                                         <div class="table-responsive">
-                                                        <table class="table table-hover" id="BeneficiaireTable">
+                                                        <table class="table table-hover AdditionTable" id="BeneficiaireTable">
                                                             <thead>
                                                             <tr>
                                                                 <th scope="col" class="text-capitalize">Dénomination/Nom Prenom</th>
@@ -312,7 +315,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            {{ form_row(form.Submit, { 'label': 'Creer compromis' }) }}
+                                            {{ form_row(form.Submit, { 'label': 'Créer' }) }}
                                         </div>
                                         {{ form_end(form) }}
                                         <!-- Modal for Client Selection -->

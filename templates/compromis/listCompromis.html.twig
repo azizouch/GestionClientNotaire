@@ -29,6 +29,34 @@
                     </li>
                 </ul>
             </div>
+            {% for label, messages in app.flashes %}
+                <div class="modal fade" id="flashModal" tabindex="-1" aria-labelledby="flashModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="flashModalLabel">
+                                    {% if label == 'error' %}
+                                        ⚠️ Erreur
+                                    {% elseif label == 'success' %}
+                                        ✅ Succès
+                                    {% else %}
+                                        ℹ️ Info
+                                    {% endif %}
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                {% for message in messages %}
+                                    <p>{{ message }}</p>
+                                {% endfor %}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
@@ -125,6 +153,8 @@
                                                         <li><a class="dropdown-item" href="{{ path('app_compromis_pdf', { id: comp.id }) }}" target="_blank"><i class="fa fa-file-pdf"></i> Pdf</a></li>
                                                         <li><a class="dropdown-item" href="{{ path('app_compromis_pdf_eng', { id: comp.id }) }}" target="_blank"><i class="fa fa-file-pdf"></i> Pdf Eng</a></li>
                                                         <li><a class="dropdown-item" href="#" target="_blank"><i class="fa fa-file-word"></i> Word</a></li>
+                                                        <li><a class="dropdown-item" href="{{ path('app_createVente', { id: comp.id }) }}"><i class="fa fa-plus"></i> Créer Vente</a></li>
+
                                                         {#                                                        <li><a class="dropdown-item" href="{{ path('app_procuration_word_eng', { id: procuration.id }) }}" target="_blank"><i class="fa fa-file-word"></i> Word Eng</a></li>#}
                                                     </ul>
                                                 </div>
@@ -144,7 +174,11 @@
     <script src="{{ asset('asset/js/core/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('asset/js/plugin/datatables/datatables.min.js') }}"></script>
     <script>
+
         document.addEventListener("DOMContentLoaded", function() {
+            let flashModal = new bootstrap.Modal(document.getElementById('flashModal'));
+            flashModal.show();
+
             document.querySelectorAll(".compromis-row").forEach(row => {
                 // Handle row click (navigate to the update page)
                 row.addEventListener("click", function(event) {
@@ -170,9 +204,6 @@
                 }
             });
         });
-
-
-
 
         $(document).ready(function () {
             $("#basic-datatables").DataTable({});

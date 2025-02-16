@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Procuration;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -49,10 +50,13 @@ class ProcurationType extends AbstractType
                 'by_reference' => false,
                 'allow_delete' => true,
             ])
+            ->add('selectedPersons', HiddenType::class, [
+                'mapped' => false, // Not mapped to the Contrat entity
+                'required' => false,
+            ])
             ->add('Submit',SubmitType::class,[
-                'label' => 'Creer Procuration',
                 'attr' => [
-                    'class' => 'btn btn-primary mt-5',
+                    'class' => 'btn btn-primary',
                 ],
             ])
         ;

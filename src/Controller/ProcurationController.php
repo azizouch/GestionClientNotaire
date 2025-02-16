@@ -2,12 +2,18 @@
 
 namespace App\Controller;
 
+use App\Entity\Dossier;
+use App\Entity\PersonnePhysique;
 use App\Entity\Procuration;
+use App\Entity\Role;
 use App\Form\ProcurationType;
+use App\Repository\DossierRepository;
 use App\Repository\PersonnePhysiqueRepository;
 use App\Repository\ProcurationRepository;
+use App\service\AuditLogger;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -26,11 +32,16 @@ class ProcurationController extends AbstractController
 {
     private DateFormatterService $dateFormatter;
     private GeneratePdf $generatePdf;
+    private AuditLogger $auditLogger;
+    private Security $security;
 
-    public function __construct(DateFormatterService $dateFormatter,GeneratePdf $generatePdf)
+
+    public function __construct(DateFormatterService $dateFormatter,GeneratePdf $generatePdf,AuditLogger $auditLogger, Security $security)
     {
         $this->dateFormatter = $dateFormatter;
         $this->generatePdf = $generatePdf;
+        $this->auditLogger = $auditLogger;
+        $this->security = $security;
     }
     #[Route('/procurations', name: 'app_procurations')]
     public function index(ProcurationRepository $procurationRepository): Response
@@ -40,14 +51,16 @@ class ProcurationController extends AbstractController
             'procurations' => $procurations,
         ]);
     }
+
     #[Route('/procuration/new', name: 'app_add_new_procuration')]
-    public function new(Request $request,
-                        EntityManagerInterface $entityManager,
-                        PersonnePhysiqueRepository $personnePhysiqueRepository,
-    ): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, PersonnePhysiqueRepository $personnePhysiqueRepository, DossierRepository $dossierRepository): Response
     {
         $Persons = $personnePhysiqueRepository->findAll();
         $procuration = new Procuration();
+        $dossier = new Dossier();
+        $dossier->setDevis(0);
+        $dossier->setStatut("Active");
+        $dossier->setSuivie("Procuration creé");
 
         // Create the form with your form type
         $form = $this->createForm(ProcurationType::class, $procuration);
@@ -56,10 +69,25 @@ class ProcurationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Save the data to the database
-//            dd($procuration);
-            $entityManager->persist($procuration);
-            $entityManager->flush();
+
+            $procuration->setDossier($dossier);  // Set Dossier on Procuration
+            $procuration->setCreatedAt(new \DateTime());
+            $procuration->setUpdatedAt(new \DateTime());
+            $dossier->setProcuration($procuration);  // Set Procuration on Dossier
+            $dossier->setRepertoir($dossierRepository->generateRepertoir($entityManager));  // Generate and set the repertoir
+            dd($procuration);
+            $entityManager->persist($dossier);  // Persist the Dossier
+            $entityManager->persist($procuration);  // Persist the Procuration
+            $entityManager->flush();  // Save to the database
+            // Log the action
+            $user = $this->security->getUser();
+            $username = $user ? $user->getUsername() : 'Utilisateur inconnu';
+
+            $this->auditLogger->log(
+                $user,
+                'Création',
+                sprintf('Une nouvelle procuration avec Rep: %s a été ajouté par %s.', $procuration->getRepertoir(), $username)
+            );
 
             // Redirect to a success page or show a message
             return $this->redirectToRoute('app_procurations');
@@ -71,14 +99,75 @@ class ProcurationController extends AbstractController
             'Persons' => $Persons,
         ]);
     }
+
+    #[Route('/procuration/update/{id}', name: 'app_update_procuration')]
+    public function update(Procuration $procuration, Request $request, EntityManagerInterface $entityManager,PersonnePhysiqueRepository $personnePhysiqueRepository): Response
+    {
+        // Create the form with existing procuration data
+        $Persons = $personnePhysiqueRepository->findAll();
+        $form = $this->createForm(ProcurationType::class, $procuration);
+
+        // Handle the form submission
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Handle selected persons
+            $selectedPersons = json_decode($form->get('selectedPersons')->getData() ?? '[]', true);
+            if($selectedPersons){
+                //            dd($selectedPersons);
+                foreach ($selectedPersons as $personData) {
+                    $personId = $personData['id'];
+                    $roleName = $personData['role'];
+
+                    $person = $entityManager->getRepository(PersonnePhysique::class)->find($personId);
+                    if ($person) {
+                        // Try to retrieve the existing role
+                        $role = $entityManager->getRepository(Role::class)->findOneBy(['name' => $roleName]);
+//                        dd($role);
+                        if (!$role) {
+                            // If the role does not exist, create it
+                            $role = new Role();
+                            $role->setName($roleName);
+                            $entityManager->persist($role); // Persist the new role
+                        }
+
+                        // Add the role to the person (this will not remove any existing roles)
+                        $person->addRole($role);
+
+                        // Add the person to the contract (as needed)
+                        $procuration->addPerson($person);
+                    }
+                }
+            }
+
+//            dd($procuration);
+            $entityManager->flush();
+
+            // Log the update action
+            $user = $this->security->getUser();
+            $username = $user ? $user->getUsername() : 'Utilisateur inconnu';
+
+            $this->auditLogger->log(
+                $user,
+                'Modification',
+                sprintf('Le procuration avec Rep: %s a été modifié par %s.', $procuration->getRepertoir(), $username)
+            );
+
+            // Redirect after updating
+            return $this->redirectToRoute('app_procurations');
+        }
+
+        return $this->render('procurations/updateProcuration.html.twig', [
+            'form' => $form->createView(),
+            'procuration' => $procuration,
+            'Persons' => $Persons,
+        ]);
+    }
+
     // code for pdf document
     #[Route('/procuration/{id}/pdf-eng', name: 'app_procuration_pdf_eng')]
     #[Route('/procuration/{id}/pdf', name: 'app_procuration_pdf')]
-    public function generateProcurationPdf(
-        int $id,
-        ProcurationRepository $procurationRepository,
-        Request $request
-    ): Response {
+    public function generateProcurationPdf(int $id, ProcurationRepository $procurationRepository, Request $request): Response {
         // Fetch the procuration
         $procuration = $procurationRepository->find($id);
         if (!$procuration) {
@@ -110,143 +199,37 @@ class ProcurationController extends AbstractController
     }
 
     // code for word document
-
-//    #[Route('/procuration/{id}/word-eng', name: 'app_procuration_word_eng')]
-//    #[Route('/procuration/{id}/word', name: 'app_procuration_word')]
-//    public function generateProcurationWord(
-//        int $id,
-//        ProcurationRepository $procurationRepository,
-//        Request $request
-//    ): Response {
-//        // Fetch the procuration
-//        $procuration = $procurationRepository->find($id);
-//        if (!$procuration) {
-//            throw $this->createNotFoundException('Procuration not found.');
-//        }
-//
-//        // Determine the template based on the route name
-//        $routeName = $request->attributes->get('_route');
-//        $template = match ($routeName) {
-//            'app_procuration_word_eng' => 'procurations/procurationPdfPourEng.html.twig',
-//            'app_procuration_word' => 'procurations/procurationPdf.html.twig',
-//            default => throw new \LogicException('Unexpected route.'),
-//        };
-//
-//        // Format the dates
-//        $formattedDateMaitre = $this->formatDateTimeInFrench($procuration->getDateMaitre());
-//        $formattedDateMandant = $this->formatDateTimeInFrench($procuration->getDateMandant());
-//        $formattedDateMandataire = $this->formatDateTimeInFrench($procuration->getDateMandataire());
-//
-//        // Render the HTML content using the Twig template
-//        $htmlContent = $this->renderView($template, [
-//            'procuration' => $procuration,
-//            'formattedDateMaitre' => $formattedDateMaitre,
-//            'formattedDateMandant' => $formattedDateMandant,
-//            'formattedDateMandataire' => $formattedDateMandataire,
-//        ]);
-//
-//        // Generate the Word document
-//        return $this->generateWordResponse($htmlContent, 'procuration.docx');
-//    }
-
-    #[Route('/generate-word', name: 'generate_word')]
-    public function generateWord(): Response
-    {
-        // Create a new Word document
-        $phpWord = new PhpWord();
-
-        // Add a new section to the document
-        $section = $phpWord->addSection();
-
-        // Add HTML content to the section
-        $html = '<h1>Hello, World!</h1><p>This is a sample Word document created from Symfony!</p>';
-        Html::addHtml($section, $html, false, false);
-
-        // Save the document as a .docx file
-        $fileName = 'sample_document.docx';
-        $tempFile = tempnam(sys_get_temp_dir(), 'phpword_') . '.docx';
-        $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
-        $objWriter->save($tempFile);
-
-        // Return the document as a response
-        return new BinaryFileResponse($tempFile, 200, [
-            'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
-        ]);
-    }
-
-
-    // function to format the datetime
-
-    private function cleanHtml(string $html): string
-    {
-        // Load the HTML into DOMDocument
-        $dom = new \DOMDocument();
-        libxml_use_internal_errors(true); // Suppress errors
-
-        // Load the HTML, assuming it's well-formed
-        if (@$dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD)) {
-            // Loop through all <style> tags and remove them
-            foreach ($dom->getElementsByTagName('style') as $node) {
-                $node->parentNode->removeChild($node);
-            }
-
-            // Return the cleaned HTML
-            return $dom->saveHTML();
-        }
-
-        return ''; // Return an empty string if loading fails
-    }
-
-//    private function cleanHtml(string $html): string
-//    {
-//        $dom = new \DOMDocument();
-//
-//        // Suppress warnings and parse the HTML
-//        libxml_use_internal_errors(true);
-//        @$dom->loadHTML('<!DOCTYPE html><html><body>' . $html . '</body></html>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-//        libxml_clear_errors();
-//
-//        // Extract the body content safely
-//        $body = $dom->getElementsByTagName('body')->item(0);
-//        if ($body === null) {
-//            return ''; // Return an empty string if no body element is found
-//        }
-//
-//        return $dom->saveHTML($body);
-//    }
-
+    #[Route('/procuration/{id}/word-eng', name: 'app_procuration_word_eng')]
     #[Route('/procuration/{id}/word', name: 'app_procuration_word')]
-    public function generateProcurationWord(
-        int $id,
-        ProcurationRepository $procurationRepository,
-        Request $request
-    ): Response {
+    public function generateProcurationWord(int $id, ProcurationRepository $procurationRepository, Request $request): Response {
         // Fetch the procuration
         $procuration = $procurationRepository->find($id);
         if (!$procuration) {
             throw $this->createNotFoundException('Procuration not found.');
         }
 
-        // Format the dates
-        $formattedDateMaitre = $this->dateFormatter->formatDateTimeInFrench($procuration->getDateMaitre());
-        $formattedDateMandant = $this->dateFormatter->formatDateTimeInFrench($procuration->getDateMandant());
-        $formattedDateMandataire = $this->dateFormatter->formatDateTimeInFrench($procuration->getDateMandataire());
+        // Determine the template based on the route name
+        $routeName = $request->attributes->get('_route');
+        $template = match ($routeName) {
+            'app_procuration_word_eng' => 'procurations/procurationPdfPourEng.html.twig',
+            'app_procuration_word' => 'procurations/procurationPdf.html.twig',
+            default => throw new \LogicException('Unexpected route.'),
+        };
 
-        // Render the HTML for the Word document
-        $html = $this->renderView('procurations/procurationPdf.html.twig', [
+        // Format the dates
+        $formattedDateMaitre = $this->formatDateTimeInFrench($procuration->getDateMaitre());
+        $formattedDateMandant = $this->formatDateTimeInFrench($procuration->getDateMandant());
+        $formattedDateMandataire = $this->formatDateTimeInFrench($procuration->getDateMandataire());
+
+        // Render the HTML content using the Twig template
+        $htmlContent = $this->renderView($template, [
             'procuration' => $procuration,
             'formattedDateMaitre' => $formattedDateMaitre,
             'formattedDateMandant' => $formattedDateMandant,
             'formattedDateMandataire' => $formattedDateMandataire,
         ]);
 
-        // Generate and return the Word document
-        return new Response($html, 200, [
-            'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            'Content-Disposition' => 'attachment; filename="procuration.docx"',
-        ]);
+        // Generate the Word document
+        return $this->generateWordResponse($htmlContent, 'procuration.docx');
     }
-
-
 }

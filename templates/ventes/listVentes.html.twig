@@ -7,10 +7,10 @@
     <link rel="stylesheet" href="{{ asset('asset/css/comunee.css') }}"/>
 
     <div class="container">
-        <div class="page-inner pt-3">
+        <div class="page-inner pt-2">
             <div class="page-header m-0">
-                <h3 class="fw-bold mb-3">Liste ventes</h3>
-                <ul class="breadcrumbs mb-3">
+                <h3 class="fw-bold mb-2">Liste ventes</h3>
+                <ul class="breadcrumbs mb-2">
                     <li class="nav-home">
                         <a href="{{ path('app_admin') }}">
                             <i class="icon-home"></i>
@@ -35,10 +35,10 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="d-flex align-items-center">
-                                <h4 class="card-title">Ventes <span class="badge bg-soft-dark text-dark ms-2">0</span></h4>
-                                <button class="btn btn-primary btn-round ms-auto"onclick="window.location.href='{{ path('app_add_new_vente') }}'">
+                                <h4 class="card-title">Ventes <span class="badge bg-soft-dark text-dark ms-2">{{ventes|length}}</span></h4>
+                                <button class="btn btn-primary btn-round ms-auto" onclick="window.location.href='{{ path('app_add_new_vente') }}'">
                                     <i class="fa fa-plus"></i>
-                                    Nouveau vente
+                                    Nouveau
                                 </button>
                             </div>
                         </div>
@@ -57,16 +57,81 @@
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <th>534/2024</th>
-                                            <th>299729,34</th>
-                                            <th><span>immolog</span></th>
-                                            <th><span>mahjouba lafissi</span></th>
-                                            <th><span>Statut</span></th>
+                                            <th>Repertoire</th>
+                                            <th>Montant de l'affaire</th>
+                                            <th>1ere partie(S)</th>
+                                            <th>2eme partie(S)</th>
+                                            <th>Statut</th>
                                             <th style="width: 10%">Action</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
+                                    {% for vente in ventes %}
+                                        <tr class="compromis-row" data-id="{{ vente.id }}">
+                                            <td>{{ vente.repertoir }}</td>
+                                            <td>{{ vente.designation.getMontantTTC() }}</td>
+                                            <td>
+                                                {# Display the name of the person with the role 'Promettant' #}
+                                                {% for person in vente.getPphysique() %}
+                                                    {% for role in person.getRoles() %}
+                                                        {% if role.name == 'Promettant' %}
+                                                            <span class="badge bg-soft-dark text-dark ms-1 fw-bold text-uppercase" style="font-size: 12px">
+                                                                {{ person.firstName }} {{ person.lastName }}
+                                                            </span>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endfor %}
+                                                {% for person in vente.getPmorale() %}
+                                                    {% for role in person.getRoles() %}
+                                                        {% if role.name == 'Promettant' %}
+                                                            <span class="badge bg-soft-dark text-dark ms-1 fw-bold text-uppercase" style="font-size: 12px">
+                                                                {{ person.name }}
+                                                            </span>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endfor %}
 
+                                            </td>
+                                            <td>
+                                                {# Display the name of the person with the role 'Bénéficiaire' #}
+                                                {% for person in vente.getPphysique() %}
+                                                    {% for role in person.getRoles() %}
+                                                        {% if role.name == 'Bénéficiaire' %}
+                                                            <span class="badge bg-soft-dark text-dark ms-1 fw-bold text-uppercase" style="font-size: 12px">
+                                                                {{ person.firstName }} {{ person.lastName }}
+                                                            </span>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endfor %}
+                                                {% for person in vente.getPmorale() %}
+                                                    {% for role in person.getRoles() %}
+                                                        {% if role.name == 'Bénéficiaire' %}
+                                                            <span class="badge bg-soft-dark text-dark ms-1 fw-bold text-uppercase" style="font-size: 12px">
+                                                                {{ person.name }}
+                                                            </span>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endfor %}
+
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-soft-success text-success border-0" style="font-size: 11px">active</span>
+                                            </td>
+                                            <td>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-label-info btn-round btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <small class="btn-label"><i class="fa fa-print"></i></small>Print
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-end">
+                                                        <li><a class="dropdown-item" href="{{ path('app_vente_pdf', { id: vente.id }) }}" target="_blank"><i class="fa fa-file-pdf"></i> Pdf</a></li>
+                                                        <li><a class="dropdown-item" href="{{ path('app_vente_pdf_eng', { id: vente.id }) }}" target="_blank"><i class="fa fa-file-pdf"></i> Pdf Eng</a></li>
+                                                        <li><a class="dropdown-item" href="#" target="_blank"><i class="fa fa-file-word"></i> Word</a></li>
+                                                        {#                                                        <li><a class="dropdown-item" href="{{ path('app_procuration_word_eng', { id: procuration.id }) }}" target="_blank"><i class="fa fa-file-word"></i> Word Eng</a></li>#}
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
@@ -77,8 +142,8 @@
         </div>
     </div>
 
-    <script src="{{ asset('js/core/jquery-3.7.1.min.js') }}"></script>
-    <script src="{{ asset('js/plugin/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('asset/js/core/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('asset/js/plugin/datatables/datatables.min.js') }}"></script>
     <script>
         $(document).ready(function () {
             $("#basic-datatables").DataTable({});

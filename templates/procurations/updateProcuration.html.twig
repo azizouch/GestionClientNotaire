@@ -109,21 +109,21 @@
                                         </div>
                                         <div class="card-body">
                                             <div class="table-responsive">
-                                            <table class="table table-hover AdditionTable" id="MandantTable">
-                                                <thead>
-                                                <tr>
-                                                    <th scope="col" class="text-capitalize">Dénomination/Nom Prenom</th>
-                                                    <th scope="col" class="text-capitalize">Identifiant</th>
-                                                    <th scope="col" class="text-capitalize">Ville</th>
-                                                    <th scope="col" class="text-capitalize">Telephone</th>
-                                                    <th scope="col" class="text-capitalize">Email</th>
-                                                    <th scope="col" class="text-capitalize">Actions</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <!-- Client entries will go here -->
-                                                </tbody>
-                                            </table>
+                                                <table class="table table-hover AdditionTable" id="MandantTable">
+                                                    <thead>
+                                                    <tr>
+                                                        <th scope="col" class="text-capitalize">Dénomination/Nom Prenom</th>
+                                                        <th scope="col" class="text-capitalize">Identifiant</th>
+                                                        <th scope="col" class="text-capitalize">Ville</th>
+                                                        <th scope="col" class="text-capitalize">Telephone</th>
+                                                        <th scope="col" class="text-capitalize">Email</th>
+                                                        <th scope="col" class="text-capitalize">Actions</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <!-- Client entries will go here -->
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
                                         <div class="card-footer">
@@ -144,21 +144,21 @@
                                         </div>
                                         <div class="card-body">
                                             <div class="table-responsive">
-                                            <table class="table table-hover AdditionTable" id="MandataireTable">
-                                                <thead>
-                                                <tr>
-                                                    <th scope="col" class="text-capitalize">Dénomination/Nom Prenom</th>
-                                                    <th scope="col" class="text-capitalize">Identifiant</th>
-                                                    <th scope="col" class="text-capitalize">Ville</th>
-                                                    <th scope="col" class="text-capitalize">Telephone</th>
-                                                    <th scope="col" class="text-capitalize">Email</th>
-                                                    <th scope="col" class="text-capitalize">Actions</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <!-- Client entries will go here -->
-                                                </tbody>
-                                            </table>
+                                                <table class="table table-hover AdditionTable" id="MandataireTable">
+                                                    <thead>
+                                                    <tr>
+                                                        <th scope="col" class="text-capitalize">Dénomination/Nom Prenom</th>
+                                                        <th scope="col" class="text-capitalize">Identifiant</th>
+                                                        <th scope="col" class="text-capitalize">Ville</th>
+                                                        <th scope="col" class="text-capitalize">Telephone</th>
+                                                        <th scope="col" class="text-capitalize">Email</th>
+                                                        <th scope="col" class="text-capitalize">Actions</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <!-- Client entries will go here -->
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
                                         <div class="card-footer">
@@ -172,7 +172,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                {{ form_row(form.Submit, { 'label': 'Créer' })}}
+                                {{ form_row(form.Submit, { 'label': 'Modifier' }) }}
                             </div>
                             {{ form_end(form) }}
                             <!-- Modal for Client Selection -->
@@ -184,36 +184,30 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <table class="table table-hover" id="clientsTables">
-                                                <thead>
-                                                <tr>
-                                                    <th>Prenom</th>
-                                                    <th>Nom</th>
-                                                    <th>CIN</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                {% for person in Persons %}
-                                                    <tr data-client-info='{
-                                                            "firstName": "{{ person.firstName }}",
-                                                            "lastName": "{{ person.lastName }}",
-                                                            "cin": "{{ person.cin }}",
-                                                            "phone": "{{ person.telephone }}",
-                                                            "address": "{{ person.address }}",
-                                                            "situation": "{{ person.situation }}",
-                                                            "email": "{{ person.email }}",
-                                                        }'>
-                                                        <td>{{ person.firstName }}</td>
-                                                        <td>{{ person.lastName }}</td>
-                                                        <td>{{ person.cin }}</td>
+                                            <div class="table-responsive">
+                                                <table class="table table-hover basetable" id="clientsTables">
+                                                    <thead>
+                                                    <tr style="text-transform: capitalize">
+                                                        <th>Denomination/Nom/Prenom</th>
+                                                        <th>Identifiant</th>
+                                                        <th>Ville</th>
+                                                        <th>Telephone</th>
+                                                        <th>Email</th>
                                                     </tr>
-                                                {% else %}
-                                                    <tr>
-                                                        <td colspan="3">No person available.</td>
-                                                    </tr>
-                                                {% endfor %}
-                                                </tbody>
-                                            </table>
+                                                    </thead>
+                                                    <tbody class="tablebody">
+                                                    {% for person in Persons %}
+                                                        <tr data-id="{{ person.id }}" data-cin="{{ person.cin }}">
+                                                            <td>{{ person.firstName }} {{ person.lastName }}</td>
+                                                            <td>CIN: {{ person.cin }}</td>
+                                                            <td>{{ person.city }}</td>
+                                                            <td>{{ person.telephone }}</td>
+                                                            <td>{{ person.email }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
@@ -381,7 +375,157 @@
     <script src="{{ asset('asset/js/core/jquery-3.7.1.min.js') }}"></script>
 
     <script>
+        function populateTables() {
+            const MandantTable = document.querySelector('#MandantTable tbody');
+            const MandataireTable = document.querySelector('#MandataireTable tbody');
+
+            // Helper function to append rows based on role
+            function appendRowToTable(values, newRow, fieldset) {
+                newRow.find('.delete-client').on('click', function () {
+                    newRow.remove(); // Remove row from table
+                    fieldset.remove(); // Remove associated fieldset
+                });
+
+                if (values.roles.includes('Mandant')) {
+                    MandantTable.appendChild(newRow[0]);
+                } else if (values.roles.includes('Mandataire')) {
+                    MandataireTable.appendChild(newRow[0]);
+                }
+            }
+
+            // Clear existing rows in both tables
+            MandantTable.innerHTML = '';
+            MandataireTable.innerHTML = '';
+
+            // Get fieldsets for both persons
+            const fieldsetsPersons = document.querySelectorAll('#procuration_persons > fieldset');
+
+            // Process physical persons
+            fieldsetsPersons.forEach(fieldset => {
+                const values = {
+                    name: fieldset.querySelector('input[name*="[first_name]"]').value + ' ' + fieldset.querySelector('input[name*="[last_name]"]').value,
+                    identifiant: fieldset.querySelector('input[name*="[cin]"]').value,
+                    ville: fieldset.querySelector('input[name*="[city]"]').value,
+                    telephone: fieldset.querySelector('input[name*="[telephone]"]').value,
+                    email: fieldset.querySelector('input[name*="[email]"]').value,
+                    roles: Array.from(fieldset.querySelectorAll('input[name*="[roles]"]')).map(role => role.value).join(', '), // Collect roles
+                };
+
+                const newRow = $(`
+                    <tr data-cin="${values.identifiant}">
+                        <td>${values.name}</td>
+                        <td>CIN: ${values.identifiant}</td>
+                        <td>${values.ville}</td>
+                        <td>${values.telephone}</td>
+                        <td>${values.email}</td>
+                        <td class="text-center"><button type="button" class="btn btn-danger btn-sm delete-client"><i class="fas fa-trash-alt"></i></button></td>
+                    </tr>
+                `);
+                fieldset.setAttribute('data-cin', values.identifiant);
+
+                // Add to the appropriate table based on the role
+                // Use the helper function to append the row
+                appendRowToTable(values, newRow, fieldset);
+            });
+
+        }
+
+        // Call populateTables when needed (e.g., on form submission or button click)
+        populateTables(); // Uncomment to run this function
+    </script>
+    <script>
+
         let selectedRole = ''; // Store the role from the button click
+        let selectedPersons = [];
+
+        $(document).ready(function () {
+            // Add click event to table rows
+            $('#clientsTables tbody').on('click', 'tr', function () {
+                // Extract data attributes from the clicked row
+                const personId = $(this).data('id'); // Get the person's ID
+
+                // Extract text from the correct table columns
+                const personName = $(this).find('td:nth-child(1)').text(); // Denomination/Nom/Prenom
+                const personIdentifiant = $(this).find('td:nth-child(2)').text(); // Identifiant (CIN or RC)
+                const personVille = $(this).find('td:nth-child(3)').text(); // Ville
+                const personTel = $(this).find('td:nth-child(4)').text(); // Telephone
+                const personEmail = $(this).find('td:nth-child(5)').text(); // Email
+                let selectedPerson = {}
+                let cin = personIdentifiant.replace("CIN: ", "").trim();
+                // Create a person object to pass to the display function
+                selectedPerson = {
+                    id: personId,
+                    name: personName,
+                    ville: personVille,
+                    telephone: personTel,
+                    email: personEmail,
+                    identifiant: cin,
+                    role: selectedRole
+                };
+
+
+                // Check if the person already exists in either table
+                if (checkPersonExists(cin)) {
+                    showAlert("La personne choisie existe déjà dans l'une des tables.");
+                } else {
+                    // Call the function to display this person in the target table
+                    if (selectedRole === "Mandant") {
+                        displayPersonInTable(selectedPerson, 'MandantTable');
+                    } else if (selectedRole === "Mandataire") {
+                        displayPersonInTable(selectedPerson, 'MandataireTable');
+                    }
+
+                    // Check if the person is already in the selected list
+                    const exists = selectedPersons.some(p => p.id === personId && p.type === personType && p.role === selectedRole);
+                    if (!exists) {
+                        selectedPersons.push(selectedPerson); // Add the person to the array
+                        $('#procuration_selectedPersons').val(JSON.stringify(selectedPersons));
+                    } else {
+                        console.log(`This person is already selected: ${personName}`, 'warning'); // Optional: show a warning
+                    }
+                }
+                $('#newClientModal').modal('hide');
+            });
+
+            // Event listener for delete buttons
+            $("#MandantTable, #MandataireTable").on("click", ".delete-client", function() {
+                // Get the closest table row (tr)
+                var $row = $(this).closest("tr");
+
+                // Retrieve data attributes
+                var cin = $row.data("cin"); // Get data-cin attribute
+
+                // Call the function with the appropriate argument
+                if (cin) {
+                    deletePersonFromFieldset(cin);
+                    removeFromSelectedPersons(cin);
+                }
+
+                // Remove the row from the DOM
+                $row.remove();
+            });
+        });
+
+        function checkPersonExists(cin) {
+            const existsInMandant = $(`#MandantTable tbody tr[data-cin="${cin}"]`).length > 0;
+            const existsInMandataire = $(`#MandataireTable tbody tr[data-cin="${cin}"]`).length > 0;
+
+            return existsInMandant || existsInMandataire;
+        }
+
+        function removeFromSelectedPersons(identifier) {
+            console.log("Identifier to remove:", identifier);
+            console.log("Before removal:", selectedPersons);
+
+            selectedPersons = selectedPersons.filter(function(person) {
+                return String(person.identifiant) !== String(identifier);
+            });
+
+            console.log("After removal:", selectedPersons);
+
+            // Update the hidden input with the updated selectedPersons array
+            $('#procuration_selectedPersons').val(JSON.stringify(selectedPersons));
+        }
 
         document.addEventListener('DOMContentLoaded', function () {
             const newClientModal = new bootstrap.Modal(document.getElementById('newClientModal'), {
@@ -638,29 +782,22 @@
             modal.hide();
         }
 
-        function displayPersonInTable(person) {
-            const newRow = $(`
-                <tr data-cin="${person.cin}">
-                    <td>${person.firstName} ${person.lastName}</td>
-                    <td>${person.cin}</td>
+        function displayPersonInTable(person, targetTable) {
+            let newRow;
+            // Check if it's a personPhysique or personMorale
+            newRow = $(`
+                <tr data-cin="${person.identifiant}">
+                    <td>${person.name}</td>
+                    <td>CIN: ${person.identifiant}</td>
                     <td>${person.ville}</td>
-                    <td>${person.phone}</td>
+                    <td>${person.telephone}</td>
                     <td>${person.email}</td>
-                    <td class="text-center"><button type="button" class="btn btn-danger btn-sm delete-client"><i class="fas fa-trash-alt"></button></td>
+                    <td class="text-center"><button type="button" class="btn btn-danger btn-sm delete-client"><i class="fas fa-trash-alt"></i></button></td>
                 </tr>
             `);
-            if (person.role === 'Mandant') {
-                $('#MandantTable tbody').append(newRow);
-            } else if (person.role === 'Mandataire') {
-                $('#MandataireTable tbody').append(newRow);
-            } else {
-                console.error(`Unknown role: ${person.role}`);
-            }
-            // Add event listener to the delete button
-            newRow.find('.delete-client').on('click', function() {
-                deletePersonFromFieldset(person.cin); // Call function to remove from fieldset
-                newRow.remove(); // Remove row from table
-            });
+
+            // Append the row to the specified table
+            $(`#${targetTable} tbody`).append(newRow);
         }
 
         function deletePersonFromFieldset(cin) {

@@ -41,7 +41,7 @@
                                                     {% if person.contrats is not empty %}
                                                         <ul>
                                                             {% for contrat in person.contrats %}
-                                                                <li>{{ contrat.type }} (ID: {{ contrat.id }}, Date: {{ contrat.dateSignature|date('Y-m-d') }})</li>
+                                                                <li>{{ contrat.type }} (Repertoir: {{ contrat.repertoir }}, Signe le: {{ contrat.DateBeneficiaire|date('d-m-Y') }})</li>
                                                             {% endfor %}
                                                         </ul>
                                                     {% else %}
@@ -52,7 +52,7 @@
                                                     {% if person.procurations is not empty %}
                                                         <ul>
                                                             {% for procuration in person.procurations %}
-                                                                <li>ID: {{ procuration.id }}, Date: {{ procuration.dateSignature|date('Y-m-d') }}</li>
+                                                                <li>Repertoir: {{ procuration.repertoir }}, Signe le: {{ procuration.DateMandant|date('d-m-Y') }}</li>
                                                             {% endfor %}
                                                         </ul>
                                                     {% else %}
@@ -63,7 +63,7 @@
                                                     {% if person.desistements is not empty %}
                                                         <ul>
                                                             {% for desistement in person.desistements %}
-                                                                <li>ID: {{ desistement.id }}, Date: {{ desistement.dateSignature|date('Y-m-d') }}</li>
+                                                                <li>Repertoir: {{ desistement.repertoir }}, Signe le: {{ desistement.DateDeuxiemePart|date('d-m-Y') }}</li>
                                                             {% endfor %}
                                                         </ul>
                                                     {% else %}

@@ -48,7 +48,9 @@
             cursor: pointer;
         }
 
-
+        .AdditionTable thead tr th{
+            background-color: #e0e0e0;
+        }
     </style>
 
     <div class="container">
@@ -224,7 +226,7 @@
                                                         <div class="card-title">Promettant(s)</div>
                                                     </div>
                                                     <div class="card-body">
-                                                        <table class="table table-hover" id="PromettantTable">
+                                                        <table class="table table-hover AdditionTable" id="PromettantTable">
                                                             <thead>
                                                             <tr>
                                                                 <th scope="col" class="text-capitalize">Dénomination/Nom Prenom</th>
@@ -257,7 +259,7 @@
                                                         <div class="card-title">Bénéficiaire(s)</div>
                                                     </div>
                                                     <div class="card-body">
-                                                        <table class="table table-hover" id="BeneficiaireTable">
+                                                        <table class="table table-hover AdditionTable" id="BeneficiaireTable">
                                                             <thead>
                                                             <tr>
                                                                 <th scope="col" class="text-capitalize">Dénomination/Nom Prenom</th>
@@ -319,11 +321,11 @@
                                                                     <td>{{ person.email }}</td>
                                                                 </tr>
                                                             {% endfor %}
-                                                            {% for personne in PersonnesMorales %}
-                                                                <tr data-id="{{ person.id }}" data-cin="{{ person.cin }}" data-type="personMorale">
+                                                            {% for person in PersonnesMorales %}
+                                                                <tr data-id="{{ person.id }}" data-cin="{{ person.RC }}" data-type="personMorale">
                                                                     <td>{{ person.name }}</td>
                                                                     <td>RC: {{ person.RC }}</td>
-                                                                    <td>{{ person.city }}</td>
+                                                                    <td>{{ person.ville }}</td>
                                                                     <td>{{ person.telephone }}</td>
                                                                     <td>{{ person.email }}</td>
                                                                 </tr>

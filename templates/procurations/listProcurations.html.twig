@@ -65,7 +65,7 @@
                                     </tfoot>
                                     <tbody>
                                     {% for procuration in procurations %}
-                                        <tr>
+                                        <tr class="procuration-row" data-id="{{ procuration.id }}">
                                             <td>{{ procuration.repertoir }}</td>
                                             <td>
                                                 {# Mandants #}
@@ -118,6 +118,32 @@
     <script src="{{ asset('asset/js/core/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('asset/js/plugin/datatables/datatables.min.js') }}"></script>
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            document.querySelectorAll(".procuration-row").forEach(row => {
+                // Handle row click (navigate to the update page)
+                row.addEventListener("click", function(event) {
+                    // Check if the clicked element is not inside the last dropdown cell
+                    const dropdownCell = row.querySelector("td:last-child");
+                    if (!dropdownCell.contains(event.target)) {
+                        let procurationId = this.getAttribute("data-id");
+                        if (procurationId) {
+                            console.log("Navigating to: /procuration/update/" + procurationId);
+                            window.location.href = "/procuration/update/" + procurationId; // Change this URL based on your Symfony route
+                        }
+                    }
+                });
+
+                // Add click event listener to the dropdown button (dropdown toggle)
+                const dropdownButton = row.querySelector(".dropdown-toggle");
+                if (dropdownButton) {
+                    dropdownButton.addEventListener("click", function(event) {
+                        event.stopPropagation(); // Prevent the row click from firing
+                        event.preventDefault(); // Prevent any default behavior associated with the button
+                    });
+                }
+            });
+        });
         $(document).ready(function () {
             $("#basic-datatables").DataTable({});
 

@@ -34,6 +34,22 @@ class Procuration
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
 
+    #[ORM\OneToOne(targetEntity: Dossier::class, inversedBy: 'procuration')]
+    #[ORM\JoinColumn(nullable: false)]  // Make this true if the relationship is mandatory
+    private ?Dossier $dossier = null;
+
+    // Getter and setter for Dossier
+    public function getDossier(): ?Dossier
+    {
+        return $this->dossier;
+    }
+
+    public function setDossier(?Dossier $dossier): self
+    {
+        $this->dossier = $dossier;
+        return $this;
+    }
+
     /**
      * @var Collection<int, PersonnePhysique>
      */
@@ -46,6 +62,8 @@ class Procuration
     public function __construct()
     {
         $this->persons = new ArrayCollection();
+        $this->createdAt = new \DateTime(); // or use \DateTimeImmutable if you prefer immutability
+        $this->updatedAt = new \DateTime();
     }
 
     public function getId(): ?int

@@ -19,8 +19,8 @@ Circles.create({
 //Notify
 $.notify({
 	icon: 'icon-bell',
-	title: 'Kaiadmin',
-	message: 'Premium Bootstrap 5 Admin Dashboard',
+	title: 'ActManager',
+	message: 'Message notify goes here!',
 },{
 	type: 'secondary',
 	placement: {

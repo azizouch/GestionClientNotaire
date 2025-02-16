@@ -5,6 +5,11 @@
 {% block body %}
 
     <link rel="stylesheet" href="{{ asset('asset/css/indexxee.css') }}" />
+    <style>
+        .recents .table>tbody>tr>td {
+            padding: 17px 24px !important;
+        }
+    </style>
     <div class="container">
         <div class="page-inner">
             <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
@@ -12,7 +17,7 @@
                     <h3 class="fw-bold mb-3">Dashboard</h3>
                 </div>
                 <div class="ms-md-auto py-2 py-md-0">
-                    <a href="#" class="btn btn-label-info btn-round me-2">Dossiers</a>
+                    <a href="{{ path('app_dossiers') }}" class="btn btn-label-info btn-round me-2">Dossiers</a>
                     <a href="#" class="btn btn-primary btn-round">
                         <i class="fa fa-print"></i>
                         repport
@@ -328,11 +333,11 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="card card-round recents">
                         <div class="card-header">
                             <div class="card-head-row card-tools-still-right">
-                                <div class="card-title">Dossiers récents</div>
+                                <div class="card-title">Dossiers Paiement</div>
                                 <div class="card-tools">
                                     <div class="dropdown">
                                         <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -351,90 +356,62 @@
                             <div style="height: 300px">
                             <!-- Projects table -->
                                 <table class="table table-responsive align-items-center mb-0">
-{#                                    <thead class="thead-light">#}
-{#                                    <tr>#}
-{#                                        <th scope="col">Payment Number</th>#}
-{#                                        <th scope="col" class="text-end">Date & Time</th>#}
-{#                                        <th scope="col" class="text-end">Amount</th>#}
-{#                                        <th scope="col" class="text-end">Status</th>#}
-{#                                    </tr>#}
-{#                                    </thead>#}
+                                    <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col" class="text-capitalize">Dossier</th>
+                                        <th scope="col" class="text-capitalize">Date & heure</th>
+                                        <th scope="col" class="text-capitalize">Paiement</th>
+                                        <th scope="col" class="text-capitalize">Type de paiement</th>
+                                        <th scope="col" class="text-capitalize">Montant</th>
+                                        <th scope="col" class="text-capitalize">Statut</th>
+                                    </tr>
+                                    </thead>
                                     <tbody>
+{#                                    {% for dossier in dossiers %}#}
+{#                                        <tr>#}
+{#                                            <td class="fw-bold">Rep: {{ dossier.repertoir }}</td>#}
+{#                                            <td>{{ dossier.dateCreation|date('M d, Y, h:ia') }}</td>#}
+{#                                            <td>#}
+{#                                                {% if dossier.avances|length > 0 %}#}
+{#                                                    Paiement#}
+{#                                                {% else %}#}
+{#                                                    Complet#}
+{#                                                {% endif %}#}
+{#                                            </td>#}
+{#                                            <td>#}
+{#                                                {% if dossier.avances|first %}#}
+{#                                                    {{ dossier.avances|first.type }}#}
+{#                                                {% else %}#}
+{#                                                    -#}
+{#                                                {% endif %}#}
+{#                                            </td>#}
+{#                                            <td>#}
+{#                                                {% if dossier.avances|length > 0 %}#}
+{#                                                    {{ dossier.avances|first.montant|number_format(2, ',', ' ') }} DH#}
+{#                                                {% else %}#}
+{#                                                    {{ dossier.montantTotal|number_format(2, ',', ' ') }} DH#}
+{#                                                {% endif %}#}
+{#                                            </td>#}
+{#                                            <td>#}
+{#                                                {% if dossier.avances|length > 0 and dossier.montantTotal > dossier.avances|map(a => a.montant)|sum %}#}
+{#                                                    <span class="badge badge-warning">En cours</span>#}
+{#                                                {% else %}#}
+{#                                                    <span class="badge badge-success">Complété</span>#}
+{#                                                {% endif %}#}
+{#                                            </td>#}
+{#                                        </tr>#}
+{#                                    {% else %}#}
+{#                                        <tr>#}
+{#                                            <td colspan="6" class="text-center">Aucun dossier récent</td>#}
+{#                                        </tr>#}
+{#                                    {% endfor %}#}
                                         <tr>
-                                            <th scope="row">
-                                                <button class="btn btn-icon btn-round btn-success btn-sm me-2">
-                                                    <i class="fa fa-check"></i>
-                                                </button>
-                                                Payment #10231
-                                            </th>
-                                            <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                            <td class="text-end">$250.00</td>
-                                            <td class="text-end">
-                                                <span class="badge badge-success">Completed</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <button class="btn btn-icon btn-round btn-success btn-sm me-2">
-                                                    <i class="fa fa-check"></i>
-                                                </button>
-                                                Payment #10231
-                                            </th>
-                                            <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                            <td class="text-end">$250.00</td>
-                                            <td class="text-end">
-                                                <span class="badge badge-success">Completed</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <button class="btn btn-icon btn-round btn-success btn-sm me-2">
-                                                    <i class="fa fa-check"></i>
-                                                </button>
-                                                Payment #10231
-                                            </th>
-                                            <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                            <td class="text-end">$250.00</td>
-                                            <td class="text-end">
-                                                <span class="badge badge-success">Completed</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <button class="btn btn-icon btn-round btn-success btn-sm me-2">
-                                                    <i class="fa fa-check"></i>
-                                                </button>
-                                                Payment #10231
-                                            </th>
-                                            <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                            <td class="text-end">$250.00</td>
-                                            <td class="text-end">
-                                                <span class="badge badge-success">Completed</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <button class="btn btn-icon btn-round btn-success btn-sm me-2">
-                                                    <i class="fa fa-check"></i>
-                                                </button>
-                                                Payment #10231
-                                            </th>
-                                            <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                            <td class="text-end">$250.00</td>
-                                            <td class="text-end">
-                                                <span class="badge badge-success">Completed</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <button class="btn btn-icon btn-round btn-success btn-sm me-2">
-                                                    <i class="fa fa-check"></i>
-                                                </button>
-                                                Payment #10231
-                                            </th>
-                                            <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                            <td class="text-end">$250.00</td>
-                                            <td class="text-end">
+                                            <td class="fw-bold">Rep: 1/2025</td>
+                                            <td>Mar 19, 2020, 2.45pm</td>
+                                            <td>Avance</td>
+                                            <td>Espèce</td>
+                                            <td>3000.00 DH</td>
+                                            <td>
                                                 <span class="badge badge-success">Completed</span>
                                             </td>
                                         </tr>
@@ -450,7 +427,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+            </div>
+            <div class="row">
+                <div class="col-md-12">
                     <div class="card activites">
                         <div class="card-header">
                             <div class="row align-items-center">
@@ -475,90 +454,28 @@
                             <div class="analytic-dash-activity " data-simplebar="init">
                                 <div class="simplebar-content" style="padding: 0px;">
                                     <div class="activity">
-                                        <div class="activity-info">
-                                            <div class="icon-info-activity">
-                                                <i class="fas fa-user-clock bg-soft-primary"></i>
-                                            </div>
-                                            <div class="activity-info-text">
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <p class="text-muted mb-0 font-13 w-75"><span>Donald</span>
-                                                        updated the status of <a href="">Refund #1234</a> to awaiting customer response
-                                                    </p>
-                                                    <small class="text-muted">10 Min ago</small>
+                                        {% for log in logs %}
+                                            <div class="activity-info">
+                                                <div class="icon-info-activity">
+                                                    <img src="{% if log.user.image %}{{ asset('uploads/' ~ log.user.image) }}{% else %}{{ asset('asset/img/avatar.png') }}{% endif %}" alt="" class="rounded-circle thumb-sm">
+                                                </div>
+                                                <div class="activity-info-text">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <p class="text-muted mb-0 font-13 w-75">
+                                                            <span><strong>{{ log.user.username }}</strong></span><br>
+                                                            <a href="#">{{ log.details }}</a>
+                                                        </p>
+                                                        <small class="text-muted">{{ log.timestamp|time_diff}}</small>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="activity-info">
-                                            <div class="icon-info-activity">
-                                                <i class="fas fa-times bg-soft-primary"></i>
-                                            </div>
-                                            <div class="activity-info-text">
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <p class="text-muted mb-0 font-13 w-75"><span>Lucy Peterson</span>
-                                                        was added to the group, group name is <a href="">Overtake</a>
-                                                    </p>
-                                                    <small class="text-muted">50 Min ago</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="activity-info">
-                                            <div class="icon-info-activity">
-                                                <img src="{{ asset('asset/img/profile2.jpg') }}" alt="" class="rounded-circle thumb-sm">
-                                            </div>
-                                            <div class="activity-info-text">
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <p class="text-muted mb-0 font-13 w-75"><span>Joseph Rust</span>
-                                                        opened new showcase <a href="">Mannat #112233</a> with theme market
-                                                    </p>
-                                                    <small class="text-muted">10 hours ago</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="activity-info">
-                                            <div class="icon-info-activity">
-                                                <i class="fas fa-clock bg-soft-primary"></i>
-                                            </div>
-                                            <div class="activity-info-text">
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <p class="text-muted mb-0 font-13 w-75"><span>Donald</span>
-                                                        updated the status of <a href="">Refund #1234</a> to awaiting customer response
-                                                    </p>
-                                                    <small class="text-muted">Yesterday</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="activity-info">
-                                            <div class="icon-info-activity">
-                                                <i class="fas fa-info bg-soft-primary"></i>
-                                            </div>
-                                            <div class="activity-info-text">
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <p class="text-muted mb-0 font-13 w-75"><span>Lucy Peterson</span>
-                                                        was added to the group, group name is <a href="">Overtake</a>
-                                                    </p>
-                                                    <small class="text-muted">14 Nov 2019</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="activity-info">
-                                            <div class="icon-info-activity">
-                                                <img src="{{ asset('asset/img/profile.jpg') }}" alt="" class="rounded-circle thumb-sm">
-                                            </div>
-                                            <div class="activity-info-text">
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <p class="text-muted mb-0 font-13 w-75"><span>Joseph Rust</span>
-                                                        opened new showcase <a href="">Mannat #112233</a> with theme market
-                                                    </p>
-                                                    <small class="text-muted">15 Nov 2019</small>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        {% endfor %}
                                     </div><!--end activity-->
                                 </div>
                             </div><!--end analytics-dash-activity-->
                         </div>  <!--end card-body-->
                         <div class="card-footer">
-                            <a class="see-all" href="#">
+                            <a class="see-all" href="{{ path('admin_audit_logs') }}">
                                 Voir toutes les activités
                                 <i class="fa fa-angle-right"></i>
                             </a>

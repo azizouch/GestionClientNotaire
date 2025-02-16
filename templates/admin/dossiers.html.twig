@@ -1,0 +1,816 @@
+{% extends '_base.html.twig' %}
+
+{% block title %} Dossiers {% endblock %}
+
+{% block body %}
+    <link rel="stylesheet" href="{{ asset('asset/css/comunee.css') }}" />
+    <style>
+        .table tbody tr td .part{
+            font-size: 12px;
+            border:2px solid #48abf7;
+            color: #48abf7;
+            padding: 2px 5px;
+            border-radius: 5px;
+            text-transform: uppercase;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .table tbody tr td .part:not(:first-of-type) {
+            margin-top: 5px;
+        }
+    </style>
+
+    <div class="container">
+        <div class="page-inner pt-2">
+            <div class="page-header m-0">
+                <h4 class="fw-bold mb-2">Liste ventes</h4>
+                <ul class="breadcrumbs mb-2">
+                    <li class="nav-home">
+                        <a href="{{ path('app_admin') }}">
+                            <i class="icon-home"></i>
+                        </a>
+                    </li>
+                    <li class="separator">
+                        <i class="icon-arrow-right"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">Tables</a>
+                    </li>
+                    <li class="separator">
+                        <i class="icon-arrow-right"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">Datatables</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center">
+                                <div class="col-md-3">
+                                    <form method="get" class="d-flex align-items-center" id="itemsPerPageForm">
+                                        <label for="itemsPerPage" class="mx-lg-2">Items per page:</label>
+                                        <select id="itemsPerPage" name="itemsPerPage" class="form-control d-inline w-auto mx-lg-2" style="width: auto;" onchange="document.getElementById('itemsPerPageForm').submit();">
+                                            <option value="10" {% if itemsPerPage == 10 %}selected{% endif %}>10</option>
+                                            <option value="25" {% if itemsPerPage == 25 %}selected{% endif %}>25</option>
+                                            <option value="50" {% if itemsPerPage == 50 %}selected{% endif %}>50</option>
+                                            <option value="100" {% if itemsPerPage == 100 %}selected{% endif %}>100</option>
+                                        </select>
+                                        <input type="hidden" name="page" value="{{ pagination.getCurrentPageNumber() }}">
+                                    </form>
+                                </div>
+                                <div class="col-md-9">
+                                    <input type="text" id="dossierSearch" class="form-control" placeholder="Rechercher un dossier...">
+                                </div>
+{#                                <h4 class="card-title">Résultats de recherche pour "{{ searchTerm }}"</h4>#}
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover dossierTable">
+                                    <thead>
+                                    <tr>
+                                        <th>Repertoir</th>
+                                        <th>1ere partie(S)</th>
+                                        <th>2eme partie(S)</th>
+                                        <th>Nature D'operation</th>
+                                        <th>Devis</th>
+                                        <th>Paiements</th>
+                                        <th>Reste à payer</th>
+                                        <th>Statut</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for dossier in pagination %}
+                                        <tr class="dossier-row"
+                                            data-id="{{ dossier.id }}"
+                                            data-repertoir="{{ dossier.repertoir }}"
+                                            data-compromis="{{ dossier.compromis ? 'Oui' : 'Non' }}"
+                                            data-vente="{{ dossier.vente ? 'Oui' : 'Non' }}"
+                                            data-devis="{{ dossier.devis }}"
+                                            data-paiements='{{ dossier.getPaiementsArray|json_encode(constant("JSON_UNESCAPED_UNICODE"))|raw }}'
+                                            data-reste="{{ dossier.devis - dossier.getTotalPaiement() }}"
+                                            data-suivie="{{ dossier.suivie }}"
+                                            data-statut="{{ dossier.statut }}"
+                                            data-procuration="{{ dossier.procuration ? 'Oui' : 'Non' }}"
+{#                                            data-desistement="{{ dossier.desistement ? 'Oui' : 'Non' }}"#}>
+                                            <td class="fw-bold">{{ dossier.repertoir }}</td>
+                                            <td>
+                                                {# Display the name of the person with the role 'Promettant' #}
+                                                {% if dossier.getCompromis() %}
+
+                                                    {% set PromettantPysique = dossier.getCompromis().getPphysique()|filter(person => 'Promettant' in person.getRoles()|map(role => role.name)) %}
+                                                    {% set count = PromettantPysique|length %}
+
+                                                    {% for person in PromettantPysique %}
+                                                        <span class="part">{{ person.firstName }} {{ person.lastName }}</span>
+                                                        {% if count > 1 and loop.index < count %} <br> {% endif %}
+                                                    {% endfor %}
+
+                                                    {% set PromettantMorale = dossier.getCompromis().getPmorale()|filter(person => 'Promettant' in person.getRoles()|map(role => role.name)) %}
+                                                    {% set count = PromettantMorale|length %}
+
+                                                    {% for person in PromettantMorale %}
+                                                        <span class="part">{{ person.name }}</span>
+                                                        {% if count > 1 and loop.index < count %} <br> {% endif %}
+                                                    {% endfor %}
+
+                                                {% elseif dossier.getProcuration() %}
+                                                    {# Mandants #}
+                                                    {% for person in dossier.getProcuration().persons %}
+                                                        {% for role in person.getRoles %}
+                                                            {% if role.name == 'Mandant' %}
+                                                                <span class="part"> {{ person.FirstName }} {{ person.LastName }} </span> {# Replace 'name' with the property for the person's name #}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endfor %}
+                                                {% endif %}
+
+                                            </td>
+                                            <td>
+                                                {# Display the name of the person with the role 'Bénéficiaire' #}
+                                                {% if dossier.getCompromis() %}
+
+                                                    {% set beneficiariesPysique = dossier.getCompromis().getPphysique()|filter(person => 'Bénéficiaire' in person.getRoles()|map(role => role.name)) %}
+                                                    {% set count = beneficiariesPysique|length %}
+
+                                                    {% for person in beneficiariesPysique %}
+                                                        <span class="part">{{ person.firstName }} {{ person.lastName }}</span>
+                                                        {% if count > 1 and loop.index < count %} <br> {% endif %}
+                                                    {% endfor %}
+
+                                                    {% set beneficiariesMorale = dossier.getCompromis().getPmorale()|filter(person => 'Bénéficiaire' in person.getRoles()|map(role => role.name)) %}
+                                                    {% set count = beneficiariesMorale|length %}
+
+                                                    {% for person in beneficiariesMorale %}
+                                                        <span class="part">{{ person.name }}</span>
+                                                        {% if count > 1 and loop.index < count %} <br> {% endif %}
+                                                    {% endfor %}
+
+                                                {% elseif dossier.getProcuration() %}
+                                                    {# Mandataires #}
+                                                    {% for person in dossier.getProcuration().persons %}
+                                                        {% for role in person.getRoles %}
+                                                            {% if role.name == 'Mandataire' %}
+                                                                <span class="part"> {{ person.FirstName }} {{ person.LastName }} </span>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endfor %}
+                                                {% endif %}
+
+                                            </td>
+                                            <td>
+                                                {% if dossier.procuration %}
+                                                    Procuration
+                                                {% elseif dossier.compromis and dossier.vente %}
+                                                    Compromis et Vente
+                                                {% elseif dossier.compromis %}
+                                                    Compromis
+                                                {% elseif dossier.vente %}
+                                                    Vente
+                                                {% elseif dossier.desistement %}
+                                                    Desistement
+                                                {% else %}
+                                                    Aucune opération
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ dossier.devis|number_format(2, '.', ' ') }} DH</td>
+                                            <td>
+                                                {% if dossier.getTotalPaiement() is not empty %}
+                                                    {{ dossier.getTotalPaiement()|number_format(2, '.', ' ') }} DH
+                                                {% else %}
+                                                    0.00 DH
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ (dossier.devis - dossier.getTotalPaiement())|number_format(2, '.', ' ') }} DH</td>
+                                            {% if dossier.statut == "Active" %}
+                                                <td>
+                                                    <span class="badge bg-soft-success text-success border-0" style="font-size: 11px">{{ dossier.statut }}</span>
+                                                </td>
+                                            {% else %}
+                                                <td>
+                                                    <span class="badge bg-soft-success text-danger border-0" style="font-size: 11px">{{ dossier.statut }}</span>
+                                                </td>
+                                            {% endif %}
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="6">Aucun dossier trouvé.</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                <div class="row navigation d-flex justify-content-center mt-4" >
+                                    {{ knp_pagination_render(pagination,'@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig') }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dossier Details Modal -->
+    <div class="modal fade" id="dossierModal" tabindex="-1" aria-labelledby="dossierModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="dossierModalLabel">Dossier Details</h5>
+                    <button type="button" id="btn-close-dossier" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body m-0" style="scrollbar-width: thin;scrollbar-color: #888 #f1f1f1;max-height: 550px;overflow: auto">
+                    <div class="container">
+                        <div class="row">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <div class="col-md-6">
+                                    <p><strong>Repertoir :</strong></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>=> <span id="modalRepertoir"></span></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Compromis et vente Info -->
+                        <div id="compromisEtVenteInfo" style="display: none;">
+                            <div class="row">
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <div class="col-md-6">
+                                        <p><strong>Nature D'operation :</strong></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>=> <span id="modalCompromisEtVente"></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Procuration Info -->
+                        <div id="procurationInfo" style="display: none;">
+                            <div class="row">
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <div class="col-md-6">
+                                        <p><strong>Nature D'operation :</strong></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>=> <span id="modalProcuration"></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Desistement Info -->
+                        <div id="desistementInfo" style="display: none;">
+                            <div class="row">
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <div class="col-md-6">
+                                        <p><strong>Nature D'operation :</strong></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>=> <span id="modalDesistement"></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <div class="col-md-6">
+                                    <p><strong>Devis :</strong></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>=> <span id="modalDevis"></span> DH</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <div class="col-md-6">
+                                    <p><strong>Le suivie :</strong></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>=> <span id="modalSuivie"></span></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <div class="col-md-6">
+                                    <p><strong>Reste à payer :</strong></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>=> <span id="modalReste"></span> DH</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p><strong>Paiements :</strong></p>
+                            </div>
+                            <div class="col-md-12">
+                                <table id="tablePaiements" class="table table-bordered table-head-bg-info table-bordered-bd-info">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Paiement</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col">Montant</th>
+                                        <th scope="col">Date & heure</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-12">
+                                <a href="#" class="btn btn-dark btn-sm" id="openPaiementModal" data-bs-toggle="modal" data-bs-target="#paiementModal">
+                                    <i class="fas fa-plus"></i>
+                                    Ajouter paiement
+                                </a>
+                            </div>
+                            <div id="test-post" class="text-center text-primary"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <form id="AnnulerForm" method="POST" style="display: inline;">
+                        <button type="button" class="btn btn-secondary annuler_dossier" style="border-radius: 100px !important;">
+                            Annuler le dossier
+                        </button>
+                    </form>
+                    <a href="#" class="btn btn-info open-update-modal" style="border-radius: 100px !important;"> Modifier</a>
+                    <button type="button" class="btn btn-primary enregistrer_dossier" style="border-radius: 100px !important;">
+                        Enregistrer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Dossier Modal -->
+    <div class="modal fade" id="updateDossierModal" tabindex="-1" aria-labelledby="updateDossierModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateDossierModalLabel">Modifier le Dossier</h5>
+                    <button type="button" id="btn-close-Upd-dossier" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="updateDossierForm" method="POST">
+                    <div class="modal-body m-0">
+                        <div class="mb-3">
+                            <label for="updateDevis" class="form-label">Devis</label>
+                            <input type="number" class="form-control" id="updateDevis" name="devis" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="updateSuivie" class="form-label">Suivie</label>
+                            <textarea class="form-control" id="updateSuivie" rows="4" name="suivie" required></textarea>
+                        </div>
+                        <input type="hidden" id="dossierId" name="dossierId" value="">
+                    </div>
+                    <div class="modal-footer d-flex align-items-center justify-content-center">
+                        <button type="button" class="btn btn-primary" id="saveDossierChanges">Enregistrer</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Annuler Dossier -->
+    <div class="modal fade" id="annulerDossierModal" tabindex="-1" aria-labelledby="annulerDossierModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="annulerDossierModalLabel">Dossier Annulé</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Ce dossier est <strong>annulé</strong>. Voulez-vous le réactiver ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <form id="desannulerForm" method="POST" action="">
+                        <input type="hidden" name="dossier_id" id="desannulerDossierId">
+                        <button type="submit" class="btn btn-success">Réactiver le dossier</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Add Paiement -->
+    <div class="modal fade" id="paiementModal" tabindex="-1" aria-labelledby="paiementModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paiementModalLabel">Ajouter un Paiement</h5>
+                    <button type="button" id="btn-close-paiement" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body m-0">
+                    <form id="paiementForm">
+                        <div class="mb-3">
+                            <label for="paiementName" class="form-label">Nom du Paiement</label>
+                            <select class="form-control" id="paiementName" required>
+                                <option value="Avance">Avance</option>
+                                <option value="Complement">Complement</option>
+                                <option value="Note">Note</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="paiementType" class="form-label">Type</label>
+                            <select class="form-control" id="paiementType" required>
+                                <option value="Espèce">Espèce</option>
+                                <option value="Chèque">Chèque</option>
+                                <option value="Virement">Virement</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="paiementMontant" class="form-label">Montant</label>
+                            <input type="number" class="form-control" id="paiementMontant" required>
+                            <small class="form-text error-message" id="montantError" style="display: none; color: red;margin-left: 0"></small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="paiementDate" class="form-label">Date</label>
+                            <input type="datetime-local" class="form-control" id="paiementDate" required>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-center">
+                            <button type="submit" class="btn btn-primary">Ajouter</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ asset('asset/js/core/jquery-3.7.1.min.js') }}"></script>
+
+    <script>
+
+        let selectedDossierData = {};
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const dossierModal = new bootstrap.Modal(document.getElementById('dossierModal'), {
+                backdrop: 'static',
+                keyboard: false
+            });
+            const updateDossierModal = new bootstrap.Modal(document.getElementById('updateDossierModal'), {
+                backdrop: 'static',
+                keyboard: false
+            });
+            const annulerDossierModal = new bootstrap.Modal(document.getElementById('annulerDossierModal'), {
+                backdrop: 'static',
+                keyboard: false
+            });
+            const paiementModal = new bootstrap.Modal(document.getElementById('paiementModal'), {
+                backdrop: 'static',
+                keyboard: false
+            });
+            document.getElementById('btn-close-dossier').addEventListener('click', function () {
+                location.reload(); // Reload the page when the modal is closed
+            });
+            document.getElementById('btn-close-paiement').addEventListener('click', function () {
+                $('#dossierModal').modal('show');
+            });
+            document.getElementById('btn-close-Upd-dossier').addEventListener('click', function () {
+                $('#dossierModal').modal('show');
+            });
+        });
+
+        document.addEventListener("click", function (event) {
+            if (event.target.closest(".modal")) {
+                document.body.focus();
+            }
+        });
+
+        function updateReste() {
+            let totalPaiements = 0;
+
+            // Loop through each paiement row in the table
+            $("#tablePaiements tbody tr").each(function () {
+                let montantText = $(this).find("td:nth-child(3)").text().trim(); // Get text from the 3rd td
+                let montant = parseFloat(montantText.replace("DH", "").trim()); // Remove "DH" and convert to number
+
+                if (!isNaN(montant)) {
+                    totalPaiements += montant;
+                }
+            });
+
+            let reste = selectedDossierData.devis - totalPaiements; // Calculate remaining amount
+
+            $("#modalReste").text(reste.toFixed(2)); // Update the span
+        }
+
+        async function addPaiement(bodyData){
+            try {
+                let response = await fetch('/paiement/add', {
+                    method: 'POST',
+                    headers: { "X-Requested-with": "XMLHttpRequest" },
+                    body: JSON.stringify(bodyData),
+                });
+                let reponseAjax = await response.text();
+                reponseAjax = JSON.parse(reponseAjax);
+                if (reponseAjax['paiementId']) {
+
+                    // Append new paiement to table
+                    $("#tablePaiements tbody").append(`
+                        <tr>
+                            <td>${bodyData.name}</td>
+                            <td>${bodyData.type}</td>
+                            <td>${parseFloat(bodyData.montant).toFixed(2)} DH</td>
+                            <td>${bodyData.date}</td>
+                            <td class="text-center"><a href="#" class="btn btn-light btn-sm deletePaiement" data-id="${reponseAjax['paiementId']}"><i class="fas fa-trash fa-lg"></i></a></td>
+                        </tr>
+                    `);
+                    // Reset form fields
+                    $("#paiementForm")[0].reset();
+
+                    $("#montantError").hide();
+                    // Close modal
+                    $("#paiementModal").modal("hide");
+
+                    updateReste();
+
+                    $('#dossierModal').modal('show');
+
+                } else if (reponseAjax['error']) {
+                    console.log("no data returned !");
+                }
+            } catch (error) {
+                console.error("Erreur lors de la récupération des données:", error);
+            }
+        }
+
+        $(document).on("click", ".enregistrer_dossier", function (e) {
+            location.reload();
+        });
+
+        $(document).on("click", ".deletePaiement", function (e) {
+            e.preventDefault();
+
+            let paiementRow = $(this).closest("tr");
+            let paiementId = $(this).data("id");
+
+            if (!paiementId) {
+                alert("Erreur : ID du paiement introuvable.");
+                return;
+            }
+            swal({
+                title: "Êtes-vous sûr ?",
+                text: "Voulez-vous vraiment supprimer ce paiement ?",
+                icon: "warning",
+                buttons: {
+                    cancel: {
+                        text: "Non",
+                        visible: true,
+                        className: "btn btn-secondary",
+                    },
+                    confirm: {
+                        text: "Oui, supprimer !",
+                        visible: true,
+                        className: "btn btn-danger",
+                    },
+                },
+                dangerMode: true,
+            }).then(async(willDelete) => {
+                if (willDelete) {
+                    try {
+                        let response = await fetch(`/paiement/delete/${paiementId}`, {
+                            method: "DELETE",
+                            headers: { "X-Requested-With": "XMLHttpRequest" },
+                        });
+
+                        let responseData = await response.json();
+
+                        if (responseData.success) {
+                            paiementRow.remove(); // Remove row from table
+                            updateReste(); // Update remaining amount
+                        } else {
+                            alert("Erreur: " + responseData.message);
+                        }
+                    } catch (error) {
+                        console.error("Erreur lors de la suppression:", error);
+                    }
+                }
+            });
+        });
+
+        $(document).on("click", ".annuler_dossier", function (e) {
+            e.preventDefault();
+            swal({
+                title: "Êtes-vous sûr ?",
+                text: "Cette action est irréversible !",
+                icon: "warning",
+                buttons: {
+                    cancel: {
+                        text: "Non",
+                        visible: true,
+                        className: "btn btn-secondary",
+                    },
+                    confirm: {
+                        text: "Oui, annuler !",
+                        visible: true,
+                        className: "btn btn-danger",
+                    },
+                },
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    this.closest("form").submit(); // Submit the form
+                }
+            });
+        });
+
+        $(document).on("click", "#saveDossierChanges", async function (e) {
+            e.preventDefault();
+
+            var container = this.closest('form');
+            var devis = container.querySelector("#updateDevis").value;
+            var suivie = container.querySelector("#updateSuivie").value;
+            var dossierId = container.querySelector("#dossierId").value;
+
+            $('#modalDevis').text(parseFloat(devis).toFixed(2));
+            $('#modalSuivie').text(suivie);
+
+            updateReste();
+
+            data = {
+                devis: devis,
+                suivie: suivie,
+                dossierId: dossierId
+            }
+            try {
+                let response = await fetch(`/dossier/update`, {
+                    method: "POST",
+                    headers: { "X-Requested-With": "XMLHttpRequest" },
+                    body: JSON.stringify(data),
+                });
+
+                let responseData = await response.json();
+
+                if (responseData.success) {
+                    console.log(responseData.message);
+                } else {
+                    alert("Erreur: " + responseData.message);
+                }
+            } catch (error) {
+                console.error("Erreur getting data:", error);
+            }
+
+            $('#updateDossierModal').modal('hide');
+            $('#dossierModal').modal('show');
+
+        });
+
+        $(document).ready(function() {
+
+            $('.dossier-row').on('click', function() {
+                // Get data attributes
+                const statut = $(this).data('statut');
+                const repertoir = $(this).data('repertoir');
+                const devis = $(this).data('devis');
+                const paiementsData = $(this).attr('data-paiements'); // Get raw attribute value
+                const paiements = JSON.parse(paiementsData);
+                const reste = $(this).data('reste');
+                const suivie = $(this).data('suivie');
+                const compromis = $(this).data('compromis') === 'Oui';
+                const vente = $(this).data('vente') === 'Oui';
+                const procuration = $(this).data('procuration') === 'Oui';
+                const desistement = $(this).data('desistement') === 'Oui';
+
+                if (statut === "Annuler") {
+                    // Set the form action dynamically (replace '/desannuler' with your actual route)
+                    $('#desannulerForm').attr('action', `/desannuler/${$(this).data('id')}`);
+
+                    // Set hidden input value
+                    $('#desannulerDossierId').val(dossierId);
+
+                    // Show the modal
+                    $('#annulerDossierModal').modal('show');
+                }
+                else
+                {
+                    // Set the form action dynamically
+                    $('#AnnulerForm').attr('action', `/dossier/annuler/${$(this).data('id')}`);
+
+                    // Get data attributes from the clicked row
+                    selectedDossierData = {
+                        id: $(this).data('id'),
+                        devis: devis,
+                        Paiements: paiements,
+                        suivie: suivie,
+                        reste: reste
+                    };
+
+                    // Set values in the modal
+                    $('#modalRepertoir').text(repertoir);
+                    $('#modalDevis').text(devis.toFixed(2));
+
+                    $('#tablePaiements tbody').empty(); // Clear previous content
+
+                    paiements.forEach(paiement => {
+                        $('#tablePaiements tbody').append(`
+                            <tr>
+                                <td>${paiement.name}</td>
+                                <td>${paiement.type}</td>
+                                <td>${parseFloat(paiement.montant).toFixed(2)} DH</td>
+                                <td>${paiement.date}</td>
+                                <td class="text-center"><a href="#" class="btn btn-light btn-sm deletePaiement" data-id="${paiement.id}"><i class="fas fa-trash fa-lg"></i></a></td>
+                            </tr>
+                        `);
+                    });
+
+                    $('#modalReste').text(reste.toFixed(2));
+                    $('#modalSuivie').text(suivie);
+
+                    // Hide all sections initially
+                    $('#compromisEtVenteInfo').hide();
+                    $('#procurationInfo').hide();
+                    $('#desistementInfo').hide();
+                    let merge = "";
+
+                    // Check which operation is present and display the relevant info
+                    if (procuration) {
+                        $('#procurationInfo').show();
+                        $('#modalProcuration').text("Procuration"); // Replace with actual details
+                    }
+                    if (compromis) {
+                        merge = "Compromis"; // Set text to 'Compromis'
+                    }
+
+                    if (vente) {
+                        merge += (merge ? " et " : "") + "Vente"; // Append " et Vente" if merge is not empty
+                    }
+                    // Update the modal text and show info if there is any merge text
+                    if (merge) {
+                        $('#modalCompromisEtVente').text(merge); // Update modal text
+                        $('#compromisEtVenteInfo').show(); // Show the info
+                    }
+                    if (desistement) {
+                        $('#desistementInfo').show();
+                        $('#modalDesistement').text("Desistement"); // Replace with actual details
+                    }
+
+                    // Show the modal
+                    $('#dossierModal').modal('show');
+                }
+
+            });
+
+            // Event handler for opening the update modal
+            $('.open-update-modal').on('click', function(e) {
+                e.preventDefault(); // Prevent default anchor behavior
+
+                // Populate the modal inputs with the stored dossier data
+                $('#updateDevis').val(selectedDossierData.devis);
+                $('#updateSuivie').val(selectedDossierData.suivie);
+                $('#dossierId').val(selectedDossierData.id); // Set the dossier ID in a hidden input
+
+                // Hide the original modal if necessary
+                $('#dossierModal').modal('hide');
+
+                // Set the form action dynamically
+                // $('#updateDossierForm').attr('action', `/dossier/update/${selectedDossierData.id}`);
+
+                // Show the update modal
+                $('#updateDossierModal').modal('show');
+            });
+
+            $("#paiementForm").on("submit", function (e) {
+                e.preventDefault();
+                // Get form values
+                const name = $("#paiementName").val();
+                const type = $("#paiementType").val();
+                const montant = $("#paiementMontant").val();
+                const date = $("#paiementDate").val();
+                let dateObj = new Date(date);
+                let formattedDate = ("0" + dateObj.getDate()).slice(-2) + "-" + ("0" + (dateObj.getMonth() + 1)).slice(-2) + "-" + dateObj.getFullYear() + " " + ("0" + dateObj.getHours()).slice(-2) + ":" + ("0" + dateObj.getMinutes()).slice(-2);
+
+                if (montant > selectedDossierData.reste) {
+                    $("#montantError").text("Le montant: " + montant + " que vous avez ajouté est plus grand que le montant qui reste à payer").show();
+                    return;
+                }
+
+                let paiementData = {
+                    dossierId: selectedDossierData.id,
+                    name: name,
+                    type: type,
+                    montant: montant,
+                    date: formattedDate
+                }
+
+                addPaiement(paiementData);
+            });
+
+            $("#paiementMontant").on("focus", function () {
+                $("#montantError").hide();
+            });
+        });
+
+    </script>
+
+{% endblock %}

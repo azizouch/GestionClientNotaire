@@ -9,6 +9,9 @@ use App\Form\ContratType;
 use App\Repository\ContratRepository;
 use App\Repository\PersonneMoraleRepository;
 use App\Repository\PersonnePhysiqueRepository;
+use App\service\ConvertNumber;
+use App\service\DateFormatterService;
+use App\service\GeneratePdf;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,6 +20,15 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class VenteController extends AbstractController
 {
+    private DateFormatterService $dateFormatter;
+    private ConvertNumber $convertNumber;
+    private GeneratePdf $generatePdf;
+    public function __construct(DateFormatterService $dateFormatter,GeneratePdf $generatePdf,ConvertNumber $convertNumber)
+    {
+        $this->dateFormatter = $dateFormatter;
+        $this->convertNumber = $convertNumber;
+        $this->generatePdf = $generatePdf;
+    }
     #[Route('/ventes', name: 'app_ventes')]
     public function index(ContratRepository $contratRepository): Response
     {
@@ -88,5 +100,50 @@ class VenteController extends AbstractController
             'PersonnesPhysiques' => $PersonnesPhysiques,
             'PersonnesMorales' => $PersonnesMorales,
         ]);
+    }
+
+    // code for pdf document
+    #[Route('/vente/{id}/pdf-eng', name: 'app_vente_pdf_eng')]
+    #[Route('/vente/{id}/pdf', name: 'app_vente_pdf')]
+    public function generateCompromisPdf(int $id, ContratRepository $contratRepository, Request $request): Response
+    {
+        // Fetch the ventes
+        $vente = $contratRepository->find($id);
+        if (!$vente) {
+            throw $this->createNotFoundException('Ventes not found.');
+        }
+
+        // Determine the template based on the route name
+        $routeName = $request->attributes->get('_route');
+        $template = match ($routeName) {
+            'app_vente_pdf_eng' => 'ventes/ventePdfPourEng.html.twig',
+            'app_vente_pdf' => 'ventes/ventePdf.html.twig',
+            default => throw new \LogicException('Unexpected route.'),
+        };
+        // Format the dates
+        $formattedDatePromettant = $this->dateFormatter->formatDateTimeInFrench($vente->getDatePromettant());
+        $formattedDateBeneficiaire = $this->dateFormatter->formatDateTimeInFrench($vente->getDateBeneficiaire());
+        $formattedDateMaitre = $this->dateFormatter->formatDateTimeInFrench($vente->getDateMaitre());
+
+        $MontantTTCconverted = $this->convertNumber->convertDecimalToWords($vente->getDesignation()->getMontantTTC());
+        $MontantHTconverted = $this->convertNumber->convertDecimalToWords($vente->getDesignation()->getMontantHT());
+        $MontantTVAconverted = $this->convertNumber->convertDecimalToWords(47340.70);
+        $Delaiconverted = $this->convertNumber->convertDecimalToWords($vente->getDesignation()->getDelai());
+
+        // Render the HTML for the template
+        $html = $this->renderView($template, [
+            'vente' => $vente,
+            'formattedDatePromettant' => $formattedDatePromettant,
+            'formattedDateBeneficiaire' => $formattedDateBeneficiaire,
+            'formattedDateMaitre' => $formattedDateMaitre,
+            'MontantTTCconverted'=> $MontantTTCconverted,
+            'MontantHTconverted'=> $MontantHTconverted,
+            'MontantTVAconverted'=> $MontantTVAconverted,
+            'Delaiconverted'=> $Delaiconverted,
+
+        ]);
+
+        // Generate and return the PDF
+        return $this->generatePdf->generatePdfResponse($html, 'vente.pdf');
     }
 }

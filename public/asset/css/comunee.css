@@ -3,6 +3,7 @@
     background-color: #d0ece7;
     font-family: 'Public Sans', sans-serif;
     text-transform: capitalize;
+    font-weight: bold;
 }
 .table tfoot th span{
     background-color: rgba(72, 171, 247, .1);

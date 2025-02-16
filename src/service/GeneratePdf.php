@@ -21,4 +21,19 @@ class GeneratePdf{
             'Content-Disposition' => 'inline; filename="' . $filename . '"',
         ]);
     }
+    public function generateRepertoir(?string $lastRepertoir): string
+    {
+        if (!$lastRepertoir) {
+            return '1/' . date('Y'); // Default starting value if no previous "vente" exists
+        }
+
+        // Split the last "repertoir" into the number and year parts
+        list($number, $year) = explode('/', $lastRepertoir);
+
+        // Increment the number by 1
+        $number = (int)$number + 1;
+
+        // Return the new "repertoir" in the same format
+        return $number . '/' . $year;
+    }
 }

@@ -9,39 +9,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\PersonnePhysiqueRepository;
-use NumberToWords\NumberToWords;
 use App\Form\PersonnePhysiqueFormType;
 
 class ClientController extends AbstractController
 {
-    private function convertDecimalToWords($number, $lang = 'fr')
-    {
-        $numberToWords = new NumberToWords();
-        $numberTransformer = $numberToWords->getNumberTransformer($lang);
-
-        // Split the integer and fractional parts
-        $parts = explode(',', number_format($number, 3, ',', ''));  // Ensure decimal uses ','
-
-        $integerPart = (int) $parts[0]; // Integer part before the comma
-        $fractionalPart = isset($parts[1]) ? (int) $parts[1] : 0; // Decimal part (if exists)
-
-        // Convert both parts to words
-        $integerWords = $numberTransformer->toWords($integerPart);
-        $fractionalWords = $numberTransformer->toWords($fractionalPart);
-
-        // Customize the output format (e.g., Euros and Cents)
-        return trim($integerWords . ' dirhams ' . $fractionalWords . ' centimes ');
-    }
 
     #[Route('/clients', name: 'app_clients')]
     public function index(PersonnePhysiqueRepository $personnePhysiqueRepository): Response
     {
-        $number = $this->convertDecimalToWords(249234.68);
 
         $clients = $personnePhysiqueRepository->findAll();
         return $this->render('clients/listclients.html.twig', [
             'clients' => $clients,
-            'number' => $number,
         ]);
     }
     #[Route('/Personne_physique/add', name: 'app_add_client')]

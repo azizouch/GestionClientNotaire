@@ -16,6 +16,7 @@
         "doctrine/orm": "^3.2",
         "dompdf/dompdf": "^3.0",
         "ezyang/htmlpurifier": "^4.17",
+        "knplabs/knp-paginator-bundle": "^6.6",
         "knplabs/knp-snappy-bundle": "^1.10",
         "kwn/number-to-words": "^2.10",
         "phpdocumentor/reflection-docblock": "^5.4",

@@ -1,49 +1,234 @@
 {% extends '_base.html.twig' %}
 
-{% block title %}Audit Logs{% endblock %}
+{% block title %}Liste d'activités{% endblock %}
 
 {% block body %}
-    <h1>Audit Logs</h1>
+    <link rel="stylesheet" href="{{ asset('asset/css/comunee.css') }}" />
+    <div class="container">
+        <div class="page-inner pt-2">
+            <div class="page-header m-0">
+                <h4 class="fw-bold mb-2">Liste d'activités</h4>
+                <ul class="breadcrumbs mb-2">
+                    <li class="nav-home">
+                        <a href="{{ path('app_admin') }}">
+                            <i class="icon-home"></i>
+                        </a>
+                    </li>
+                    <li class="separator">
+                        <i class="icon-arrow-right"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">Tables</a>
+                    </li>
+                    <li class="separator">
+                        <i class="icon-arrow-right"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">Datatables</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h4>Suivi des utilisateurs</h4>
+                                <form method="get" class="d-flex align-items-center" id="itemsPerPageForm">
+                                    <label for="itemsPerPage" class="mx-lg-2">Items per page:</label>
+                                    <select id="itemsPerPage" name="itemsPerPage" class="form-control d-inline w-auto mx-lg-2" style="width: auto;" onchange="document.getElementById('itemsPerPageForm').submit();">
+                                        <option value="10" {% if itemsPerPage == 10 %}selected{% endif %}>10</option>
+                                        <option value="25" {% if itemsPerPage == 25 %}selected{% endif %}>25</option>
+                                        <option value="50" {% if itemsPerPage == 50 %}selected{% endif %}>50</option>
+                                        <option value="100" {% if itemsPerPage == 100 %}selected{% endif %}>100</option>
+                                    </select>
+                                    <input type="hidden" name="page" value="{{ pagination.getCurrentPageNumber() }}">
+                                </form>
+                                <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#filtersModal"><i class="fas fa-filter"></i>Filtres</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Utilisateur</th>
+                                            <th>Action</th>
+                                            <th>Détails</th>
+                                            <th>Date & houre</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for log in pagination %}
+                                            <tr>
+                                                <td>{{ log.id }}</td>
+                                                <td>{{ log.user ? log.user.username : 'Utilisateur inconnu' }}</td>
+                                                <td>{{ log.action }}</td>
+                                                <td>{{ log.details }}</td>
+                                                <td>{{ log.timestamp|date('d/m/Y H:i') }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row navigation d-flex justify-content-center mt-4" >
+                                {{ knp_pagination_render(pagination,'@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Dossier Details Modal -->
+    <div class="modal fade" id="filtersModal" tabindex="-1" aria-labelledby="filtersModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="filtersModalLabel">Suivie filtres</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="get" action="{{ path('admin_audit_logs') }}" id="filterForm">
+                    <div class="modal-body m-0">
+                        <div class="container">
+                            <!-- Utilisateur Dropdown -->
+                            <div class="form-group">
+                                <label for="user">Utilisateur</label>
+                                <select name="user" id="user" class="form-select">
+                                    <option value="">Tous les utilisateurs</option>
+                                    {% for user in users %}
+                                        <option value="{{ user.username }}" {% if app.request.query.get('user') == user.username %}selected{% endif %}>
+                                            {{ user.username }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
 
-    <form method="get" action="{{ path('admin_audit_logs') }}">
-        <div class="form-group">
-            <label for="user">User</label>
-            <input type="text" name="user" id="user" class="form-control" value="{{ app.request.query.get('user') }}">
+                            <!-- Action Dropdown -->
+                            <div class="form-group">
+                                <label for="action">Action</label>
+                                <select name="action" id="action" class="form-select">
+                                    <option value="">Toutes les actions</option>
+                                    {% for act in actions %}
+                                        <option value="{{ act.action }}" {% if app.request.query.get('action') == act.action %}selected{% endif %}>
+                                            {{ act.action }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="dateFrom">Depuis</label>
+                                <input type="text" name="dateFrom" id="dateFrom" class="form-control"
+                                       placeholder="dd/mm/yyyy" value="{{ app.request.query.get('dateFrom') }}">
+                                <small class="form-text error-message" id="dateFromError" style="display: none; color: red;">
+                                    Date invalide, format attendu : dd/mm/yyyy.
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="dateTo">À</label>
+                                <input type="text" name="dateTo" id="dateTo" class="form-control"
+                                       placeholder="dd/mm/yyyy" value="{{ app.request.query.get('dateTo') }}">
+                                <small class="form-text error-message" id="dateToError" style="display: none; color: red;">
+                                    Date invalide, format attendu : dd/mm/yyyy.
+                                </small>
+                            </div>
+                            <small id="dateError" class="form-text" style="display: none;color: red;"></small>
+                        </div>
+                    </div>
+                    <div class="modal-footer d-flex align-items-center justify-content-center">
+                        <button type="submit" class="btn btn-primary" id="filterBtn" style="border-radius: 100px !important;">Filtrer</button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="action">Action</label>
-            <input type="text" name="action" id="action" class="form-control" value="{{ app.request.query.get('action') }}">
-        </div>
-        <div class="form-group">
-            <label for="dateFrom">From</label>
-            <input type="date" name="dateFrom" id="dateFrom" class="form-control" value="{{ app.request.query.get('dateFrom') }}">
-        </div>
-        <div class="form-group">
-            <label for="dateTo">To</label>
-            <input type="date" name="dateTo" id="dateTo" class="form-control" value="{{ app.request.query.get('dateTo') }}">
-        </div>
-        <button type="submit" class="btn btn-primary">Filter</button>
-    </form>
+    </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('filterForm');
+        const dateFromInput = document.getElementById('dateFrom');
+        const dateToInput = document.getElementById('dateTo');
+        const dateFromError = document.getElementById('dateFromError');
+        const dateToError = document.getElementById('dateToError');
+        const dateError = document.getElementById('dateError'); // Added this for new validation
+        let isSubmitted = false;
+
+        function isValidDate(dateStr) {
+            const datePattern = /^\d{2}\/\d{2}\/\d{4}$/; // Format: dd/mm/yyyy
+            if (!datePattern.test(dateStr)) return false;
+
+            const [day, month, year] = dateStr.split('/').map(Number);
+            const date = new Date(year, month - 1, day);
+
+            return (
+                date.getFullYear() === year &&
+                date.getMonth() === month - 1 &&
+                date.getDate() === day
+            );
+        }
+
+        form.addEventListener('submit', function (event) {
+            let isValid = true;
 
 
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>User</th>
-            <th>Action</th>
-            <th>Details</th>
-            <th>Date & Time</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for log in auditLogs %}
-            <tr>
-                <td>{{ log.user.username }}</td> <!-- Display the user responsible -->
-                <td>{{ log.action }}</td>       <!-- The type of action -->
-                <td>{{ log.details }}</td>      <!-- The details of the change -->
-                <td>{{ log.timestamp|date('Y-m-d H:i:s') }}</td> <!-- Timestamp -->
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            if (dateFromInput.value && !isValidDate(dateFromInput.value)) {
+                dateFromError.style.display = 'block';
+                isValid = false;
+            }
+
+            if (dateToInput.value && !isValidDate(dateToInput.value)) {
+                dateToError.style.display = 'block';
+                isValid = false;
+            }
+
+            // Convert dates to compare
+            if (dateFromInput.value && dateToInput.value && isValidDate(dateFromInput.value) && isValidDate(dateToInput.value)) {
+                const [dayFrom, monthFrom, yearFrom] = dateFromInput.value.split('/').map(Number);
+                const [dayTo, monthTo, yearTo] = dateToInput.value.split('/').map(Number);
+
+                const dateFromObj = new Date(yearFrom, monthFrom - 1, dayFrom);
+                const dateToObj = new Date(yearTo, monthTo - 1, dayTo);
+
+                if (dateFromObj > dateToObj) {
+                    event.preventDefault(); // Prevent form submission
+                    dateError.textContent = "La date de début ne peut pas être supérieure à la date de fin.";
+                    dateError.style.display = "block";
+                    isValid = false;
+                }
+            }
+
+            if (!isValid) {
+                event.preventDefault(); // Prevent form submission if invalid
+            }
+            else {
+                //  Store flag in localStorage before submitting
+                localStorage.setItem("formSubmitted", "true");
+            }
+        });
+
+        // Reset form manually after page reload
+        if (localStorage.getItem("formSubmitted") === "true") {
+            setTimeout(() => {
+                // Manually reset input values
+                dateFromInput.value = "";
+                dateToInput.value = "";
+                document.getElementById('user').value = "";
+                document.getElementById('action').value = "";
+                localStorage.removeItem("formSubmitted"); // Remove flag
+                console.log("Form has been reset after reload!"); // Debugging message
+            }, 100);
+        }
+
+        // Hide error when user clicks inside the input
+        dateFromInput.addEventListener('focus', function () {
+            dateFromError.style.display = 'none';
+            dateError.style.display = 'none';
+        });
+
+        dateToInput.addEventListener('focus', function () {
+            dateToError.style.display = 'none';
+            dateError.style.display = 'none';
+        });
+    });
+</script>
 {% endblock %}

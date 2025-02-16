@@ -34,7 +34,7 @@ class Contrat
     #[ORM\Column(length: 255)]
     private ?string $repertoir = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Designation $designation = null;
 
@@ -58,6 +58,10 @@ class Contrat
      */
     #[ORM\ManyToMany(targetEntity: PersonneMorale::class, inversedBy: 'contrats',cascade: ['persist'])]
     private Collection $pmorale;
+
+    #[ORM\ManyToOne(targetEntity: Dossier::class, inversedBy: 'compromis')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Dossier $dossier = null; // Add this to the Contrat class
 
     public function __construct()
     {
@@ -210,6 +214,18 @@ class Contrat
     public function removePmorale(PersonneMorale $pmorale): static
     {
         $this->pmorale->removeElement($pmorale);
+
+        return $this;
+    }
+
+    public function getDossier(): ?Dossier
+    {
+        return $this->dossier;
+    }
+
+    public function setDossier(?Dossier $dossier): static
+    {
+        $this->dossier = $dossier;
 
         return $this;
     }

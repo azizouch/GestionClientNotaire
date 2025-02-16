@@ -23,7 +23,7 @@
     <div class="container">
         <div class="page-inner pt-2">
             <div class="page-header m-0">
-                <h4 class="fw-bold mb-2">Liste ventes</h4>
+                <h4 class="fw-bold mb-2">Liste dossiers</h4>
                 <ul class="breadcrumbs mb-2">
                     <li class="nav-home">
                         <a href="{{ path('app_admin') }}">
@@ -48,24 +48,38 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <div class="d-flex align-items-center">
-                                <div class="col-md-3">
-                                    <form method="get" class="d-flex align-items-center" id="itemsPerPageForm">
-                                        <label for="itemsPerPage" class="mx-lg-2">Items per page:</label>
-                                        <select id="itemsPerPage" name="itemsPerPage" class="form-control d-inline w-auto mx-lg-2" style="width: auto;" onchange="document.getElementById('itemsPerPageForm').submit();">
+                            <form method="GET" action="{{ path('app_dossiers') }}">
+                                <div class="row d-flex justify-content-between">
+                                    <!-- Search Input -->
+                                    <div class="col-md-6">
+                                        <input type="text" name="search" id="dossierSearch" class="form-control"
+                                               placeholder="Rechercher un dossier..." value="{{ searchQuery }}">
+                                    </div>
+                                    <!-- Contract Type Dropdown -->
+                                    <div class="col-md-3">
+                                        <select name="contractType" id="contractType" class="form-select" onchange="this.form.submit()">
+                                            <option value="">Tous les contrats</option>
+                                            <option value="compromis" {% if contractType == 'compromis' %}selected{% endif %}>Compromis</option>
+                                            <option value="vente" {% if contractType == 'vente' %}selected{% endif %}>Vente</option>
+                                            <option value="procuration" {% if contractType == 'procuration' %}selected{% endif %}>Procuration</option>
+                                            <option value="desistement" {% if contractType == 'desistement' %}selected{% endif %}>Desistement</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Items per Page Dropdown -->
+                                    <div class="col-md-1">
+                                        <select name="itemsPerPage" id="itemsPerPage" class="form-select" onchange="this.form.submit()">
                                             <option value="10" {% if itemsPerPage == 10 %}selected{% endif %}>10</option>
                                             <option value="25" {% if itemsPerPage == 25 %}selected{% endif %}>25</option>
                                             <option value="50" {% if itemsPerPage == 50 %}selected{% endif %}>50</option>
                                             <option value="100" {% if itemsPerPage == 100 %}selected{% endif %}>100</option>
                                         </select>
-                                        <input type="hidden" name="page" value="{{ pagination.getCurrentPageNumber() }}">
-                                    </form>
+                                    </div>
+
+                                    <!-- Hidden Submit Button (Not necessary but ensures form submission) -->
+                                    <button type="submit" hidden></button>
                                 </div>
-                                <div class="col-md-9">
-                                    <input type="text" id="dossierSearch" class="form-control" placeholder="Rechercher un dossier...">
-                                </div>
-{#                                <h4 class="card-title">Résultats de recherche pour "{{ searchTerm }}"</h4>#}
-                            </div>
+                            </form>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -119,13 +133,14 @@
 
                                                 {% elseif dossier.getProcuration() %}
                                                     {# Mandants #}
-                                                    {% for person in dossier.getProcuration().persons %}
-                                                        {% for role in person.getRoles %}
-                                                            {% if role.name == 'Mandant' %}
-                                                                <span class="part"> {{ person.FirstName }} {{ person.LastName }} </span> {# Replace 'name' with the property for the person's name #}
-                                                            {% endif %}
-                                                        {% endfor %}
+                                                    {% set MandantPerson = dossier.getProcuration.getPersons()|filter(person => 'Mandant' in person.getRoles()|map(role => role.name)) %}
+                                                    {% set count = MandantPerson|length %}
+
+                                                    {% for person in MandantPerson %}
+                                                        <span class="part">{{ person.firstName }} {{ person.lastName }}</span>
+                                                        {% if count > 1 and loop.index < count %} <br> {% endif %}
                                                     {% endfor %}
+
                                                 {% endif %}
 
                                             </td>
@@ -151,12 +166,12 @@
 
                                                 {% elseif dossier.getProcuration() %}
                                                     {# Mandataires #}
-                                                    {% for person in dossier.getProcuration().persons %}
-                                                        {% for role in person.getRoles %}
-                                                            {% if role.name == 'Mandataire' %}
-                                                                <span class="part"> {{ person.FirstName }} {{ person.LastName }} </span>
-                                                            {% endif %}
-                                                        {% endfor %}
+                                                    {% set MandatairePerson = dossier.getProcuration.getPersons()|filter(person => 'Mandataire' in person.getRoles()|map(role => role.name)) %}
+                                                    {% set count = MandatairePerson|length %}
+
+                                                    {% for person in MandatairePerson %}
+                                                        <span class="part">{{ person.firstName }} {{ person.lastName }}</span>
+                                                        {% if count > 1 and loop.index < count %} <br> {% endif %}
                                                     {% endfor %}
                                                 {% endif %}
 
@@ -185,15 +200,13 @@
                                                 {% endif %}
                                             </td>
                                             <td>{{ (dossier.devis - dossier.getTotalPaiement())|number_format(2, '.', ' ') }} DH</td>
+                                            <td>
                                             {% if dossier.statut == "Active" %}
-                                                <td>
-                                                    <span class="badge bg-soft-success text-success border-0" style="font-size: 11px">{{ dossier.statut }}</span>
-                                                </td>
+                                                <span class="badge bg-soft-success text-success border-0" style="font-size: 11px">{{ dossier.statut }}</span>
                                             {% else %}
-                                                <td>
-                                                    <span class="badge bg-soft-success text-danger border-0" style="font-size: 11px">{{ dossier.statut }}</span>
-                                                </td>
+                                                <span class="badge bg-soft-success text-danger border-0" style="font-size: 11px">{{ dossier.statut }}</span>
                                             {% endif %}
+                                                </td>
                                         </tr>
                                     {% else %}
                                         <tr>

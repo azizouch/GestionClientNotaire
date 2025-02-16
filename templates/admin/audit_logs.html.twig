@@ -7,7 +7,7 @@
     <div class="container">
         <div class="page-inner pt-2">
             <div class="page-header m-0">
-                <h4 class="fw-bold mb-2">Liste d'activités</h4>
+                <h4 class="fw-bold mb-2">Suivi les utilisateurs</h4>
                 <ul class="breadcrumbs mb-2">
                     <li class="nav-home">
                         <a href="{{ path('app_admin') }}">
@@ -33,9 +33,9 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="d-flex align-items-center justify-content-between">
-                                <h4>Suivi des utilisateurs</h4>
+                                <h4>Activités<span class="badge bg-soft-dark text-dark ms-2">{{auditLoggers|length}}</span></h4>
                                 <form method="get" class="d-flex align-items-center" id="itemsPerPageForm">
-                                    <label for="itemsPerPage" class="mx-lg-2">Items per page:</label>
+                                    <label for="itemsPerPage" class="mx-lg-2">Activités par page:</label>
                                     <select id="itemsPerPage" name="itemsPerPage" class="form-control d-inline w-auto mx-lg-2" style="width: auto;" onchange="document.getElementById('itemsPerPageForm').submit();">
                                         <option value="10" {% if itemsPerPage == 10 %}selected{% endif %}>10</option>
                                         <option value="25" {% if itemsPerPage == 25 %}selected{% endif %}>25</option>

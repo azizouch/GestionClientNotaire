@@ -152,6 +152,111 @@
 
         $(document).ready(function () {
 
+            var listscrollbarmessage = $('.listmessage .scrollbar');
+
+            if (listscrollbarmessage.length > 0) {
+                listscrollbarmessage.scrollbar();
+            }
+
+            var scrollbarchatarea = $('.chat-area .scrollbar');
+            if (scrollbarchatarea.length > 0) {
+                scrollbarchatarea.scrollbar();
+            }
+
+            // Header Search Toggle
+
+            var $searchWrapper = $('.header-search-wrapper'),
+                $body = $('body'),
+                $searchToggle = $('.search-toggle');
+
+            $searchToggle.on('click', function (e) {
+                $searchWrapper.toggleClass('show');
+                $(this).toggleClass('active');
+                $searchWrapper.find('input').focus();
+                e.preventDefault();
+            });
+
+            $body.on('click', function (e) {
+                if ( $searchWrapper.hasClass('show') ) {
+                    $searchWrapper.removeClass('show');
+                    $searchToggle.removeClass('active');
+                    $body.removeClass('is-search-active');
+                }
+            });
+
+            $('.header-search').on('click', function (e) {
+                e.stopPropagation();
+            });
+            // Header Search Toggle
+
+            // send message by clicking the enter keyboard
+            // Listen for the Enter key on the message input
+            $('#messageInput').on('keypress', function (event) {
+                if (event.which === 13) { // 13 is the Enter key
+                    event.preventDefault(); // Prevents the default action (like form submission)
+                    sendMessage(); // Call the send message function
+                }
+            });
+
+            // Listen for input on the search field
+            $('#Inputsearch').on('input', function () {
+                const searchValue = $(this).val().toLowerCase().trim();
+                // Filter the message items
+                $('.message-item').each(function (index) {
+                    const userName = $(this).find('h6').text().toLowerCase().trim();
+
+                    if (userName.startsWith(searchValue)) {
+                        $(this).css('display', 'flex'); // Show matching items
+                    } else {
+                        $(this).attr('style', 'display: none !important'); // Force hide non-matching items
+                    }
+                });
+
+                // Handle case for empty search
+                if (searchValue === '') {
+                    $('.message-item').css('display', 'flex'); // Reset to show all items
+                }
+            });
+
+            // Listen for input on the search header field
+            $('#chatSearch').on('input', function () {
+                const searchValue = $(this).val().toLowerCase().trim();
+                let firstMatchScrolled = false; // To track if the first match has been scrolled into view
+
+                // If the input is empty, remove the highlight class from all messages
+                if (searchValue === '') {
+                    $('.chat-message').removeClass('highlight');
+                    return; // Exit early since there's nothing to search
+                }
+
+                // Filter the message items
+                $('.chat-message').each(function () {
+                    const content = $(this).find('.message-content').text().toLowerCase().trim();
+
+                    // Check if the content starts with or includes the search value
+                    if (content.startsWith(searchValue) || content.includes(searchValue)) {
+                        $(this).addClass('highlight'); // Add the highlight class to matching messages
+
+                        // Scroll to the first matching message
+                        if (!firstMatchScrolled) {
+                            this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            firstMatchScrolled = true; // Ensure only the first match is scrolled
+                        }
+                    } else {
+                        $(this).removeClass('highlight'); // Remove highlight if not matching
+                    }
+                });
+
+                if (!firstMatchScrolled && searchValue !== '') {
+                    console.log('No matches found.'); // Optional: Log if no matches were found
+                }
+            });
+
+        });
+
+        $(document).ready(function () {
+
+
             // Show the `users-exist-container` and hide the `users-active-container`
             $buttonAddChat.on('click', function () {
                 $usersActiveContainer.addClass('d-none');
@@ -438,111 +543,6 @@
 
             reader.readAsDataURL(file); // Read the file as a data URL
         }
-
-        $(document).ready(function () {
-
-            var listscrollbarmessage = $('.listmessage .scrollbar');
-
-            if (scrollbarlistmessage.length > 0) {
-                scrollbarlistmessage.scrollbar();
-            }
-
-            var scrollbarchatarea = $('.chat-area .scrollbar');
-            if (scrollbarchatarea.length > 0) {
-                scrollbarchatarea.scrollbar();
-            }
-
-            // Header Search Toggle
-
-            var $searchWrapper = $('.header-search-wrapper'),
-                $body = $('body'),
-                $searchToggle = $('.search-toggle');
-
-            $searchToggle.on('click', function (e) {
-                $searchWrapper.toggleClass('show');
-                $(this).toggleClass('active');
-                $searchWrapper.find('input').focus();
-                e.preventDefault();
-            });
-
-            $body.on('click', function (e) {
-                if ( $searchWrapper.hasClass('show') ) {
-                    $searchWrapper.removeClass('show');
-                    $searchToggle.removeClass('active');
-                    $body.removeClass('is-search-active');
-                }
-            });
-
-            $('.header-search').on('click', function (e) {
-                e.stopPropagation();
-            });
-            // Header Search Toggle
-
-            // send message by clicking the enter keyboard
-            // Listen for the Enter key on the message input
-            $('#messageInput').on('keypress', function (event) {
-                if (event.which === 13) { // 13 is the Enter key
-                    event.preventDefault(); // Prevents the default action (like form submission)
-                    sendMessage(); // Call the send message function
-                }
-            });
-
-            // Listen for input on the search field
-            $('#Inputsearch').on('input', function () {
-                const searchValue = $(this).val().toLowerCase().trim();
-
-                // Filter the message items
-                $('.message-item').each(function (index) {
-                    const userName = $(this).find('h6').text().toLowerCase().trim();
-
-                    if (userName.startsWith(searchValue)) {
-                        $(this).css('display', 'flex'); // Show matching items
-                    } else {
-                        $(this).attr('style', 'display: none !important'); // Force hide non-matching items
-                    }
-                });
-
-                // Handle case for empty search
-                if (searchValue === '') {
-                    $('.message-item').css('display', 'flex'); // Reset to show all items
-                }
-            });
-
-            // Listen for input on the search header field
-            $('#chatSearch').on('input', function () {
-                const searchValue = $(this).val().toLowerCase().trim();
-                let firstMatchScrolled = false; // To track if the first match has been scrolled into view
-
-                // If the input is empty, remove the highlight class from all messages
-                if (searchValue === '') {
-                    $('.chat-message').removeClass('highlight');
-                    return; // Exit early since there's nothing to search
-                }
-
-                // Filter the message items
-                $('.chat-message').each(function () {
-                    const content = $(this).find('.message-content').text().toLowerCase().trim();
-
-                    // Check if the content starts with or includes the search value
-                    if (content.startsWith(searchValue) || content.includes(searchValue)) {
-                        $(this).addClass('highlight'); // Add the highlight class to matching messages
-
-                        // Scroll to the first matching message
-                        if (!firstMatchScrolled) {
-                            this.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                            firstMatchScrolled = true; // Ensure only the first match is scrolled
-                        }
-                    } else {
-                        $(this).removeClass('highlight'); // Remove highlight if not matching
-                    }
-                });
-
-                if (!firstMatchScrolled && searchValue !== '') {
-                    console.log('No matches found.'); // Optional: Log if no matches were found
-                }
-            });
-
-        });
 
     </script>
 

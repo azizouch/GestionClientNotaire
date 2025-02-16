@@ -13,7 +13,7 @@
 
     {% set index = 1 %}
 
-    <title>Compromis de
+    <title>Vente de
         {% if firstBeneficiaire is not null %}
             {% if firstBeneficiaire.FirstName is defined and firstBeneficiaire.LastName is defined %}
                 {{ firstBeneficiaire.FirstName }} {{ firstBeneficiaire.LastName }}
@@ -32,13 +32,13 @@
     </title>
     <style>
         body { font-family: Arial, sans-serif;line-height: 1.4; }
-        strong { font-family: "Times New Roman";font-size:18px; }
-        .strong2 { font-family: 'Verdana', sans-serif;font-weight: bold;font-size:16px; }
+        strong { font-family: "Times New Roman";font-size:16px; }
+        .strong2 { font-family: 'Verdana', sans-serif;font-weight: bold;font-size:15px; }
     </style>
 </head>
 <body>
 <div>
-    Par-devant <strong>Maître BOUTASKIOUINE KAMAL</strong> notaire à Marrakech ( Maroc), soussigné,----
+    Par-devant <strong>Maître BOUTASKIOUINE KAMAL</strong> notaire à Marrakech ( Maroc), soussigné,---------
     ----------------------------------------------------------------------------------------------------------<strong class="strong2">ONT COMPARU</strong>
     <br>
     {# Display Promettant persons #}
@@ -67,9 +67,9 @@
         <br>
         {% set index = index + 1 %} {# Increment index #}
     {% endfor %}
-    -----------------------------------------------------------------<strong>Ci-après dénommé les Promettantses qualite</strong>
+    ---------------------------------------------------------------------------<strong>Ci-après dénommés les vendeurs es qualité</strong>
 
-    ---------------------------------------------------------------------------------------------------------------<strong class="strong2">D'UNE PART</strong>
+    -----------------------------------------------------------------------------------------------------------------<strong class="strong2">D'UNE PART</strong>
     <br>
     {# Display Bénéficiaire persons #}
     {% set countBenificiaires = 0 %}
@@ -97,48 +97,25 @@
         {% set index = index + 1 %} {# Increment index #}
     {% endfor %}
 
-
-    ------------------------------------------------------------------------------<strong>Ci-après dénommé {% if countBenificiaires > 1 %} les Bénéficiaires {% else %} le Bénéficiaire {% endif %}</strong>
+    -------------------------------------------------------------------------------------<strong>Ci-après dénommé {% if countBenificiaires > 1 %} les’Acquéreurs {% else %} l’Acquéreur {% endif %}</strong>
     <br>
-    -----------------------------------------------------------------------------------------------------------<strong class="strong2">D'AUTRE PART</strong>
+    -------------------------------------------------------------------------------------------------------------<strong class="strong2">D'AUTRE PART</strong>
     <br>
-    Les Promettantses qualité et le Bénéficiaire sont ci-après collectivement désignés les "Parties" et individuellement la "Partie". -------------------------------------------------------------------------------------------
+    Les vendeurs es qualités et l’Acquéreur sont ci-après collectivement désignés les "Parties" et individuellement la "Partie". ---------------------------------------------------------------------------------------------
     <br>
-    Lesquels, ont requis <strong>Maître BOUTASKIOUINE Kamal</strong> notaire soussigné de constater par acte authentique, Lesquels, parties, ont, d’un
+    Lesquels, ont requis Maître <strong>BOUTASKIOUINE KAMAL</strong> notaire soussigné de constater par acte authentique, Lesquels, parties, ont, d’un commun accord entre eux, requis Maître <strong>BOUTASKIOUINE KAMAL </strong>,
 
-    commun accord entre eux, requis <strong>Maître BOUTASKIOUINE Kamal</strong>, Notaire soussigné, de rédiger en langue française, conformément à
+    Notaire soussigné, de rédiger en langue française, conformément à l’article 42 de la loi n°32-09 relative à l’organisation de la profession de Notaire et de conférer l’authenticité aux
 
-    l’article 42 de la loi n°32-09 relative à l’organisation de la profession de Notaire et de conférer l’authenticité aux conventions
+    conventions suivantes directement arrêtées entre eux sans le concours ni la participation dudit notaire, qui n’en est que le rédacteur, conformément à l’article 35 de la loi 32-09 susmentionnée.
 
-    suivantes directement arrêtées entre eux sans le concours ni la participation dudit notaire, qui n’en est que le rédacteur,
+    Sachant que le Notaire, reçoit les actes, auxquels la loi impose le caractère d’authenticité attachée aux actes de l’autorité publique, ou auxquels les parties veulent donner ce caractère.
 
-    conformément à l’article 35 de la loi 32-09 susmentionnée. Sachant que le Notaire, reçoit les actes, auxquels la loi impose le
-
-    caractère d’authenticité attachée aux actes de l’autorité publique, ou auxquels les parties veulent donner ce caractère.
-
-    Le Notaire constate la date des actes et assure la conservation des minutes et en délivre des exemplaires et copies. ----------------------------------------------------------------------------------
+    Le Notaire constate la date des actes et assure la conservation des minutes et en délivre des exemplaires et copies ----------------------------------------------------------------------------------
     <br>
-    <strong>IL a été, préalablement aux présentes, exposé ce qui suit:</strong> ----------------------------------------------
+    <strong class="strong2">ARTICLE 1- VENTE TOTALE DE BIEN IMMOBILIER SOUMIS AU REGIME DE LA COPROPRIETE DANS LE CADRE DES DISPOSITIONS DE LA LOI DE FINANCES POUR L’ANNEE 2010 SUR LE LOGEMENT SOCIAL</strong> ---------------------------------------------------------------------------------------------------
     <br>
-    Que le présent compromis de vente s’inscrit dans le cadre des dispositions de l’article 93 du code général des impôt telle qu’il
-
-    a été modifié et complété par la loi de finances pour l’année 2010 relatives aux opérations de cession de logements sociaux à
-
-    usage d’habitation principale, prévoyant notamment le paiement par l’Etat au bénéfice de la Bénéficiaire, de la partie du prix
-
-    de vente égale au montant de la TVA, grevant l’acquisition de logements sociaux. ------------------------
-    <br>
-    <strong>Ceci exposé, il a été arrêté et convenu ce  qui suit :</strong> --------------------------------------------------------
-    <br>
-    <strong class="strong2">ARTICLE 1 - COMPROMIS DE VENTE DE BIEN IMMOBILIER SOUMIS AU REGIME DE LA COPROPRIETE DANS LE CADRE DES DISPOSITIONS DE LA LOI DE
-
-        FINANCES POUR L’ANNEE 2010 SUR LE LOGEMENT SOCIAL</strong> ----------------------------------------------------------------
-    <br>
-    La société « <strong>{{ compayName }}</strong> » SARL, représentée par ses mandataires dûment habilités à cet effet, comparants d’une part, s’engagent à
-
-    vendre par les présentes, en s’obligeant à toutes les garanties ordinaires de fait et de droit, les plus étendues en pareille
-
-    matière. --------------------------
+    La société dite « <strong>{{ compayName }}</strong> » représentée par ses mandataires, es qualités, comparants d'une part, Vendent par les présentes en s'obligeant à toutes les garanties ordinaires. ---------------------
     <br>A
     {% for person in beneficiairePersons %}
         {% if person.name is defined %}
@@ -157,7 +134,7 @@
         comparant{% if firstBeneficiaire and firstBeneficiaire.genre == "Femelle" %}e{% endif %}
     {% endif %}
 
-    d’autre part, ici présents et qui acceptent, d’acquérir par parts égales entre eux dans l’indivision a conccurence de 50% chacun   DANS LA propriété des biens immobiliers désignés.--------------------
+    d’autre part, ici présent et qui accepte d’acquérir la pleine propriété des biens immobiliers désignés.
     <br>
     -------------------------------------------<strong class="strong2">ARTICLE 2 - DESIGNATION</strong>-----------------------------------------------
     <br>
@@ -165,236 +142,222 @@
 
     copropriété, situé au <strong>{{ vente.designation.etage }}</strong>, d’une superficie de: <strong>{{ vente.designation.superficie }}</strong> m2 SOIXANTE DIX NEUF METRE CARRES,  constituant la fraction divise
 
-    numéro <strong>{{ vente.designation.NumeroDivise }}</strong>, immatriculée à la conservation foncière de Marrakech sous la dénomination de «<strong>{{ compromis.designation.NumeroBien }}</strong>» objet du titre
+    numéro <strong>{{ vente.designation.NumeroDivise }}</strong>, immatriculée à la conservation foncière de Marrakech sous la dénomination de «<strong>{{ vente.designation.NumeroBien }}</strong>» objet du titre
 
-    foncier <strong>N°{{ vente.designation.TitreFoncier }}</strong> -----------------------------------------------------
+    foncier <strong>N°{{ vente.designation.TitreFoncier }}</strong>.
     <br>
-    Les parts d’indivision <strong>{{ compromis.designation.indivision }}</strong> dans l’immeuble et les <strong>{{ vente.designation.residence }}</strong> dans la résidence affectées à cet appartement
+    Les parts d’indivision <strong>{{ vente.designation.indivision }}</strong> dans l’immeuble et les <strong>{{ vente.designation.residence }}</strong> dans la résidence affectées à cet appartement
 
-    dans le règlement de copropriété de l’immeuble objet du titre foncier mère <strong>N°{{ vente.designation.TitreFoncierMere }}</strong> ----------------------------------------------------------------------------------------------------
+    dans le règlement de copropriété de l’immeuble objet du titre foncier mère <strong>N°{{ vente.designation.TitreFoncierMere }}</strong>.
     <br>
     Tel au surplus que le Bien existe et se comporte avec toute ses aisances et dépendances et tous les droits y attachés sans
 
     aucune exception ni réserve, et tel en outre, qu'il est bien connu de la Bénéficiaire qui déclare l'avoir vu et visité à
 
-    plusieurs reprises aux fins des présentes. ----------------
+    plusieurs reprises aux fins des présentes. --------------
     <br>
-    ----------------------------------------<strong class="strong2">ARTICLE 3 - ORIGINE DE PROPRIETE</strong>------------------------------------
+    ----------------------------------------<strong class="strong2">ARTICLE 3 - ORIGINE DE PROPRIETE</strong>--------------------------------------
     <br>
     Pour les besoins du Service de l’Enregistrement « le vendeur es qualités » déclare qu’il est propriétaire du bien présentement
 
-    vendu tel qu’il est mentionné   a conservation foncière.
+    vendu tel qu’il est mentionné a conservation foncière.------------
 
-    --------------------------------------<strong class="strong2">ARTICLE 4 - PROPRIETE  - JOUISSANCE</strong>----------------------------------
+    --------------------------------------<strong class="strong2">ARTICLE 4 - PROPRIETE  - JOUISSANCE</strong>------------------------------------
     <br>
-    Le Bénéficiaire sera propriétaire du Bien à compter du jour de l’inscription de l’acte de vente définitif sur les livres fonciers conformément
+    « L’acquéreur » susnommé sera propriétaire du bien présentement vendu à compter de l’inscription des présentes sur les livres fonciers conformément aux articles 66 et 67 du Dahir du 12 Août 1913 modifié par le dahir du 22 novembre 2011sur l’immatriculation.-------------------------------
+    <br>
+    Il en aura la jouissance à compter de ce jour par la prise de possession réelle et effective à son profit libre de toute occupation ou location quelconque.--------------------------------------------------------
+    <br>
+    ---------------------------------------<strong class="strong2">ARTICLE 5 - CHARGES & CONDITIONS</strong>-------------------------------------
+    <br>
+    <strong>5.1. CHARGES & CONDITIONS ORDINAIRES </strong>----------------------------------------------------------------
+    <br>
+    La présente vente est faite sous les charges et conditions ordinaires de fait et de droit les plus étendus en pareille matière et notamment sous celles suivantes, que l’Acquéreur s'oblige à exécuter et accomplir, savoir : ----------------------------------------------------------------------------------------
+    <br>
+    <strong>a)</strong> de prendre le Bien dans l'état où il se trouve actuellement, sans pouvoir prétendre à aucune indemnité ni diminution du prix ci-après fixé pour quelque cause que ce soit. ---------------------------
+    <br>
+    <strong>b)</strong> de souffrir les servitudes passives, apparentes ou occultes continues ou discontinues et mitoyennetés, dont le Bien peut être grevé, sauf à s'en défendre et à profiter en retour de celles actives, s'il en existe à ses risques et périls. ----------------------------------------------------------------------
+    <br>
+    A ce sujet, les vendeurs es qualités déclarent qu'à leur connaissance il n'existe pas d'hypothèques, charges, servitudes, ni mitoyennetés grevant le Bien autres que celles figurant au dossier d'immatriculation du Bien que l'Acquéreur déclare bien connaître, -----------------------------------------
+    <br>
+    <strong>c)</strong> d'acquitter à compter du jour ci-dessus fixé pour l'entrée en jouissance, toutes contributions, impositions ou autres taxes, généralement quelconque pouvant grever le Bien, de manière que les vendeurs es qualités ne soient jamais inquiétés ni recherchés à ce sujet. -------------------------------
+    <br>
+    Etant bien entendu que pour les périodes antérieures à la date d'entrée en jouissance de l'Acquéreuse es qualité tous impôts, taxes et contributions quelconques émis ou restant à émettre et non encore réglés à ce jour grevant ou pouvant grever le Bien, resteront entièrement à la charge exclusive des Vendeurs qui s'y obligent expressément. -------------------------------------------------------
+    <br>
+    <strong>d)</strong> de se conformer aux clauses, conditions, prescriptions et interdictions résultant du règlement de copropriété, du plan de construction approuvé « NE VARIETUR » et du plan topographique, relatifs au Bien, conformément aux dispositions de l’article 11 de la loi numéro 18-00 sur le statut de la copropriété des immeubles bâtis et dont une copie conforme à l’original lui a été remise par les vendeurs es qualités et dispense le notaire de les joindre au présent acte et lui consent décharge entière et sans réserve à ce sujet. -----------------------------------------------------------------------------------
+    <br>
+    <strong>e)</strong> de payer tous les droits, frais et taxes des présentes et ceux qui en seront la suite ou la conséquence. --------------------------------------------------------------------------------------------------------------
+    <br>
+    Les Parties sont convenues que le présent contrat de vente annule et remplace tous compromis de vente et documents les liant. ------------------------------------------------------------------------------------------
+    <br>
+    <strong>f)</strong> de payer en sus du prix de vente hors taxe sur la valeur ajoutée, tous les impôts et taxes dus par les Vendeurs es qualité pour cette vente et desquels les Vendeurs es qualité était exonéré en vertu de la convention qu'ils ont signée avec l'Etat et ce, dans le cas où l'Acquéreur ne bénéficie pas du versement par l'Etat, à son bénéfice, de la partie du prix de vente égale au montant de la taxe sur la valeur ajoutée. ----------------------------------------------------------------------------------------------------------
+    <br>
+    <strong>5.2. CHARGES & CONDITIONS SPECIALES LIEES A LA COPROPRIETE</strong> ----------------------------
+    <br>
+    L’Acquéreur déclare avoir été informé par les vendeurs es qualités de la constitution du syndicat des copropriétaires de l’immeuble dont dépend le Bien et qui sera chargé de la gestion de ses parties communes et déclare adhérer d’ores et déjà et expressément à sa gestion par une société spécialisée et s’oblige expressément, à titre irrévocable, à verser au profit de ladite société le montant de la cotisation pour la durée qui lui sera impartie par ladite société, afin de lui permettre de remplir ses fonctions dans les meilleurs conditions. --------------------------------------------------------
+    <br>
+    L’Acquéreur déclare avoir pris parfaite connaissance de l’existence du droit de préférence résultant au profit des copropriétaires en ce qui concerne tous les actes emportant transfert de propriété à titre onéreux et des dispositions du règlement de copropriété notamment celles relatives aux modalités d’exercice de ce droit et ses délais.---------------------------------------------------------------------
+    <br>
+    Les Parties dispensent le notaire soussigné, conformément à l'article 47 de la loi 32-09, de procéder à la notification du présent acte au syndicat des copropriétaires ou à toute autre personne, et à l’accomplissement de toutes formalités y afférentes et à toutes formalités pour l’obtention de l’attestation de paiement des créances du syndicat des copropriétaires grevant le Bien, déclarant vouloir en faire leur affaire personnelle notamment pour tenir le syndicat des copropriétaires, informé du contenu des présentes, déchargeant ledit notaire de toute responsabilité à cet effet. ------------------------------------------------------------------------------------------------
+    <br>
+    <strong>APPLICATION DE LA LOI N°18-00 RELATIVE AU STATUT DE LA COPROPRIETE DES IMMEUBLES BATIS</strong> -----------------------------------------------------------------------------------------------------
+    <br>
+    La présente vente a lieu sous les charges et conditions résultant de la loi N°18-00 et du règlement de copropriété ainsi que l’état descriptif de division et des plans de construction et topographique y annexés, le cas échéant de leurs actes modificatifs et complémentaires, lesquelles pièces dont déposés au service de la conservation foncière «l’acquéreur» déclare avoir eu parfait connaissance de l’article 11 de la loi dont il s’agit et dispense le «vendeur» de lui remettre une copie desdits documents. ----------------------------------------------------------------------------------------------
+    <br>
+    En outre, le notaire soussigné a bien informé «l’acquéreur» de l’étendue de ses droits et obligations en ce qui concerne particulièrement sa quote-part dans les charges relatives à la conservation, l’entretien et la gestion des parties communes dont le défaut de paiement est sanctionné par la procédure d’injonction de payer, de l’hypothèque forcée et du privilège mobilier, le tout prévu par les articles 36 et suivant de ladite loi. ---------------------------------------------------------
+    <br>
+    «L’acquéreur» sera, par le seul fait des présentes, à compter de la date de l’entrée de jouissance, subrogé de plein droit, tant activement que passivement dans les droits et obligations résultant pour le «vendeur» de ce règlement de copropriété et de l’état de descriptif de division ainsi que de leurs éventuels modificatifs, il en fera son affaire
 
-    aux dispositions des articles 66 et 67 du Dahir du 12 Août 1913 relatif à l'immatriculation des immeubles tel qu’il a été modifié et complété
+    personnelle et s’oblige à les exécuter en ce qui concerne «l’immeuble» de façon qu’aucun recours ne puisse être exercé contre le «vendeur», par qui que ce soit. ------------------------------------------------------------------------------------------------------------
+    <br>
+    ------------------------------------------<strong> DISPENSE DE NOTIFICATION </strong>-------------------------------------------
+    <br>
+    L’acquéreur dispense Maître Kamal BOUTASKIOUINE, Notaire soussigné, d’accomplir les formalités de notification de la présente vente au syndicat des copropriétaires de l’immeuble, dont dérivent les biens immobiliers présentement vendus et ce, en conformité avec l’article 27 du dahir du 16 Novembre 1946 sur le statut de la copropriété. A Cet égard, il déclare en faire son affaire personnelle dégageant ainsi le notaire soussigné de toute responsabilité à ce sujet. ------------------
+    <br>
+    Il déclare qu’il n’existe à ce jour aucune charge lui incombant. En conséquence, «l’acquéreur» déclare en faire son affaire personnelle et décharge expressément le notaire soussigné de toute responsabilité à cet égard. -----------------------------------------------------------------------------------------------
+    <br>
+    ------------------------------ <strong> JUSTIFICATION DU PAIEMENT DES CHARGES DE </strong> -------------------------
+    <br>
+    --------------------------------- <strong> COPROPRIETE ET DES REDEVANCES D’EAU </strong>, -----------------------------
+    <br>
+    ------------------------- <strong> D’ELECTRICITE ET DE TELEPHONE ET D’ASSURANCES </strong> ---------------------
+    <br>
+    L’acquéreur reconnaît avoir été informé par le Notaire soussigne, de sa solidarité avec le vendeur vis-à-vis du syndic de copropriété quand au paiement des charges ou créances dues par le vendeur et ce, conformément aux dispositions de l’article 42 de la 18-00 sus énoncée. ---------------
+    <br>
+    Il déclare en outre faire son affaire personnelle avec le vendeur pour le règlement de tout ce qui peut être dû au syndic de copropriété au jour de son entrée en jouissance. ------------------------------
+    <br>
+    A ce sujet le vendeur déclare qu’il est à jour dans le règlement des charges du syndic de copropriété. -----------------------------------------------------------------------------------------------------------------
+    <br>
+    De même en ce qui concerne les polies et les contrats d’abonnement, d’eau, d’électricité, de téléphone et d’assurance le cas échéant, l’acquéreur déclare faire son affaire personnelle avec le vendeur pour en effectuer le transfert en son nom et veiller au paiement par le vendeur des redevances dues au jour de l’entrée en jouissance.-------------------------------------------------------------
+    <br>
+    En conséquence, l’acquéreur décharge expressément le Notaire soussigne de toute responsabilité concernant le paiement des sommes pouvant rester dûes au jour de son entrée en jouissance à ces divers titres. ----------------------------------------------------------------------------------------------------------
+    <br>
+    ------------------------------------------<strong class="strong2">ARTICLE  6 -  PRIX DE LA VENTE</strong>--------------------------------------------
+    <br>
+    6.1. Prix de la vente : -----------------------------------------------------------------------------------------------------
+    <br>
+    En outre la présente vente est respectivement consentie et acceptée moyennant le prix de <strong>{{ MontantTTCconverted|upper  }} ({{ vente.designation.MontantTTC }} DHS)</strong>, y compris la taxe sur la valeur ajoutée s'appliquant comme suit:
+    <br>
+    6.2. Modalités de paiement du Prix de la vente : ------------------------------------------------------------------
+    <br>
+    Lequel prix a été payé de la manière suivante : --------------------------------------------------------------------
+    <br>
+    A concurrence de la somme de <strong>{{ MontantHTconverted|upper }} ({{ vente.designation.MontantHT|number_format(2, ',', ' ') }} DHS)</strong>, représentant le prix de vente hors taxe sur la valeur ajoutée a été payée des avant ce jour hors la vue du Notaire soussigné et sans passé par sa comptabilité.
+    <br>
+    Et A concurrence de la somme de <strong>{{ MontantTVAconverted|upper  }} ({{ vente.designation.TVA|number_format(2, ',', ' ')}} DHS)</strong>, représentant la partie du prix de vente égale au montant de la taxe sur la valeur ajoutée grevant l’acquisition du Bien, payable par l’Etat, au bénéfice de l’Acquéreur, conformément aux dispositions de l’article 93 du code général des impôts tel que modifié et complété par la loi de finances pour l’année 2010.
+    <br>
+    laquelle somme de <strong>{{ MontantTVAconverted|upper  }} ({{ vente.designation.TVA|number_format(2, ',', ' ')}} DHS)</strong>, ne sera débloqué au profit « des vendeurs es-qualité» qu’après accomplissement des formalités légales consécutives aux présentes, notamment, après inscription des présentes sur les livres fonciers.
+    <br>
+    -Lequel prix est ainsi payable aux Vendeurs es qualité qui acceptent et en donnent d’ores et déjà bonne et valable quittance sous réserve de l’encaissement intégral du prix de vente. -----------------
+    <br>
+    -------------------------------------------------------------------------------------------------------------<strong class="strong2">Dont quittance</strong>
+    <br>
+    ----------------------------------------------<strong class="strong2">ARTICLE 7 - CONSIGNATION</strong>-------------------------------------------
+    <br>
+    Les Parties décident d’un commun accord que la somme de <strong>{{ MontantTVAconverted|upper  }} ({{ vente.designation.TVA|number_format(2, ',', ' ')}} DHS)</strong>, sera consignée dès son paiement par l’Etat par virement au compte du notaire soussigné et sera remise aux Vendeurs es qualité qui acceptent, après inscription du présent acte sur le titre foncier du Bien.
+    <br>
+    La réserve liée à la quittance du montant de la TVA faite ci-dessus est considérée comme étant levée dés l’encaissement par les Vendeurs es qualité du montant de la TVA et sans qu’il soit besoin d’être constaté par un acte ultérieur -----------------------------------------------------------------------
+    <br>
+    -------------------------------------------------<strong class="strong2">ARTICLE 8 – FORMALITES</strong>--------------------------------------------
+    <br>
+    L’Acquéreur remplira dans les délais impartis par la loi, les formalités de dépôt et d'inscription du présent acte sur le titre foncier du Bien auprès du service de la conservation de la propriété foncière compétent. ------------------------------------------------------------------------------------------------------
+    <br>
+    · Les vendeurs es qualités déclarent formellement par les présentes, que le Bien est libre de toutes dettes et qu'ils ne fait l'objet d'aucune inscription hypothécaire, saisie, prénotation, séquestre ou empêchement quelconque ----------------------------------------------------------------------------------------------
+    <br>
+    Si contrairement aux déclarations qui précèdent, le Bien était grevé d'une ou plusieurs inscriptions, saisies ou autres charges du chef des Vendeurs es qualités, ces derniers s'obligent à en rapporter à leur frais la justification de leur radiation dans le mois de la dénonciation amiable qui lui en sera faite au domicile ci-après élu. -------------------------------------------------------------------------------------------
+    <br>
+    Les Parties confèrent tous pouvoirs nécessaires au porteur d'une expédition, d'un extrait ou d'une copie du présent acte à l'effet d'accomplir les formalités prescrites par la loi. ------------------------------
+    <br>
+    En outre elles confèrent un pouvoir spécial au notaire soussigné, avec facultés de substitution à l'effet de signer tous avenants et réquisitions modificatifs, rectificatifs ou complémentaires destinés à assurer l'exécution du présent acte notamment auprès de la conservation foncière et de l'administration des impôts. ----------------------------------------------------------------------------------------------
+    <br>
+    -------------------------------------<strong class="strong2">ARTICLE 9 – RECONNAISSANCE DE CONSEIL</strong>-------------------------------
+    <br>
+    Les Parties reconnaissent avoir été conseillées par le notaire soussigné sur les conséquences pouvant résulter du paiement du prix de vente directement par l’Acquéreur aux Vendeurs es qualité et avant la signature du présent contrat de vente, son inscription sur les livres fonciers et l’accomplissement des formalités légales notamment la production de l’attestation de paiement des impôts grevant le Bien ou l’attestation d’exonération de la TH-TSC et (ii) de la conclusion du présent acte de vente antérieurement au virement au compte du notaire soussigné du
 
-    par la loi  numéro 14-07. Néanmoins, il n’en aura la jouissance par la prise de possession réelle à  son profit, libre de toute occupation,
+    montant de la TVA, déchargeant le notaire soussigné de toute responsabilité des conséquences pouvant en résulter.-------------------------------------------------------------------------------------------------------------------------
+    <br>
+    <strong class="strong2">ARTICLE 10 - DECLARATIONS FISCALES-AFFECTATION HYPOTHECAIRE AU PROFIT DE L’ETAT</strong>
+    <br>
+    Les vendeurs es qualités déclarent : -----------------------------------------------------------------------------------
+    <br>
+    · Qu’ils ont conclu une convention avec l’Etat pour la réalisation d’un programme de construction d’au moins cinq cent (500) logements sociaux, réparti sur une période maximum de cinq (5) ans, dans les conditions prévues à l’article 247-XVI du code général des impôts. -------------------------------
+    <br>
+    · Que la tranche dont dépend le Bien a fait l’objet d’un permis d’habiter délivré par la commune urbaine de Marrakech. -----------------------------------------------------------------------------------------------------
+    <br>
+    L’Acquéreur déclare : ------------------------------------------------------------------------------------------------------
+    <br>
+    · Qu’il s’engage à affecter le Bien présentement acquis à son habitation principale pendant une durée de quatre (4) années consécutives, à compter de la date de signature du présent contrat définitif de vente. -----------------------------------------------------------------------------------------------------------
+    <br>
+    · Consentir au profit de l’Etat Marocain, une hypothèque de PREMIER rang sur le Bien, en garantie du paiement de la partie du prix de vente égale au montant de la taxe sur la valeur ajoutée grevant le Bien et versée par l’Etat, ainsi que des pénalités et majorations exigibles, en cas de manquement à l’engagement visé au paragraphe précédent. -------------------------------------------------
+    <br>
+    Le tout conformément aux dispositions de l’article 93 du code général des impôts tel que modifié et complété par la loi de finances pour l’année 2010. ---------------------------------------------------------------
+    <br>
+    -----------------------------------------<strong class="strong2">ARTICLE 11 - REQUISITION - POUVOIR</strong>--------------------------------------
+    <br>
+    Les parties requièrent Monsieur le Conservateur de la Propriété Foncière et des hypothèques Marrakech Mènera bien vouloir : ---------------------------------------------------------------------------------------
+    <br>
+    1-inscrire la présente vente sur ledit titre foncier <strong>N° {{ vente.designation.TitreFoncier }}</strong>-------------------------------------------------
+    <br>
+    2-inscrire l’hypothèque en premier rang sur le titre foncier <strong>N° {{ vente.designation.TitreFoncier }}</strong> au profit de au profit de l’Etat Marocain pour la garantie du remboursement de la tva.--------------------------------------------------
+    <br>
+    Tous pouvoirs sont donnés à cet effet au porteur d’une expédition ou d’une copie des présentes.
+    <br>
+    3- Délivrer au MANDATAIRE es qualité et à toute personne désignée par lui le Certificat ordinaire et de remettre a « l’acquéreur » après inscription de l’hypothèque précitée le duplicata du titre foncier <strong>N° {{ vente.designation.TitreFoncier }}</strong> étant convenu que le retrait de ce duplicata pourra être effectué par la Notaire soussigné, ayant un pouvoir de substitution en vertu du mandat sus mentionnée. -----------------------
+    <br>
+    Ils donnent en outre, tous pouvoirs au porteur d’un extrait ou d’une expédition des présentes pour accomplir toutes les formalités et retirer tous titres et pièces et notamment le duplicata du titre foncier susvisé et donnent décharge à cet effet, à Monsieur le Conservateur de la Propriété Foncière de MARRAKECH MENARA. --------------------------------------------------------------------------------
+    <br>
+    -------------------<strong class="strong2">ARTICLE 12 – DECLARATION AUX SERVICES DE L’ENREGISTREMENT</strong>-----------------
+    <br>
+    Les Parties requièrent Monsieur le receveur de l'enregistrement et du timbre compétent, de bien vouloir appliquer au présent acte le taux réduit mis en place par l’article 133-B°-3 du code général des impôts. -------------------------------------------------------------------------------------------------------------------
+    <br>
+    -------------------------------------------<strong class="strong2">ARTICLE 13 – LECTURE DES LOIS</strong>------------------------------------------
+    <br>
+    Avant de clore et conformément à la loi, le notaire soussigné a donné lecture, aux Parties qui le reconnaissent, des dispositions des articles 186 B-2°, 187, 208 et 217 du code général des impôts relatives notamment au droit de contrôle des prix, des sanctions en cas de dissimulation des prix et charges ou d’évaluation ou du véritable caractère des contrats et des sanctions pour fraude ou complicité de fraude. ------------------------------------------------------------------------------------------------------
+    <br>
+    -----------------------------<strong class="strong2">ARTICLE 14 – ELECTION DE DOMICILE – NOTIFICATIONS</strong>------------------------
+    <br>
+    Pour l'exécution des présentes et de leurs suites, les Parties font élection de domicile en leur siège et demeure respectif sus indiqué. --------------------------------------------------------------------------------------
+    <br>
+    Toute notification devant être faite en vertu de l’une ou l’autre des stipulations du présent contrat, sauf stipulation expresse à l’effet contraire, sera valablement effectuée si elle est envoyée, par lettre recommandée avec avis de réception et adressée au domicile ci-dessus élu. --------------------
+    <br>
+    Chacune des Parties devra, à peine d’inopposabilité, aviser chacune des autres Parties de tout changement d’adresses postales. ------------------------------------------------------------------------------------
+    <br>
+    --------------------------------------------------<strong class="strong2">ARTICLE 15 – DIVERS</strong>--------------------------------------------------
+    <br>
+    Le défaut d’une ou l’autre des Parties d’insister sur la stricte exécution d’une obligation au titre du présent contrat, ou d’exercer toute option ou tout droit ne devra pas être interprété comme une renonciation au bénéfice du terme, de la stipulation, de l’option ou du droit concerné, et ceux-ci continueront de recevoir plein effet. Toute renonciation au bénéfice de l’une quelconque des stipulations du présent contrat n’engagera la Partie concernée que pour autant que cette renonciation ait été exprimée par écrit. ------------------------------------------------------------------------------
+    <br>
+    Dans l’hypothèse où l’une ou plusieurs des stipulations du présent contrat seraient jugées nulles ou inapplicables pour quelque raison que ce soit, toute autre stipulation du présent contrat n’en serait aucunement affectée ou altérée et la validité ou l’exécution de la ou des stipulations concernées ne serait pas remise en cause dans tout autre situation ou devant toute autre juridiction. --------------------------------------------------------------------------------------------------------------------
+    <br>
+    ----------------------------------<strong class="strong2">ARTICLE 16 – DECLARATIONS ET GARANTIES</strong>----------------------------------
+    <br>
+    Les vendeurs es qualités déclarent et garantissent : --------------------------------------------------------------
+    <br>
+    · qu’ils sont une société en bonne et due forme, dûment constituée et existant valablement en vertu du droit marocain et qu’ils ont obtenu toutes les autorisations et tous les permis nécessaires à la conclusion et à l’exécution de ses obligations en vertu du présent contrat; ---------------------------------
+    <br>
+    · qu’à la date des présentes, il n’existe pas d’actions en cours, d’arbitrages, d’enquêtes, d’audiences ou autres procédures pendantes ou, à sa meilleure connaissance, latentes qui pourrait affecter sa capacité à exécuter le présent contrat ou la validité ou le caractère exécutoire du présent contrat ; -------------------------------------------------------------------------------------------------------------
+    <br>
+    · qu’ils ont tous pouvoirs et la pleine capacité pour signer le présent contrat, les stipulations du présent contrat l’engageant pleinement et valablement ; ---------------------------------------------------------
+    <br>
+    · que l’origine de la propriété du Bien est régulière et lui confère un titre de propriété transférable sur le Bien et qu’à sa connaissance il n’existe sur le Bien, à la date de conclusion du présent contrat, aucun droit de préemption non purgé, aucune action en rescision, résolution, réquisition ou expropriation et qu’il n’existe aucun empêchement à l’acquisition du Bien. ---------------------------------
+    <br>
+    L’Acquéreur et garantit : --------------------------------------------------------------------------------------------------
+    <br>
+    · Qu’il jouit de sa capacité juridique et qu’il ne fait pas l’objet de procédures de tutelle, faillite, redressement judiciaire ou cessation de paiement ou autres procédures pendantes ou, à sa meilleure connaissance, latentes qui pourrait affecter sa capacité à exécuter le présent contrat ou la validité ou le caractère exécutoire du présent contrat. --------------------------------------------------------
+    <br>
+    ---------<strong class="strong2">ARTICLE 17 – LECTURE DE L’ACTE ET PRISE DE CONNAISSANCE DE SA TENEUR</strong>----------
+    <br>
 
-    location ou domiciliation quelconque, qu’à compter du jour de la signature de l’acte de vente définitif et de l’encaissement effectif par
-
-    les promettants es qualité de l’intégralité du prix de vente.-------------------------------------------------------------------------------------------
     <br>
-    ---------------------------------------<strong class="strong2">ARTICLE 5 - CHARGES & CONDITIONS</strong>----------------------------------
+    ------------------------------------------------------------------------------------------------------------------ <strong class="strong2">DONT ACTE</strong>
     <br>
-    Le présent compromis est fait sous les charges et conditions ordinaires de fait et de droit, les plus étendues en pareille matière et notamment sous celles
-
-    suivantes que la Bénéficiaires qualités ‘oblige à exécuter et accomplir, savoir :-----------------------------------------------------------------------------
+    <strong>FAIT ET PASSE A Marrakech</strong>, -----------------------------------------------------------------------------------------
     <br>
-    a) de prendre le Bien dans l’état où il se trouve actuellement, sans pouvoir prétendre à aucune indemnité ni diminution du
-
-    prix ci-après fixé pour quelque cause que ce soit. ---------------------------
+    <strong>EN L'ETUDE DE Maitre BOUTASKIOUINE KAMAL</strong> -----------------------------------------------------------
     <br>
-    b) de souffrir les servitudes passives, apparentes ou occultes, continues ou discontinues et mitoyennetés, dont le Bien,
-
-    peut être grevé sauf à s’en défendre et à profiter en retour de celles actives, s’il en existe à ses risques et périls. ----------------------------------------------------------------------
+    <strong>L’an Deux Mille vingt-cinq</strong>,-----------------------------------------------------------------------------------------------
     <br>
-    A ce sujet, les Promettant ses qualité déclarent qu’à sa connaissance ils n’existent pas d’hypothèques, charges, servitudes,
-
-    ni mitoyennetés grevant le Bien autres que celles figurant au dossier d’immatriculation du Bien que la Bénéficiaire déclare bien connaître.----------------------------
-    <br>
-    c) d’acquitter à compter du jour ci-dessus fixé pour l’entrée en jouissance, toutes contributions, impositions ou autres taxes,
-
-    généralement quelconque pouvant grever le Bien de manière que les Promettant ses qualité  ne soit jamais inquiété ni recherché à ce sujet.------------------------------------
-    <br>
-    Etant bien entendu que pour les périodes antérieures à la date d'entrée en jouissance du Bénéficiaire tous impôts, taxes et contributions
-
-    quelconques émis ou restant à émettre et non encore réglés à ce jour, resteront entièrement à la charge exclusive les Promettant ses qualité
-
-    qui s'y obligent expressément.-----------------------------------------------------------------------------------------------
-    <br>
-    d) de se conformer aux clauses, conditions, prescriptions et interdictions résultant du règlement de copropriété afférent à l'immeuble dont
-
-    dépend le Bien, ainsi qu'aux obligations incombant aux membres du syndicat des copropriétaires dudit immeuble. -----------------------------------------------------
-    <br>
-    e) de payer tous les droits, frais et taxes des présentes et ceux qui en seront la suite ou la conséquence. ---------------------------------------------------------------------------------------------------------------
-    <br>
-    -----------------------------------------<strong class="strong2">ARTICLE  6 -  PRIX DE LA VENTE</strong>--------------------------------------------
-    <br>
-    La vente définitive sera faite moyennant le prix de <strong>{{ MontantTTCconverted }} ({{ vente.designation.MontantTTC }} DHS)</strong>,
-
-    y compris la taxe sur la valeur ajoutée, s'appliquant comme suit:
-    <br>
-    - A concurrence de la somme de <strong>{{ MontantHTconverted }} ({{ vente.designation.MontantHT }}DHS)</strong>, représentant le prix de vente hors taxe sur la valeur ajoutée.
-    <br>
-    - A concurrence de la somme de <strong>{{ MontantTVAconverted }} ({{ vente.designation.TVA}} DHS)</strong>, représentant le montant
-
-    de la Lequel prix sera payé par les Bénéficiaires entre les mains du notaire soussigné, au plus tard le jour convenu ci-après pour la réalisation
-
-    de la condition suspensive ci-dessous citée.
-    <br>
-    Etant  précisé, que la Bénéficiaire es qualité entend bénéficier du versement par l’Etat, à son bénéfice, de la partie du prix de vente égale au
-
-    montant de la taxe sur la valeur ajoutée, grevant l’acquisition du Bien, conformément aux dispositions de l’article 93 du code général des impôts
-
-    tel que modifié et complété par la loi de finances pour l’année 2010. --------------------------------------------
-    <br>
-    Dans le cas où la Bénéficiaire es qualité ne bénéficie pas de ce versement par l'Etat, à son bénéfice, de la partie du prix de vente égale au  montant
-
-    de la taxe sur la valeur ajoutée, il s'oblige à payer en sus du prix de vente hors taxe sur la valeur ajoutée, tous les impôts et taxes dus par le vendeur
-
-    es qualité  pour cette vente et desquels il était exonéré en vertu de la convention qu'il a signée avec l'Etat.----------------------------------------------------------------------------------------------------------
-    <br>
-    ---------------------------------------<strong class="strong2">ARTICLE 7 - CONDITION SUSPENSIVE</strong>------------------------------------
-    <br>
-    Le présent compromis de vente est soumis aux conditions suspensives suivantes (i) Du paiement par la Bénéficiaire es qualité aux Promettant ses qualités,
-
-    de l'intégralité du prix de vente y compris la taxe sur la valeur ajoutée, comme suit: ---------------------------------------------------------------------------
-    <br>
-    - A concurrence de la somme de <strong>{{ MontantHTconverted }} ({{ vente.designation.MontantHT }}DHS)</strong>, représentant le prix de vente hors taxe sur la valeur ajoutée, qui sera
-
-    payé par des deniers personnels de l’acquéreur.
-    <br>
-    Et à concurrence de la somme de <strong>{{ MontantTVAconverted }} ({{ vente.designation.TVA}} DHS)</strong>,représentant le montant de
-
-    la taxe sur la valeur ajoutée par le versement par l'Etat, entre les mains du notaire soussigné, au bénéfice de Bénéficiaire, de la partie du prix de
-
-    vente égale au montant de la taxe sur la valeur ajoutée, grevant l’acquisition du Bien, conformément aux dispositions de l’article 93 du code général
-
-    des impôts tel que modifié et complété par la loi de finances pour l’année 2010.
-    <br>
-    Toutefois, dans le cas où la Bénéficiaire ne bénéficie pas de ce versement par l'Etat, à son bénéfice, de la partie du prix de vente égale au  montant
-
-    de la taxe sur la valeur ajoutée, il s'oblige à payer en sus du prix de vente hors taxe sur la valeur ajoutée, tous les impôts et taxes dûs par les Promettantes
-
-    qualité pour cette vente et desquels il était exonéré en vertu de la convention qu'ils ont signée avec l'Etat
-
-    (ii) l’obtention par les promettants es qualité du permis d’habiter relatif au Bien. ---------------------------------------------------------------------------------------------------------------------------
-    <br>
-    Le tout au plus tard dans un délai de {{ Delaiconverted }} ({{ vente.designation.delai }}) jours, à compter de la date de signature du présent compromis.
-    <br>
-    Passé ce délai de QUATRE VIGNT DIX (90) jours et à défaut de réalisation de la première condition suspensive visé au paragraphe (i) ci-dessus malgré
-
-    la réalisation de la seconde condition suspensive, les promettants es qualité se réservent le droit si bon leur semble, de se délièrent de leurs engagements
-
-    sans qu’il soit besoin d’être constaté par un acte ultérieur et le présent compromis sera considéré comme étant nul et non avenu, avec application des stipulations
-
-    de l'article 8 ci-après.---------------------------------------------------------------------------------------------------------
-    <br>
-    -------------------------------------------------<strong class="strong2">ARTICLE 8 – INDEMNITES</strong>-------------------------------------------
-    <br>
-    En cas de non réalisation de l'acte définitif de vente notamment pour (i) non réalisation de la condition suspensive sus visée dans le délai ci-dessus convenu,
-
-    (ii) renonciation ou désistement de bénéficiaire, ce dernier s’oblige expressément à régler au profit des promettants es qualité, une indemnité fixée d’un commun
-
-    accord à dix  pour cent (10 %) du prix de vente sus visé, que la bénéficiaire autorise les promettant es qualité, à l’instant même, de façon irrévocable et automatique,
-
-    à prélever des versements effectués aux promettants es qualité et ce, à titre d’indemnité d’immobilisation et dommages - intérêts et en contrepartie du préjudice subi,
-
-    et renonce d’ores et déjà à toute réclamation ou contestation à ce sujet. --------------------------------------
-    <br>
-    ----------------------<strong class="strong2">ARTICLE 9 – DECLARATIONS – GARANTIES ET ENGAGEMENTS</strong>----------------
-    <br>
-    Le Bénéficiaire déclare et garantit--------------------------------------------------------------------------------------
-    <br>
-    - qu’il jouit de tous ses droits civiques et qu’il  a pleine capacité pour conclure les présentes et exécuter les obligations qui lui incombent au titre du présent
-
-    compromis de vente.----------------------
-    <br>
-    Le Bénéficiaire s'engage à :----------------------------------------------------------------------------------------------
-    <br>
-    Affecter le Bien à son habitation principale pendant une durée de quatre (4) années consécutives, à compter de la date de conclusion du contrat d’acquisition définitif. ----------------------------------------
-    <br>
-    Consentir au profit de l’Etat, une hypothèque de premier ou deuxième rang sur le Bien, en garantie de la taxe sur la valeur ajoutée versée par l’Etat, ainsi que des pénalités et majorations exigibles,
-
-    en cas de manquement à l’engagement visé au paragraphe précédent. -----------------------------------
-    <br>
-    les Promettants es qualité déclarent et garantit :-------------------------------------------------------------------
-    <br>
-    - Qu'ils ont conclu une convention avec l'Etat pour la réalisation d'un programme de construction d'au moins cinq cent (500) logements sociaux, réparti sur une
-
-    période maximum de cinq (5) ans, dans les conditions prévues à l'article 247-XVI du code général des impôts.------------------------------
-    <br>
-    - Que le Bien a fait l’objet d’un permis d’habiter délivré par la commune urbaine de Marrakech. ----
-    <br>
-    - Que le Bien sera le jour de la signature du contrat définitif de vente libre de toutes dettes ou charges et qu'il ne fera l'objet d'aucune mesure conservatoire exécutoire.--------------------------------
-    <br>
-    Si contrairement aux déclarations qui précèdent, le Bien serait grevé d'une ou plusieurs inscriptions, saisies ou autres charges du chef du Vendeur, ce dernier s'oblige à en
-
-    rapporter à ses frais la justification de leur radiation le jour de la réalisation de l'acte définitif de vente.----------------
-    <br>
-    --------------------------------------<strong class="strong2">ARTICLE 10 - DECLARATION ETAT CIVIL</strong>--------------------------------
-    <br>
-    Les vendeurs es qualités déclarent formellement, que les biens ci-dessus désignés sont libres de toutes dettes et charges et qu’ils ne font l’objet d’aucune .-----------------------------------------------------
-    <br>
-    Si, contrairement à cette déclaration, ladite propriété était grevée d’une ou plusieurs inscriptions du chef des vendeurs préalablement à l’inscription des présentes sur les livres fonciers,
-
-    et en tout cas dans le mois de la dénonciation amiable qui lui en sera faite au domicile ci-après élu. ----------------
-    <br>
-    En conséquence, il ne peut être procédé  à l’inscription de la présente vente qu’après radiation de toutes les charges grevant ou pouvant grever l’immeuble vendu. -------------------------------------------
-    <br>
-    L’acquéreur es qualité déclare avoir connaissance des hypothèques cites ci-dessus il donne des charge au notaire de toute responsabilité en cas du retard pour la signature de la vente
-
-    définitive ou  à l’inscription a la conservation foncier ------------------------------------------------------------------------
-    <br>
-    -------------------------<strong class="strong2">ARTICLE 11 - ELECTION DE DOMICILE – NOTIFICATIONS</strong>----------------------
-    <br>
-    Pour l'exécution des présentes et de leurs suites, les Parties font élection de domicile en leur siège et demeure respectif sus indiqué.-------------------------------------------------------------------------------------
-    <br>
-    Toute notification devant être faite en vertu de l’une ou l’autre des stipulations du présent contrat, sauf stipulation expresse à l’effet contraire, sera valablement effectuée si elle est envoyée,
-
-    par lettre recommandée avec avis de réception et adressée au domicile ci-dessus élu.--------------------
-    <br>
-    Chacune des Parties devra, à peine d’inopposabilité, aviser chacune des autres Parties de tout changement d’adresses postales.------------------------------------------------------------------------------------
-    <br>
-    -----------------------------------------------<strong class="strong2">ARTICLE 12 – DIVERS</strong>--------------------------------------------------
-    <br>
-    Le défaut d’une ou l’autre des Parties d’insister sur la stricte exécution d’une obligation au titre du présent contrat, ou d’exercer toute option ou tout droit ne devra pas être
-
-    interprété comme une renonciation au bénéfice du terme, de la stipulation, de l’option ou du droit concerné, et ceux-ci continueront de recevoir plein effet. Toute renonciation
-
-    au bénéfice de l’une quelconque des stipulations du présent contrat n’engagera la Partie concernée que pour autant que cette renonciation ait été exprimée par écrit. ----------------------------------------------------------------------------
-    <br>
-    Dans l’hypothèse où l’une ou plusieurs des stipulations du présent contrat seraient jugées nulles ou inapplicables pour quelque raison que ce soit, toute autre stipulation du
-
-    présent contrat n’en serait aucunement affectée ou altérée et la validité ou l’exécution de la ou des stipulations concernées ne serait pas remise en cause dans tout autre
-
-    situation ou devant toute autre juridiction.------------------------------------------------------------------------------------------------------------------
-    <br>
-    -----------------<strong class="strong2">ARTICLE 13 – ETABLISSEMENT DE L'ACTE DE VENTE DEFINITIF</strong>-----------------
-    <br>
-    Les Parties décident d'un commun accord, que le contrat définitif de vente sera établi, en la forme notariée, par-devant le notaire soussigné, après règlement par Le Bénéficiaire
-
-    de l'intégralité du prix d'acquisition toutes taxes comprises et des frais qui en résulte.---------------------------------------
-    <br>
-    -----<strong class="strong2">ARTICLE 14 - LECTURE DE L’ACTE ET PRISE DE CONNAISSANCE DE SA TENEUR</strong>-----
-    <br>
-    Par les présentes, les Parties déclarent avoir lu le présent acte et pris connaissance de sa teneur notamment par la lecture qui leur a été faite par le notaire soussigné et
-
-    reconnaissent avoir parfaitement compris la teneur des présentes qu'elles approuvent sans réserve.-----------------------
-    <br>
-    ---------------------------------------------------------------------------------------------------------------<strong class="strong2">DONT ACTE</strong>
-    <br>
-    <strong>FAIT ET PASSE A Marrakech</strong>, ----------------------------------------------------------------------------------
-    <br>
-    <strong>EN L'ETUDE DE Maitre BOUTASKIOUINE KAMAL</strong> ------------------------------------------------
-    <br>
-    <strong>L’an Deux Mille vingt-quatre</strong>,--------------------------------------------------------------------------------------
-    <br>
-    <strong>Et après lecture faite, les Parties ont signé avec le notaire soussigné</strong>.--------------------------------
-    <br><br><br><br><br><br><br><br><br><br>
+    <strong>Et après lecture faite, les Parties ont signé avec le notaire soussigné,Acte fait sur six 6 pages</strong>.--------------
+    <br><br><br><br><br><br><br><br><br><br><br>
     <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif;">
         <thead>
         <tr>
@@ -405,7 +368,7 @@
         </thead>
         <tbody>
         <tr>
-            <td style="height: 100px; border: 1px solid #000; padding: 8px; text-align: center; font-family: 'Times New Roman'"><strong style="font-size: 18px;">Le promettant es-qualité : <br>Monsieur SAID AOURAGH</strong></td>
+            <td style="height: 100px; border: 1px solid #000; padding: 8px; text-align: center; font-family: 'Times New Roman'"><strong style="font-size: 18px;">Le vendeur : <br>Monsieur SAID AOURAGH</strong></td>
             <td style="border: 1px solid #000; padding: 8px; text-align: center;"></td>
             <td style="border: 1px solid #000; padding: 8px; text-align: center;"></td>
         </tr>
@@ -414,7 +377,7 @@
                 {{ person.name }}
             {% else %}
                 <tr>
-                    <td style="height: 100px; border: 1px solid #000; padding: 8px; text-align: center; font-family: 'Times New Roman'"><strong style="font-size: 18px;">{% if person.genre == "Femelle" %}La bénéficiaire: {% else %} Le Bénéficier: {% endif %}{{ person.Civilite|upper }} {{ person.FirstName|upper }} {{ person.LastName|upper }}</strong></td>
+                    <td style="height: 100px; border: 1px solid #000; padding: 8px; text-align: center; font-family: 'Times New Roman'"><strong style="font-size: 18px;">L’acquéreur : {{ person.Civilite|upper }} {{ person.FirstName|upper }} {{ person.LastName|upper }}</strong></td>
                     <td style="border: 1px solid #000; padding: 8px; text-align: center;"></td>
                     <td style="border: 1px solid #000; padding: 8px; text-align: center;"></td>
                 </tr>

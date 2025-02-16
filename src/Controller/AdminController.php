@@ -56,7 +56,8 @@ class AdminController extends AbstractController
 
         // Fetch the last 6 audit logs
         $logs = $auditLogRepository->findBy([], ['timestamp' => 'DESC'], 6);
-//        $dossiers = $dossierRepository->findBy([], ['CreatedAt' => 'DESC'], 6);
+
+        $dossiers = $dossierRepository->findBy([], ['createdAt' => 'DESC'], 6);
         $personMorales = $personMoraleRepository->findAllWithContractsCount();
         $totalContracts = $contratRepository->count([]); // Get the total number of contracts
 
@@ -68,7 +69,7 @@ class AdminController extends AbstractController
             'personMorales' => $personMorales,
             'totalContracts' => $totalContracts,
             'logs' => $logs,
-//            'dossiers' => $dossiers,
+            'dossiers' => $dossiers,
         ]);
     }
 
@@ -114,24 +115,50 @@ class AdminController extends AbstractController
     }
 
     #[Route('/dossiers', name: 'app_dossiers')]
-    public function dossiers(Request $request,EntityManagerInterface $entityManager): Response
+    public function dossiers(Request $request, EntityManagerInterface $entityManager): Response
     {
-        // Fetch the number of items per page from the request, defaulting to 10
+        $searchQuery = $request->query->get('search', '');
+        $contractType = $request->query->get('contractType', '');
         $itemsPerPage = $request->query->getInt('itemsPerPage', 10);
 
-        // Fetch all dossiers
-        $dossiers = $entityManager->getRepository(Dossier::class)->findBy([], ['id' => 'DESC']);
+        // Use the updated search method in the repository
+        $dossiers = $entityManager->getRepository(Dossier::class)->searchDossiers($searchQuery, $contractType);
+        // Iterate over the array of Dossier objects
+
+        // Pagination
         $pagination = $this->paginator->paginate(
             $dossiers,
             $request->query->getInt('page', 1),
-            $itemsPerPage // Number of dossier per page from the request
+            $itemsPerPage
         );
 
         return $this->render('admin/dossiers.html.twig', [
             'pagination' => $pagination,
-            'itemsPerPage' => $itemsPerPage, // Pass the items per page to the view
+            'itemsPerPage' => $itemsPerPage,
+            'searchQuery' => $searchQuery,
+            'contractType' => $contractType,
         ]);
     }
+
+//    #[Route('/dossiers', name: 'app_dossiers')]
+//    public function dossiers(Request $request,EntityManagerInterface $entityManager): Response
+//    {
+//        // Fetch the number of items per page from the request, defaulting to 10
+//        $itemsPerPage = $request->query->getInt('itemsPerPage', 10);
+//
+//        // Fetch all dossiers
+//        $dossiers = $entityManager->getRepository(Dossier::class)->findBy([], ['id' => 'DESC']);
+//        $pagination = $this->paginator->paginate(
+//            $dossiers,
+//            $request->query->getInt('page', 1),
+//            $itemsPerPage // Number of dossier per page from the request
+//        );
+//
+//        return $this->render('admin/dossiers.html.twig', [
+//            'pagination' => $pagination,
+//            'itemsPerPage' => $itemsPerPage, // Pass the items per page to the view
+//        ]);
+//    }
 
     #[Route('/api/statistics', name: 'api_statistics')]
     public function getStatistics(DesistementRepository $desistementRepository,ProcurationRepository $procurationRepository,ContratRepository $contratRepository): JsonResponse
@@ -153,6 +180,7 @@ class AdminController extends AbstractController
     #[Route('/admin/audit-logs', name: 'admin_audit_logs')]
     public function viewAuditLogs(Request $request, EntityManagerInterface $em): Response
     {
+        $auditLoggers = $em->getRepository(AuditLog::class)->findAll();
         // Get date filters from the request
         $dateFromString = $request->query->get('dateFrom');
         $dateToString = $request->query->get('dateTo');
@@ -235,6 +263,7 @@ class AdminController extends AbstractController
             'itemsPerPage' => $itemsPerPage,
             'users' => $users,
             'actions' => $actions,
+            'auditLoggers' => $auditLoggers
         ]);
     }
 

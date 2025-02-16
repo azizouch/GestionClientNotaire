@@ -106,17 +106,19 @@
                                     <div class="container card-body">
                                         {{ form_start(form)}}
                                         <div class="row mb-3">
-                                            {{ form_row(form.repertoir) }}
+                                            <div class="col-md-6">
+                                                {{ form_row(form.repertoir) }}
+                                            </div>
+                                            <div class="col-md-6">
+                                                {{ form_label(form.designation.numero_bien) }}
+                                                {{ form_widget(form.designation.numero_bien, { 'attr': { 'class': 'form-control shadow-sm' } }) }}
+                                            </div>
                                         </div>
                                         <div class="row mb-3">
                                             <fieldset class="mb-3">
                                                 <legend class="col-form-label required mb-3">Designation</legend>
                                                 <div id="compromis_designation">
                                                     <div class="row mb-3">
-                                                        <div class="col-md-4">
-                                                            {{ form_label(form.designation.numero_bien) }}
-                                                            {{ form_widget(form.designation.numero_bien, { 'attr': { 'class': 'form-control shadow-sm' } }) }}
-                                                        </div>
                                                         <div class="col-md-4">
                                                             {{ form_label(form.designation.titre_foncier) }}
                                                             {{ form_widget(form.designation.titre_foncier, { 'attr': { 'class': 'form-control shadow-sm' } }) }}
@@ -125,6 +127,10 @@
                                                             {{ form_label(form.designation.titre_foncier_mere) }}
                                                             {{ form_widget(form.designation.titre_foncier_mere, { 'attr': { 'class': 'form-control shadow-sm' } }) }}
                                                         </div>
+                                                        <div class="col-md-4">
+                                                            {{ form_label(form.designation.delai) }}
+                                                            {{ form_widget(form.designation.delai, { 'attr': { 'class': 'form-control shadow-sm' } }) }}
+                                                        </div>
                                                     </div>
                                                     <div class="row mb-3">
                                                         <div class="col-md-4">
@@ -132,12 +138,12 @@
                                                             {{ form_widget(form.designation.montant_TTC, { 'attr': { 'class': 'form-control shadow-sm' } }) }}
                                                         </div>
                                                         <div class="col-md-4">
-                                                            {{ form_label(form.designation.TVA) }}
-                                                            {{ form_widget(form.designation.TVA, { 'attr': { 'class': 'form-control shadow-sm' } }) }}
+                                                            {{ form_label(form.designation.montant_HT) }}
+                                                            {{ form_widget(form.designation.montant_HT, { 'attr': { 'class': 'form-control shadow-sm' } }) }}
                                                         </div>
                                                         <div class="col-md-4">
-                                                            {{ form_label(form.designation.delai) }}
-                                                            {{ form_widget(form.designation.delai, { 'attr': { 'class': 'form-control shadow-sm' } }) }}
+                                                            {{ form_label(form.designation.TVA) }}
+                                                            {{ form_widget(form.designation.TVA, { 'attr': { 'class': 'form-control shadow-sm' } }) }}
                                                         </div>
                                                     </div>
                                                     <div class="row mb-3">

@@ -333,7 +333,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-7">
                     <div class="card card-round recents">
                         <div class="card-header">
                             <div class="card-head-row card-tools-still-right">
@@ -357,64 +357,41 @@
                             <!-- Projects table -->
                                 <table class="table table-responsive align-items-center mb-0">
                                     <thead class="thead-light">
-                                    <tr>
-                                        <th scope="col" class="text-capitalize">Dossier</th>
-                                        <th scope="col" class="text-capitalize">Date & heure</th>
-                                        <th scope="col" class="text-capitalize">Paiement</th>
-                                        <th scope="col" class="text-capitalize">Type de paiement</th>
-                                        <th scope="col" class="text-capitalize">Montant</th>
-                                        <th scope="col" class="text-capitalize">Statut</th>
-                                    </tr>
+                                        <tr>
+                                            <th scope="col" class="text-capitalize small">Dossier</th>
+                                            <th scope="col" class="text-capitalize small">Devis</th>
+                                            <th scope="col" class="text-capitalize small">Paiements</th>
+                                            <th scope="col" class="text-capitalize small">Reste à payer</th>
+                                            <th scope="col" class="text-capitalize small">Statut</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-{#                                    {% for dossier in dossiers %}#}
-{#                                        <tr>#}
-{#                                            <td class="fw-bold">Rep: {{ dossier.repertoir }}</td>#}
-{#                                            <td>{{ dossier.dateCreation|date('M d, Y, h:ia') }}</td>#}
-{#                                            <td>#}
-{#                                                {% if dossier.avances|length > 0 %}#}
-{#                                                    Paiement#}
-{#                                                {% else %}#}
-{#                                                    Complet#}
-{#                                                {% endif %}#}
-{#                                            </td>#}
-{#                                            <td>#}
-{#                                                {% if dossier.avances|first %}#}
-{#                                                    {{ dossier.avances|first.type }}#}
-{#                                                {% else %}#}
-{#                                                    -#}
-{#                                                {% endif %}#}
-{#                                            </td>#}
-{#                                            <td>#}
-{#                                                {% if dossier.avances|length > 0 %}#}
-{#                                                    {{ dossier.avances|first.montant|number_format(2, ',', ' ') }} DH#}
-{#                                                {% else %}#}
-{#                                                    {{ dossier.montantTotal|number_format(2, ',', ' ') }} DH#}
-{#                                                {% endif %}#}
-{#                                            </td>#}
-{#                                            <td>#}
-{#                                                {% if dossier.avances|length > 0 and dossier.montantTotal > dossier.avances|map(a => a.montant)|sum %}#}
-{#                                                    <span class="badge badge-warning">En cours</span>#}
-{#                                                {% else %}#}
-{#                                                    <span class="badge badge-success">Complété</span>#}
-{#                                                {% endif %}#}
-{#                                            </td>#}
-{#                                        </tr>#}
-{#                                    {% else %}#}
-{#                                        <tr>#}
-{#                                            <td colspan="6" class="text-center">Aucun dossier récent</td>#}
-{#                                        </tr>#}
-{#                                    {% endfor %}#}
+                                    {% for dossier in dossiers %}
+                                        {% set rest = dossier.devis - dossier.getTotalPaiement() %}
                                         <tr>
-                                            <td class="fw-bold">Rep: 1/2025</td>
-                                            <td>Mar 19, 2020, 2.45pm</td>
-                                            <td>Avance</td>
-                                            <td>Espèce</td>
-                                            <td>3000.00 DH</td>
+                                            <td class="fw-bold">Rep: {{ dossier.repertoir }}</td>
+                                            <td>{{ dossier.devis|number_format(2, '.', ' ') }} DH</td>
+                                            <td>{{ dossier.getTotalPaiement()|number_format(2, '.', ' ') }} DH</td>
+                                            <td>{{ rest|number_format(2, '.', ' ') }} DH</td>
                                             <td>
-                                                <span class="badge badge-success">Completed</span>
+                                                {% if rest == 0 %}
+                                                    <span class="badge badge-success">Complete</span>
+                                                {% else %}
+                                                    <span class="badge badge-warning">En cour...</span>
+                                                {% endif %}
                                             </td>
                                         </tr>
+                                    {% endfor %}
+                                    <tr>
+                                        <td class="fw-bold">Rep: 3/2025
+                                        </td>
+                                        <td>21500.00 DH</td>
+                                        <td>21500.00 DH</td>
+                                        <td>0.00 DH</td>
+                                        <td>
+                                            <span class="badge badge-success">Complete</span>
+                                        </td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -427,9 +404,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-5">
                     <div class="card activites">
                         <div class="card-header">
                             <div class="row align-items-center">
@@ -486,6 +461,31 @@
         </div>
     </div>
     <script src="{{asset('asset/js/core/jquery-3.7.1.min.js')}}"></script>
+
+{#    <table class="table table-responsive align-items-center mb-0">#}
+{#        <thead class="thead-light">#}
+{#        <tr>#}
+{#            <th scope="col" class="text-capitalize">Dossier</th>#}
+{#            <th scope="col" class="text-capitalize">Date & heure</th>#}
+{#            <th scope="col" class="text-capitalize">Paiement</th>#}
+{#            <th scope="col" class="text-capitalize">Type de paiement</th>#}
+{#            <th scope="col" class="text-capitalize">Montant</th>#}
+{#            <th scope="col" class="text-capitalize">Statut</th>#}
+{#        </tr>#}
+{#        </thead>#}
+{#        <tbody>#}
+{#        <tr>#}
+{#            <td class="fw-bold">Rep: 1/2025</td>#}
+{#            <td>Mar 19, 2020, 2.45pm</td>#}
+{#            <td>Avance</td>#}
+{#            <td>Espèce</td>#}
+{#            <td>3000.00 DH</td>#}
+{#            <td>#}
+{#                <span class="badge badge-success">Completed</span>#}
+{#            </td>#}
+{#        </tr>#}
+{#        </tbody>#}
+{#    </table>#}
     <script>
 
         document.addEventListener("DOMContentLoaded", function () {

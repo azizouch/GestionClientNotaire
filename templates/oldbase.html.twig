@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Kaiadmin | Dashboard{% endblock %}</title>
+        <title>{% block title %}ActManager | Dashboard{% endblock %}</title>
 
         <link rel="icon" href="{{ asset('asset/img/kaiadmin/favicon.ico') }}" type="image/x-icon"/>
         <link rel="stylesheet" href="{{ asset('asset/css/bootstrap.min.css') }}" />
@@ -117,71 +117,7 @@
                 margin-left: 30px;
             }
 
-            /* chat style*/
-            .user-list {
-                max-height: 300px;
-                overflow-y: auto;
-                margin-bottom: 15px;
-            }
 
-            .user-message {
-                display: flex;
-                align-items: center;
-                padding: 10px;
-                cursor: pointer;
-            }
-
-            .user-message:hover {
-                background-color: #f1f1f1;
-            }
-
-            .user-profile {
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                margin-right: 10px;
-            }
-
-            .user-details {
-                flex-grow: 1;
-            }
-
-            .last-message {
-                margin: 0;
-            }
-
-            .chat-box {
-                max-height: 300px;
-                overflow-y: auto;
-                margin-bottom: 15px;
-                background-color: #fff;
-                border-radius: 5px;
-                padding: 10px;
-                border: 1px solid #dee2e6;
-                display: flex;
-                flex-direction: column;
-            }
-
-            .message {
-                padding: 8px;
-                margin-bottom: 10px;
-                border-radius: 5px;
-                max-width: 80%;
-            }
-
-            .sent {
-                background-color: #007bff;
-                color: white;
-                align-self: flex-end; /* Align to the right */
-                margin-left: auto; /* Align to the right */
-            }
-
-            .received {
-                background-color: #e9ecef;
-                color: black;
-                align-self: flex-start; /* Align to the left */
-                margin-right: auto; /* Align to the left */
-            }
 
             /* Add flex properties to chat box for alignment */
             .input-group {
@@ -194,12 +130,12 @@
             }
 
             .sidebar-wrapper .nav-item a.active {
-                color: white !important;
+                /*color: white !important;*/
                 font-weight: bold;
             }
 
             .nav-item .collapse.show > .nav-collapse a.active {
-                color: #fff !important;
+                /*color: #fff !important;*/
                 position: relative; /* Ensure the parent `<a>` acts as the positioning context */
             }
 
@@ -210,7 +146,7 @@
                 border: solid #6861ce; /* Arrow styling */
                 border-width: 0 3px 3px 0;
                 display: inline-block;
-                padding: 3px;
+                padding: 2px;
                 transform: translateY(-50%) rotate(-45deg); /* Center and rotate for the arrow effect */
                 -webkit-transform: translateY(-50%) rotate(-45deg); /* For older browsers */
             }
@@ -235,6 +171,7 @@
                 font-weight: bold;
                 background-color: #f8f9fa;
             }
+
             .scroll-top-btn {
                 position: fixed;
                 bottom: 50px;
@@ -293,7 +230,7 @@
                 <div class="sidebar-wrapper scrollbar scrollbar-inner">
                     <div class="sidebar-content">
                         <ul class="nav nav-secondary">
-                            <li class="nav-item active text-center">
+                            <li class="nav-item text-center">
                                 <a href="{{ path('app_admin') }}" class="collapsed" aria-expanded="false">
                                     <i class="fas fa-home"></i>
                                     <p>Accueil</p>
@@ -339,6 +276,10 @@
                                         <li>
                                             <a href="{{ path('app_dossiers') }}">
                                                 <span class="sub-item">Liste dossiers</span>
+                                                <span class="arrow"></span>
+                                            </a>
+                                            <a href="{{ path('app_dossiers_paiements') }}">
+                                                <span class="sub-item">Dossiers paiements</span>
                                                 <span class="arrow"></span>
                                             </a>
                                         </li>
@@ -567,7 +508,7 @@
                         <!-- Logo Header -->
                         <div class="logo-header" data-background-color="dark">
                             <a href="index.html" class="logo">
-                                <img src="{{ asset('asset/img/kaiadmin/logo_light.svg') }}" alt="navbar brand" class="navbar-brand" height="20"/>
+                                <img src="{{ asset('asset/img/logo-light.png') }}" alt="navbar brand" class="navbar-brand" height="20"/>
                             </a>
                             <div class="nav-toggle">
                                 <button class="btn btn-toggle toggle-sidebar">
@@ -795,55 +736,8 @@
                     <!-- End Navbar -->
                 </div>
 
+                {% block body %}{% endblock %}
 
-                <!-- modal chat -->
-{#                <a class="nav-link " href="#" role="button" id="openModalBtn">#}
-{#                    <i class="fa fa-comment"></i>#}
-{#                </a>#}
-                <div class="modal" id="chatModal" tabindex="-1" role="dialog">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 id="modalUserName" class="modal-title">Messages</h5>
-                                <input type="text" class="form-control search-input" placeholder="Search..." id="searchInput">
-                                <button type="button" class="close" id="closeModalBtn" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <div id="userList" class="user-list">
-                                    <div class="user-message" data-username="Alice">
-                                        <img src="" alt="Profile" class="user-profile">
-                                        <div class="user-details">
-                                            <strong>Alice</strong>
-                                            <p class="last-message">Hey! How's it going?</p>
-                                            <small class="last-seen">Last seen: 5 mins ago</small>
-                                        </div>
-                                    </div>
-                                    <div class="user-message" data-username="Bob">
-                                        <img src="" alt="Profile" class="user-profile">
-                                        <div class="user-details">
-                                            <strong>Bob</strong>
-                                            <p class="last-message">Are we still on for tomorrow?</p>
-                                            <small class="last-seen">Last seen: 10 mins ago</small>
-                                        </div>
-                                    </div>
-                                    <!-- Add more users as needed -->
-                                </div>
-
-                                <div class="chat-box d-none">
-                                    <div class="messages"></div>
-                                    <div class="input-group mt-3">
-                                        <input type="text" class="form-control" placeholder="Type a message..." aria-label="Message" id="chatInput">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary" id="sendMessageBtn">Send</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <!-- modal logout -->
                 <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
@@ -864,8 +758,6 @@
                 <div id="loader">
                     <div class="spinner"></div>
                 </div>
-
-                {% block body %}{% endblock %}
 
 
                 <footer class="footer">
@@ -964,11 +856,11 @@
         <script src="{{ asset('asset/js/plugin/jsvectormap/world.js') }}"></script>
         <!-- Sweet Alert -->
         <script src="{{ asset('asset/js/plugin/sweetalert/sweetalert.min.js') }}"></script>
-        <!-- Kaiadmin JS -->
+        <!-- JS -->
         <script src="{{ asset('asset/js/kaiadmin.min.js') }}"></script>
-        <!-- Kaiadmin DEMO methods, don't include it in your project! -->
+        <!-- DEMO methods, don't include it in your project! -->
         <script src="{{ asset('asset/js/setting-demoo.js') }}"></script>
-        <script src="{{ asset('asset/js/demo000.js') }}"></script>
+        <script src="{{ asset('asset/js/demo0000.js') }}"></script>
         <script>
 
             document.getElementById('searchClient').addEventListener('keyup', function() {
@@ -979,6 +871,7 @@
                     window.location.href = "{{ path('search_client') }}?query=" + encodeURIComponent(searchValue);
                 }
             });
+
             document.addEventListener("DOMContentLoaded", function () {
                 const scrollTopBtn = document.getElementById("scrollTopBtn");
 
@@ -1003,10 +896,66 @@
                 });
             });
 
-
+            const langLabel = document.querySelector('#lang_label');
             // Select the dropdown menu and button elements
             const dropdownMenu = document.querySelector('#dropdownMenuButton + .dropdown-menu');
-            const langLabel = document.querySelector('#lang_label');
+
+            // Add a click event listener to the dropdown menu for languages
+            dropdownMenu.addEventListener('click', function (event) {
+                // Check if a dropdown item was clicked
+                if (event.target.classList.contains('dropdown-item')) {
+                    event.preventDefault(); // Prevent default link behavior
+                    const selectedLang = event.target.getAttribute('data-lang'); // Get the selected language
+                    langLabel.textContent = selectedLang; // Update the lang_label span text
+                }
+            });
+
+            document.addEventListener("DOMContentLoaded", function () {
+                const currentPath = window.location.pathname; // Get the current URL path
+                const navLinks = document.querySelectorAll(".nav-item .nav-collapse a"); // Target nested links
+                const navlinkAcueil = document.querySelector('.nav-item a');
+
+                if (navlinkAcueil.getAttribute("href") === currentPath){
+                    navlinkAcueil.closest(".nav-item").classList.add("active");
+                }
+
+                navLinks.forEach(link => {
+                    if (link.getAttribute("href") === currentPath) {
+                        // Add 'active' class to the link
+                        link.classList.add("active");
+
+                        // Ensure the parent submenu is expanded
+                        const parentSubmenu = link.closest(".collapse");
+                        if (parentSubmenu) {
+                            parentSubmenu.classList.add("show");
+
+                            // Add 'active' class to the parent <li>
+                            const parentNavItem = parentSubmenu.closest(".nav-item");
+                            parentNavItem.classList.add("active","submenu");
+                            if (parentNavItem) {
+                                parentNavItem.querySelector("a[data-bs-toggle]").classList.add("active");
+                            }
+                        }
+                    }
+                });
+            });
+
+            // Wait for the page to fully load
+            window.addEventListener('load', () => {
+                const loader = document.getElementById('loader');
+                // After 2 seconds, hide the loader and show the content
+                setTimeout(() => {
+                    loader.style.display = 'none';   // Hide the loader
+                }, 20);
+            });
+
+
+
+
+
+
+
+
             document.addEventListener("DOMContentLoaded", () => {
                 const formOutlines = document.querySelectorAll(".form-outline");
 
@@ -1059,50 +1008,6 @@
                     }
                 });
 
-            });
-
-            // Add a click event listener to the dropdown menu for languages
-            dropdownMenu.addEventListener('click', function (event) {
-                // Check if a dropdown item was clicked
-                if (event.target.classList.contains('dropdown-item')) {
-                    event.preventDefault(); // Prevent default link behavior
-                    const selectedLang = event.target.getAttribute('data-lang'); // Get the selected language
-                    langLabel.textContent = selectedLang; // Update the lang_label span text
-                }
-            });
-
-            document.addEventListener("DOMContentLoaded", function () {
-                const currentPath = window.location.pathname; // Get the current URL path
-                const navLinks = document.querySelectorAll(".nav-item .nav-collapse a"); // Target nested links
-
-                navLinks.forEach(link => {
-                    if (link.getAttribute("href") === currentPath) {
-                        // Add 'active' class to the link
-                        link.classList.add("active");
-
-                        // Ensure the parent submenu is expanded
-                        const parentSubmenu = link.closest(".collapse");
-                        if (parentSubmenu) {
-                            parentSubmenu.classList.add("show");
-
-                            // Add 'active' class to the parent <li>
-                            const parentNavItem = parentSubmenu.closest(".nav-item");
-                            parentNavItem.classList.add("submenu");
-                            if (parentNavItem) {
-                                parentNavItem.querySelector("a[data-bs-toggle]").classList.add("active");
-                            }
-                        }
-                    }
-                });
-            });
-
-            // Wait for the page to fully load
-            window.addEventListener('load', () => {
-                const loader = document.getElementById('loader');
-                // After 2 seconds, hide the loader and show the content
-                setTimeout(() => {
-                    loader.style.display = 'none';   // Hide the loader
-                }, 20);
             });
 
             //chat js
@@ -1186,125 +1091,6 @@
         const messageDropdown = document.querySelector('#messageDropdown');
         const notifCenter = document.querySelector('.notif-center');
         const messageCount = document.querySelector('#messageCount'); // Badge element for the unseen count
-
-        // Function to fetch all messages
-        // async function fetchMessages() {
-        //     try {
-        //         const response = await fetch('/fetch-messages');
-        //         if (!response.ok) {
-        //             throw new Error('Failed to fetch messages');
-        //         }
-        //
-        //         const messages = await response.json();
-        //
-        //         // Clear current messages
-        //         notifCenter.innerHTML = '';
-        //
-        //         let unseenCount = 0;
-        //
-        //         // Add all messages to the dropdown
-        //         messages.forEach((msg) => {
-        //             if (msg.status === 'unseen') {
-        //                 unseenCount++;
-        //             }
-        //
-        //             const messageHTML = `
-        //             <a href="/chats/${msg.id}" class="${msg.status === 'unseen' ? 'unseen-message' : ''}">
-        //                 <div class="notif-img">
-        //                     <img src="${msg.image}" alt="Img Profile">
-        //                 </div>
-        //                 <div class="notif-content">
-        //                     <span class="subject">${msg.sender}</span>
-        //                     <span class="block">${msg.content}</span>
-        //                     <span class="time">${msg.time}</span>
-        //                 </div>
-        //             </a>
-        //         `;
-        //             notifCenter.innerHTML += messageHTML;
-        //         });
-        //
-        //         // Update the unseen message count badge
-        //         if (unseenCount > 0) {
-        //             messageCount.textContent = unseenCount; // Set the count
-        //             messageCount.style.display = 'inline'; // Ensure it's visible
-        //         } else {
-        //             messageCount.style.display = 'none'; // Hide if no unseen messages
-        //         }
-        //     } catch (error) {
-        //         console.error('Error fetching messages:', error);
-        //     }
-        // }
-
-        // async function fetchNewMessages() {
-        //     try {
-        //         const response = await fetch('/fetch-new-messages');
-        //
-        //         if (!response.ok) {
-        //             throw new Error('Failed to fetch new messages');
-        //         }
-        //
-        //         const messages = await response.json();
-        //         console.log(messages)
-        //
-        //         // Update the UI
-        //         const notifCenter = document.querySelector('.notif-center');
-        //         notifCenter.innerHTML = ''; // Clear existing messages
-        //
-        //         messages.forEach((msg) => {
-        //             const messageHTML = `
-        //         <a href="/chats/${msg.id}">
-        //             <div class="notif-img">
-        //                 <img src="${msg.image}" alt="Img Profile">
-        //             </div>
-        //             <div class="notif-content">
-        //                 <span class="subject">${msg.sender}</span>
-        //                 <span class="block">${msg.content}</span>
-        //                 <span class="time">${msg.time}</span>
-        //             </div>
-        //         </a>
-        //     `;
-        //             notifCenter.innerHTML += messageHTML;
-        //         });
-        //
-        //         // Update unseen count (optional)
-        //         const unseenCount = messages.length;
-        //         const messageCount = document.querySelector('#messageCount');
-        //         if (unseenCount > 0) {
-        //             messageCount.textContent = unseenCount;
-        //             messageCount.style.display = 'inline';
-        //         } else {
-        //             messageCount.style.display = 'none';
-        //         }
-        //     } catch (error) {
-        //         console.error('Error fetching new messages:', error);
-        //     }
-        // }
-
-        // function fetchNewMessages(userId) {
-        //     fetch(`/fetch-new-messages/${userId}`)
-        //         .then(response => {
-        //             if (!response.ok) {
-        //                 throw new Error('Network response was not ok');
-        //             }
-        //             return response.json();
-        //         })
-        //         .then(data => {
-        //             console.log('New messages fetched:', data);
-        //             // Update your UI with new messages
-        //         })
-        //         .catch(error => {
-        //             console.error('Error fetching new messages:', error);
-        //         });
-        // }
-        //
-        // // Call this function with the specific userId
-        // fetchNewMessages(9); // Replace `specificUserId` with the actual user ID you want to use
-
-        // Fetch messages when the dropdown is clicked
-        // messageDropdown.addEventListener('click', fetchNewMessages);
-
-        // Optionally, auto-refresh messages every X seconds
-        // setInterval(fetchNewMessages, 3000); // Fetch every 3 seconds
     </script>
     </body>
 </html>

@@ -7,10 +7,9 @@
     <link rel="stylesheet" href="{{ asset('asset/css/comunee.css') }}"/>
 
     <div class="container">
-        <div class="page-inner pt-3">
+        <div class="page-inner pt-2">
             <div class="page-header m-0">
-                <h3 class="fw-bold mb-3">Liste Clients</h3>
-                <ul class="breadcrumbs mb-3">
+                <ul class="breadcrumbs mb-2">
                     <li class="nav-home">
                         <a href="{{ path('app_admin') }}">
                             <i class="icon-home"></i>
@@ -26,7 +25,7 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">La liste des Clients</a>
+                        <a href="#">Liste Clients</a>
                     </li>
                 </ul>
             </div>
@@ -38,16 +37,38 @@
                                 <h4 class="card-title">Clients <span class="badge bg-soft-dark text-dark ms-2">{{clients|length}}</span></h4>
                                 <button class="btn btn-primary btn-round ms-auto" onclick="window.location.href='{{ path('app_add_client') }}'">
                                     <i class="fa fa-plus"></i>
-                                    Nouveau client
+                                    Nouveau
                                 </button>
                             </div>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body pt-2">
+                            <form method="GET" action="{{ path('app_clients') }}">
+                                <div class="row d-flex justify-content-between">
+                                    <!-- Items per Page Dropdown -->
+                                    <div class="col-3 col-md-2 mb-2">
+                                        <select name="itemsPerPage" id="itemsPerPage" class="form-control" onchange="this.form.submit()">
+                                            <option value="10" {% if itemsPerPage == 10 %}selected{% endif %}>10</option>
+                                            <option value="25" {% if itemsPerPage == 25 %}selected{% endif %}>25</option>
+                                            <option value="50" {% if itemsPerPage == 50 %}selected{% endif %}>50</option>
+                                            <option value="100" {% if itemsPerPage == 100 %}selected{% endif %}>100</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Search Input -->
+                                    <div class="col-9 col-md-6 mb-2">
+                                        <input type="text" name="search" id="clientSearch" class="form-control"
+                                               placeholder="Rechercher un client..." value="{{ searchQuery }}">
+                                    </div>
+
+                                    <!-- Hidden Submit Button (Not necessary but ensures form submission) -->
+                                    <button type="submit" hidden></button>
+                                </div>
+                            </form>
                             <div class="table-responsive">
-                                <table id="multi-filter-select" class="display table table-hover">
+                                {% if pagination is not empty %}
+                                <table id="multi-filter-select" class="table table-bordered table-hover">
                                     <thead>
                                         <tr class="head">
-                                            <th style="text-transform: capitalize;"><input type="checkbox" onclick="toggleAll(this)"></th>
                                             <th style="text-transform: capitalize;">Nom</th>
                                             <th style="text-transform: capitalize;">Prenom</th>
                                             <th style="text-transform: capitalize;">Cin</th>
@@ -56,44 +77,9 @@
                                             <th style="width: 10%;text-transform: capitalize;">Action</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th></th>
-                                            <th>Nom</th>
-                                            <th>Prenom</th>
-                                            <th>Cin</th>
-                                            <th>Adresse</th>
-                                            <th>Situation</th>
-                                            <th style="width: 10%">Action</th>
-                                        </tr>
-                                    </tfoot>
                                     <tbody>
-                                    {% for client in clients %}
-                                        <tr data-client='{
-                                            "id": {{ client.id }},
-                                            "lastName": "{{ client.lastName|e('js') }}",
-                                            "firstName": "{{ client.firstName|e('js') }}",
-                                            "cin": "{{ client.cin|e('js') }}",
-                                            "phone": "{{ client.telephone|e('js') }}",
-                                            "email": "{{ client.email|e('js') }}",
-                                            "address": "{{ client.address|e('js') }}",
-                                            "situation": "{{ client.situation|e('js') }}",
-                                            "gender": "{{ client.genre|e('js') }}",
-                                            "fatherFirstName": "{{ client.prenomPere|e('js') }}",
-                                            "motherFirstName": "{{ client.prenomMere|e('js') }}",
-{#                                            "partners": [#}
-{#                                                {% for partner in client.partners %}#}
-{#                                                    {#}
-{#                                                        "id": {{ partner.id }},#}
-{#                                                        "firstName": "{{ partner.firstName|e('js') }}",#}
-{#                                                        "lastName": "{{ partner.lastName|e('js') }}",#}
-{#                                                        "mariage_date": "{{ partner.mariageDate|date('Y-m-d')|e('js') }}",#}
-{#                                                        "mariage_place": "{{ partner.mariagePlace|e('js') }}"#}
-{#                                                    }{% if not loop.last %},{% endif %}#}
-{#                                                {% endfor %}#}
-{#                                            ]#}
-                                            }'>
-                                            <td><input type="checkbox" class="row-checkbox"></td>
+                                    {% for client in pagination %}
+                                        <tr>
                                             <td>{{ client.lastName }}</td>
                                             <td>{{ client.firstName }}</td>
                                             <td>{{ client.cin }}</td>
@@ -140,6 +126,12 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
+                                {% else %}
+                                    <div class="alert-search alert_warning text-center">Aucun résultat trouvé.</div>
+                                {% endif %}
+                            </div>
+                            <div class="row navigation d-flex justify-content-center mt-3" >
+                                {{ knp_pagination_render(pagination,'@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig') }}
                             </div>
                         </div>
                     </div>
@@ -149,143 +141,9 @@
     </div>
 
     <script src="{{ asset('asset/js/core/jquery-3.7.1.min.js') }}"></script>
-    <script src="{{ asset('asset/js/plugin/datatables/datatables.min.js') }}"></script>
+
     <script>
-        function toggleAll(source) {
-            const checkboxes = document.querySelectorAll('.row-checkbox');
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = source.checked;
-            });
-        }
         $(document).ready(function () {
-            // Event delegation for clicking on table rows
-            $('#multi-filter-select tbody').on('click', 'tr', function(e) {
-                // Check if the click target is not a button
-                if (!$(e.target).closest('button').length && !$(e.target).closest('a').length) {
-                    // Get client information from the data attributes
-                    const clientData = JSON.parse($(this).attr('data-client'));
-
-                    // Populate modal with client data
-                    $('#clientLastName').text(clientData.lastName);
-                    $('#clientFirstName').text(clientData.firstName);
-                    $('#clientCin').text(clientData.cin);
-                    $('#clientTelephone').text(clientData.phone);
-                    $('#clientAddress').text(clientData.address);
-                    $('#clientEmail').text(clientData.email);
-                    $('#clientSituation').text(clientData.situation);
-                    $('#clientGenre').text(clientData.gender);
-                    $('#clientFatherFirstName').text(clientData.fatherFirstName);
-                    $('#clientMotherFirstName').text(clientData.motherFirstName);
-
-                    // Check if the situation is 'Marié' and show partner information
-                    if (clientData.situation === 'Marié') {
-                        $('#partnerInfo').empty(); // Clear previous info
-
-                        $.each(clientData.partners, function(index, partner) {
-                            $('#partnerInfo').append(`
-                            <div class="row container mb-2"><p><strong>Marié(e) avec :</strong></p><br></div>
-                            <div class="container">
-                                <div class="row container">
-                                    <div class="col-md-2">
-                                        <p><strong>Nom :</strong></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p><span>${partner.lastName}</span></p>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <p><strong>Prénom :</strong></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p><span>${partner.firstName}</span></p>
-                                    </div>
-                                </div>
-                                <div class="row container">
-                                    <div class="col-md-2">
-                                        <p><strong>Date de mariage :</strong></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p><span>${partner.mariage_date}</span></p>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <p><strong>Lieu de mariage :</strong></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p><span>${partner.mariage_place}</span></p>
-                                    </div>
-                                </div>
-                            </div>`
-                            );
-                        });
-                    } else {
-                        // Clear partner info if not 'Marié'
-                        $('#partnerInfo').empty();
-                    }
-
-                    // Show the modal
-                    $('#clientModal').modal('show');
-                }
-            });
-
-            // Prevent modal from showing when clicking on update or delete buttons
-            $('#multi-filter-select').on('click', 'a.btn', function(e) {
-                // Prevent the modal opening event
-                e.stopPropagation(); // This prevents the click event from bubbling up to the row click event
-            });
-
-            $("#basic-datatables").DataTable({});
-
-            $("#multi-filter-select").DataTable({
-                pageLength: 5,
-                initComplete: function () {
-                    this.api()
-                        .columns()
-                        .every(function () {
-                            var column = this;
-                            var select = $(
-                                '<select class="form-select"><option value=""></option></select>'
-                            )
-                                .appendTo($(column.footer()).empty())
-                                .on("change", function () {
-                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
-
-                                    column
-                                        .search(val ? "^" + val + "$" : "", true, false)
-                                        .draw();
-                                });
-
-                            column
-                                .data()
-                                .unique()
-                                .sort()
-                                .each(function (d, j) {
-                                    select.append(
-                                        '<option value="' + d + '">' + d + "</option>"
-                                    );
-                                });
-                        });
-                },
-            });
-
-            // Add Row
-            $("#add-row").DataTable({
-                pageLength: 5,
-            });
-
-            var action =
-                '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
-
-            $("#addRowButton").click(function () {
-                $("#add-row")
-                    .dataTable()
-                    .fnAddData([
-                        $("#addName").val(),
-                        $("#addPosition").val(),
-                        $("#addOffice").val(),
-                        action,
-                    ]);
-                $("#addRowModal").modal("hide");
-            });
-
             $(".delete-client-btn").click(function (e) {
                 e.preventDefault(); // Prevent the default button action
                 const clientId = $(this).data("client-id");

@@ -56,8 +56,8 @@ class AdminController extends AbstractController
 
         // Fetch the last 6 audit logs
         $logs = $auditLogRepository->findBy([], ['timestamp' => 'DESC'], 6);
-
         $dossiers = $dossierRepository->findBy([], ['createdAt' => 'DESC'], 6);
+        $dossiersCount = $dossierRepository->findAll();
         $personMorales = $personMoraleRepository->findAllWithContractsCount();
         $totalContracts = $contratRepository->count([]); // Get the total number of contracts
 
@@ -70,6 +70,7 @@ class AdminController extends AbstractController
             'totalContracts' => $totalContracts,
             'logs' => $logs,
             'dossiers' => $dossiers,
+            'dossiersCount' => $dossiersCount,
         ]);
     }
 
@@ -107,10 +108,25 @@ class AdminController extends AbstractController
             return new RedirectResponse($this->generateUrl('app_users'));
 //            return $security->login($user, AppCustomAuthenticator::class, 'main');
         }
-        $users = $userRepository->findAll();
+
+        $searchQuery = $request->query->get('search', '');
+        $userType = $request->query->get('userType', '');
+        $itemsPerPage = $request->query->getInt('itemsPerPage', 25);
+
+        $users = $userRepository->searchUsers($searchQuery, $userType);
+
+        // Pagination
+        $pagination = $this->paginator->paginate(
+            $users,
+            $request->query->getInt('page', 1),
+            $itemsPerPage
+        );
         return $this->render('admin/users.html.twig', [
-            'users' => $users,
+            'users' => $pagination,
             'registrationForm' => $form,
+            'itemsPerPage' => $itemsPerPage,
+            'searchQuery' => $searchQuery,
+            'userType' => $userType,
         ]);
     }
 
@@ -119,20 +135,21 @@ class AdminController extends AbstractController
     {
         $searchQuery = $request->query->get('search', '');
         $contractType = $request->query->get('contractType', '');
-        $itemsPerPage = $request->query->getInt('itemsPerPage', 10);
+        $itemsPerPage = $request->query->getInt('itemsPerPage', 25);
 
         // Use the updated search method in the repository
-        $dossiers = $entityManager->getRepository(Dossier::class)->searchDossiers($searchQuery, $contractType);
+        $dossiersPagination = $entityManager->getRepository(Dossier::class)->searchDossiers($searchQuery, $contractType);
         // Iterate over the array of Dossier objects
 
         // Pagination
         $pagination = $this->paginator->paginate(
-            $dossiers,
+            $dossiersPagination,
             $request->query->getInt('page', 1),
             $itemsPerPage
         );
 
         return $this->render('admin/dossiers.html.twig', [
+            'dossiers' => $entityManager->getRepository(Dossier::class)->findAll(),
             'pagination' => $pagination,
             'itemsPerPage' => $itemsPerPage,
             'searchQuery' => $searchQuery,
@@ -140,25 +157,32 @@ class AdminController extends AbstractController
         ]);
     }
 
-//    #[Route('/dossiers', name: 'app_dossiers')]
-//    public function dossiers(Request $request,EntityManagerInterface $entityManager): Response
-//    {
-//        // Fetch the number of items per page from the request, defaulting to 10
-//        $itemsPerPage = $request->query->getInt('itemsPerPage', 10);
-//
-//        // Fetch all dossiers
-//        $dossiers = $entityManager->getRepository(Dossier::class)->findBy([], ['id' => 'DESC']);
-//        $pagination = $this->paginator->paginate(
-//            $dossiers,
-//            $request->query->getInt('page', 1),
-//            $itemsPerPage // Number of dossier per page from the request
-//        );
-//
-//        return $this->render('admin/dossiers.html.twig', [
-//            'pagination' => $pagination,
-//            'itemsPerPage' => $itemsPerPage, // Pass the items per page to the view
-//        ]);
-//    }
+    #[Route('/dossiers/paiements', name: 'app_dossiers_paiements')]
+    public function dossiers_paiements(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $searchQuery = $request->query->get('search', '');
+        $contractType = $request->query->get('contractType', '');
+        $itemsPerPage = $request->query->getInt('itemsPerPage', 25);
+
+        // Use the updated search method in the repository
+        $dossiersPagination = $entityManager->getRepository(Dossier::class)->searchDossiers($searchQuery, $contractType);
+        // Iterate over the array of Dossier objects
+
+        // Pagination
+        $pagination = $this->paginator->paginate(
+            $dossiersPagination,
+            $request->query->getInt('page', 1),
+            $itemsPerPage
+        );
+
+        return $this->render('admin/dossiersPaiements.html.twig', [
+            'dossiers' => $entityManager->getRepository(Dossier::class)->findAll(),
+            'pagination' => $pagination,
+            'itemsPerPage' => $itemsPerPage,
+            'searchQuery' => $searchQuery,
+            'contractType' => $contractType,
+        ]);
+    }
 
     #[Route('/api/statistics', name: 'api_statistics')]
     public function getStatistics(DesistementRepository $desistementRepository,ProcurationRepository $procurationRepository,ContratRepository $contratRepository): JsonResponse
@@ -174,6 +198,31 @@ class AdminController extends AbstractController
             'desistements' => $desistements,
             'procurations' => $procurations,
             'compromis' => $compromis,
+        ]);
+    }
+
+    #[Route('/api/dashboard-data', name: 'api_dashboard_data', methods: ['GET'])]
+    public function getDashboardData(PaiementRepository $paiementRepository): JsonResponse
+    {
+        // Get total montant
+        $totalMontant = $paiementRepository->getTotalMontant();
+
+        // Get daily income
+        $dailyIncome = $paiementRepository->getDailyIncome(); // Implement this in the repository
+
+        // Get monthly income
+        $monthlyIncome = $paiementRepository->getMonthlyIncome(); // Implement this in the repository
+
+        // Get start and end date for daily income (Modify according to your logic)
+        $startDate = !empty($dailyIncome) ? $dailyIncome[0]['day'] : null;
+        $endDate = !empty($dailyIncome) ? end($dailyIncome)['day'] : null;
+
+        return $this->json([
+            'totalMontant' => number_format($totalMontant, 2, ',', ' '),
+            'dailyIncome' => $dailyIncome,
+            'monthlyIncome' => $monthlyIncome,
+            'startDate' => $startDate,
+            'endDate' => $endDate
         ]);
     }
 
@@ -453,4 +502,24 @@ class AdminController extends AbstractController
 
         return new JsonResponse(['success' => true, 'message' => 'Paiement supprimé avec succès']);
     }
+
+    //    #[Route('/test', name: 'app_test')]
+//    public function dossiers(Request $request,EntityManagerInterface $entityManager): Response
+//    {
+//        // Fetch the number of items per page from the request, defaulting to 10
+//        $itemsPerPage = $request->query->getInt('itemsPerPage', 10);
+//
+//        // Fetch all dossiers
+//        $dossiers = $entityManager->getRepository(Dossier::class)->findBy([], ['id' => 'DESC']);
+//        $pagination = $this->paginator->paginate(
+//            $dossiers,
+//            $request->query->getInt('page', 1),
+//            $itemsPerPage // Number of dossier per page from the request
+//        );
+//
+//        return $this->render('admin/dossiers.html.twig', [
+//            'pagination' => $pagination,
+//            'itemsPerPage' => $itemsPerPage, // Pass the items per page to the view
+//        ]);
+//    }
 }

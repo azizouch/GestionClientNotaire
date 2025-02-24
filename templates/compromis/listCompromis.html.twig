@@ -8,7 +8,6 @@
     <div class="container">
         <div class="page-inner pt-2">
             <div class="page-header m-0">
-                <h5 class="fw-bold mb-2">Liste compromis</h5>
                 <ul class="breadcrumbs mb-2">
                     <li class="nav-home">
                         <a href="{{ path('app_admin') }}">
@@ -25,38 +24,10 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">Datatables</a>
+                        <a href="#">Liste compromis</a>
                     </li>
                 </ul>
             </div>
-            {% for label, messages in app.flashes %}
-                <div class="modal fade" id="flashModal" tabindex="-1" aria-labelledby="flashModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="flashModalLabel">
-                                    {% if label == 'error' %}
-                                        ⚠️ Erreur
-                                    {% elseif label == 'success' %}
-                                        ✅ Succès
-                                    {% else %}
-                                        ℹ️ Info
-                                    {% endif %}
-                                </h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                {% for message in messages %}
-                                    <p>{{ message }}</p>
-                                {% endfor %}
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
@@ -70,8 +41,41 @@
                             </div>
                         </div>
                         <div class="card-body">
+                            <form method="GET" action="{{ path('app_compromis') }}">
+                                <div class="row d-flex justify-content-between">
+
+                                    <div class="col-4 col-md-2 mb-2 mb-md-3">
+                                        <select name="itemsPerPage" id="itemsPerPage" class="form-control" onchange="this.form.submit()">
+                                            <option value="10" {% if itemsPerPage == 10 %}selected{% endif %}>10</option>
+                                            <option value="25" {% if itemsPerPage == 25 %}selected{% endif %}>25</option>
+                                            <option value="50" {% if itemsPerPage == 50 %}selected{% endif %}>50</option>
+                                            <option value="100" {% if itemsPerPage == 100 %}selected{% endif %}>100</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-8 col-md-4 mb-2">
+                                        <select name="PmoraleName" id="PmoraleName" class="form-control" onchange="this.form.submit()">
+                                            <option value="">Tous les entreprises</option>
+                                            {% for pmorale in Pmorales %}
+                                                <option value="{{ pmorale.name }}" {% if PmoraleName == '{{pmorale.name}}' %}selected{% endif %}>
+                                                    {{ pmorale.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <!-- Search Input -->
+                                    <div class="col-12 col-md-6 mb-2">
+                                        <input type="text" name="search" id="dossierSearch" class="form-control"
+                                               placeholder="Rechercher un compromis..." value="{{ searchQuery }}">
+                                    </div>
+
+                                    <!-- Hidden Submit Button (Not necessary but ensures form submission) -->
+                                    <button type="submit" hidden></button>
+                                </div>
+                            </form>
                             <div class="table-responsive">
-                                <table id="multi-filter-select" class="display table table-hover compromisTable ">
+                                {% if pagination is not empty %}
+                                <table class="table table-hover table-bordered compromisTable mt-0">
                                     <thead>
                                         <tr style="background-color: #d0ece7 ">
                                             <th>Repertoire</th>
@@ -82,18 +86,8 @@
                                             <th style="width: 10%">Action</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Repertoire</th>
-                                            <th>Montant de l'affaire</th>
-                                            <th>1ere partie(S)</th>
-                                            <th>2eme partie(S)</th>
-                                            <th>Statut</th>
-                                            <th style="width: 10%">Action</th>
-                                        </tr>
-                                    </tfoot>
                                     <tbody>
-                                    {% for comp in compromis %}
+                                    {% for comp in pagination %}
                                         <tr class="compromis-row" data-id="{{ comp.id }}">
                                             <td>{{ comp.repertoir }}</td>
                                             <td>{{ comp.designation.getMontantTTC() }}</td>
@@ -163,6 +157,12 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
+                                {% else %}
+                                    <div class="alert-search alert_warning text-center">Aucun résultat trouvé.</div>
+                                {% endif %}
+                            </div>
+                            <div class="row navigation d-flex justify-content-center mt-3" >
+                                {{ knp_pagination_render(pagination,'@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig') }}
                             </div>
                         </div>
                     </div>
@@ -172,14 +172,12 @@
     </div>
 
     <script src="{{ asset('asset/js/core/jquery-3.7.1.min.js') }}"></script>
-    <script src="{{ asset('asset/js/plugin/datatables/datatables.min.js') }}"></script>
     <script>
 
         document.addEventListener("DOMContentLoaded", function() {
-            let flashModal = new bootstrap.Modal(document.getElementById('flashModal'));
-            flashModal.show();
 
             document.querySelectorAll(".compromis-row").forEach(row => {
+
                 // Handle row click (navigate to the update page)
                 row.addEventListener("click", function(event) {
                     // Check if the clicked element is not inside the last dropdown cell
@@ -203,63 +201,11 @@
                     });
                 }
             });
+
+            let flashModal = new bootstrap.Modal(document.getElementById('flashModal'));
+            flashModal.show();
         });
 
-        $(document).ready(function () {
-            $("#basic-datatables").DataTable({});
-
-            $("#multi-filter-select").DataTable({
-                pageLength: 5,
-                initComplete: function () {
-                    this.api()
-                        .columns()
-                        .every(function () {
-                            var column = this;
-                            var select = $(
-                                '<select class="form-select"><option value=""></option></select>'
-                            )
-                                .appendTo($(column.footer()).empty())
-                                .on("change", function () {
-                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
-
-                                    column
-                                        .search(val ? "^" + val + "$" : "", true, false)
-                                        .draw();
-                                });
-
-                            column
-                                .data()
-                                .unique()
-                                .sort()
-                                .each(function (d, j) {
-                                    select.append(
-                                        '<option value="' + d + '">' + d + "</option>"
-                                    );
-                                });
-                        });
-                },
-            });
-
-            // Add Row
-            $("#add-row").DataTable({
-                pageLength: 5,
-            });
-
-            var action =
-                '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
-
-            $("#addRowButton").click(function () {
-                $("#add-row")
-                    .dataTable()
-                    .fnAddData([
-                        $("#addName").val(),
-                        $("#addPosition").val(),
-                        $("#addOffice").val(),
-                        action,
-                    ]);
-                $("#addRowModal").modal("hide");
-            });
-        });
     </script>
 
 {% endblock %}

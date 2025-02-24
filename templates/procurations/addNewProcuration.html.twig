@@ -41,6 +41,14 @@
             100% { transform: translateX(0); }
         }
 
+        .basetable thead th{
+            text-transform: capitalize;
+            background-color: #d0ece7;
+        }
+        #clientsTables tbody tr {
+            cursor: pointer;
+        }
+
         .AdditionTable thead tr th{
             background-color: #e0e0e0;
         }
@@ -48,10 +56,9 @@
     </style>
 
     <div class="container">
-        <div class="page-inner pt-3">
+        <div class="page-inner pt-2">
             <div class="page-header m-0">
-                <h3 class="fw-bold mb-3">Ajouter procuration</h3>
-                <ul class="breadcrumbs mb-3">
+                <ul class="breadcrumbs mb-2">
                     <li class="nav-home">
                         <a href="{{ path('app_admin') }}">
                             <i class="icon-home"></i>
@@ -67,23 +74,20 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">Creer procuration</a>
+                        <a href="#">Créer procuration</a>
                     </li>
                 </ul>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="card ">
-                        <div class="card-header text-center h2">
-                            Créer un nouveau procuration
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Créer une nouvelle procuration</h4>
                         </div>
-                        <div class="container card-body">
+                        <div class="card-body">
                             {{ form_start(form)}}
                             <div class="row mb-3">
-                                <div class="col-md-6">
-                                    {{ form_row(form.repertoir) }}
-                                </div>
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     {{ form_row(form.titre_foncier) }}
                                 </div>
                             </div>
@@ -180,11 +184,12 @@
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="newClientModalLabel">Choisir un client</h5>
+                                            <h5 class="modal-title" id="newClientModalLabel">Ajouter</h5>
+                                            <input type="text" id="searchInputPerson" class="form-control" placeholder="Search for a person..." style="margin-right: 20px;margin-left: 20px">
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <table class="table table-hover" id="clientsTables">
+                                            <table class="table table-hover basetable" id="clientsTables">
                                                 <thead>
                                                 <tr>
                                                     <th>Prenom</th>
@@ -365,8 +370,9 @@
                                             </form>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                                            <button type="button" class="btn btn-primary" id="saveNewClientButton">Enregistrer</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ignorer</button>
+                                            <button type="button" class="btn btn-primary" id="saveNewClientButton">Enregistrer & Fermer</button>
+                                            <button type="button" class="btn btn-info" id="saveAndNew">Enregistrer & Nouveau</button>
                                         </div>
                                     </div>
                                 </div>

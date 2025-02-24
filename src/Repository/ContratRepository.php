@@ -57,12 +57,39 @@ class ContratRepository extends ServiceEntityRepository
 
         return array_values($monthlyData); // Return values indexed 0-11 for the frontend
     }
-    public function findLastVente(): ?Contrat
+
+//    public function findLastVente(): ?Contrat
+//    {
+//        return $this->createQueryBuilder('v')
+//            ->orderBy('v.repertoir', 'DESC')
+//            ->setMaxResults(1)
+//            ->getQuery()
+//            ->getOneOrNullResult();
+//    }
+
+    public function searchContrat(?string $searchQuery = null, ?string $PmoraleName = null,string $type): array
     {
-        return $this->createQueryBuilder('v')
-            ->orderBy('v.repertoir', 'DESC')
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult();
+        $qb = $this->createQueryBuilder('c')
+            ->andWhere('c.type = :type')
+            ->setParameter('type', $type)
+            ->leftJoin('c.pmorale', 'pm') // Assuming 'pmorale' is the relation in Contrat
+            ->addSelect('pm')
+            ->leftJoin('c.pphysique', 'pp') // Assuming 'pPhysiques' is the relation in Contrat
+            ->addSelect('pp');
+
+        // Filter by search query if provided
+        if (!empty($searchQuery)) {
+            $qb->andWhere('pp.last_name IS NULL OR pp.last_name  LIKE :searchQuery')
+                ->setParameter('searchQuery', "{$searchQuery}%");
+        }
+
+        // Filter by PersonneMorale if provided
+        if (!empty($PmoraleName)) {
+            $qb->andWhere('pm.name = :PmoraleName')
+                ->setParameter('PmoraleName', $PmoraleName);
+        }
+
+        return $qb->getQuery()->getResult();
     }
+
 }

@@ -13,6 +13,7 @@
         {% set index = 1 %}
         {% set compayName = "" %}
 
+
         <title>Compromis de
             {% if firstBeneficiaire is not null %}
                 {% if firstBeneficiaire.FirstName is defined and firstBeneficiaire.LastName is defined %}
@@ -48,6 +49,7 @@
                     {% endif %}
                 </td>
             </tr>
+            <br><br>
             <tr>
                 <td colspan="2" style="text-align: center; width: 100%;"><span style="font-size: 13px">COMPROMIS PAR SOCIETE </span><strong style="font-size: 16px">« {{ compayName}} »</strong></td>
             </tr>

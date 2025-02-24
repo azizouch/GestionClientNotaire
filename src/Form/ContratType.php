@@ -20,11 +20,6 @@ class ContratType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('repertoir',null, [
-                'attr' => [
-                    'class' => 'shadow-sm',
-                ],
-            ])
             ->add('type',null,[
                 'required' => false,
             ])

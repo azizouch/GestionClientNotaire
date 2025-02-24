@@ -32,7 +32,13 @@ class CompromisController extends AbstractController
     private AuditLogger $auditLogger;
     private Security $security;
     private $paginator;
-    public function __construct(DateFormatterService $dateFormatter,GeneratePdf $generatePdf,ConvertNumber $convertNumber,AuditLogger $auditLogger, Security $security,PaginatorInterface $paginator)
+    public function __construct(
+        DateFormatterService $dateFormatter,
+        GeneratePdf $generatePdf,
+        ConvertNumber $convertNumber,
+        AuditLogger $auditLogger,
+        Security $security,
+        PaginatorInterface $paginator)
     {
         $this->dateFormatter = $dateFormatter;
         $this->convertNumber = $convertNumber;
@@ -42,11 +48,28 @@ class CompromisController extends AbstractController
         $this->paginator = $paginator;
     }
     #[Route('/compromis', name: 'app_compromis')]
-    public function index(ContratRepository $contratRepository): Response
+    public function index(Request $request,ContratRepository $contratRepository,PersonneMoraleRepository $personneMoraleRepository): Response
     {
-        $compromis = $contratRepository->findCompromis();
+
+        $searchQuery = $request->query->get('search', '');
+        $PmoraleName = $request->query->get('PmoraleName', '');
+        $itemsPerPage = $request->query->getInt('itemsPerPage', 25);
+
+        $compromis = $contratRepository->searchContrat($searchQuery, $PmoraleName,'compromis');
+
+        // Pagination
+        $pagination = $this->paginator->paginate(
+            $compromis,
+            $request->query->getInt('page', 1),
+            $itemsPerPage
+        );
         return $this->render('compromis/listCompromis.html.twig', [
-            'compromis' => $compromis,
+            'pagination' => $pagination,
+            'compromis' => $contratRepository->findCompromis(),
+            'Pmorales' => $personneMoraleRepository->findAll(),
+            'itemsPerPage' => $itemsPerPage,
+            'searchQuery' => $searchQuery,
+            'PmoraleName' => $PmoraleName
         ]);
     }
 
@@ -55,13 +78,19 @@ class CompromisController extends AbstractController
     {
         $PersonnesPhysiques = $personnePhysiqueRepository->findAll();
         $PersonnesMorales = $personneMoraleRepository->findAll();
+
         $compromis = new Contrat();
-        // Create a new Dossier and associate it with the Compromis
         $dossier = new Dossier();
+
         $dossier->setDevis(0);
-        $dossier->setStatut("Compromis prêt à signer");
         $dossier->setStatut("Active");
+        $dossier->setSuivie("Compromis créé");
+        $dossier->setCreatedAt(new \DateTime());
+        $dossier->setUpdatedAt(new \DateTime());
         $dossier->setRepertoir($dossierRepository->generateRepertoir($entityManager));
+
+        $compromis->setCreatedAt(new \DateTime());
+        $compromis->setUpdatedAt(new \DateTime());
 
         // Create the form with your form type
         $form = $this->createForm(ContratType::class, $compromis);
@@ -73,7 +102,7 @@ class CompromisController extends AbstractController
 
             // Handle selected persons
             $selectedPersons = json_decode($form->get('selectedPersons')->getData() ?? '[]', true);
-//            dd($selectedPersons);
+
             foreach ($selectedPersons as $personData) {
                 $personId = $personData['id'];
                 $personType = $personData['type'];
@@ -119,9 +148,13 @@ class CompromisController extends AbstractController
                     }
                 }
             }
+
             $compromis->setType('compromis');
-            $dossier->setCompromis($compromis);
+            $compromis->setRepertoir($this->generatePdf->generateRepertoir($entityManager));
             $compromis->setDossier($dossier);
+            $dossier->setCompromis($compromis);
+
+
             dd($compromis);
 
             $entityManager->persist($compromis);
@@ -138,7 +171,6 @@ class CompromisController extends AbstractController
                 sprintf('Un nouveau compromis avec Rep: %s a été ajouté par %s.', $compromis->getRepertoir(), $username)
             );
 
-            // Redirect to a success page or show a message
             return $this->redirectToRoute('app_compromis');
         }
 
@@ -388,11 +420,7 @@ class CompromisController extends AbstractController
 
         // Step 2: Create a new "vente" entity (assumed to be the same Contrat entity for both types)
         $vente = new Contrat();
-
-        // Set the repertoir for the new vente
-        $lastVente = $entityManager->getRepository(Contrat::class)->findLastVente();
-        $newRepertoir = $this->generatePdf->generateRepertoir($lastVente ? $lastVente->getRepertoir() : null);
-        $vente->setRepertoir($newRepertoir);
+        $vente->setRepertoir($this->generatePdf->generateRepertoir($entityManager));
 
         // Set date_beneficiaire to the current datetime
         $vente->setDateBeneficiaire(new \DateTime()); // Set to current datetime
@@ -413,12 +441,11 @@ class CompromisController extends AbstractController
         // Get the existing Dossier from the Compromis
         $vente->setDossier($dossier);
         $dossier->setVente($vente);
-        dd($vente);
+//        dd($vente);
         // Step 6: Persist the new "vente" entity
         $entityManager->persist($vente);
         $entityManager->persist($dossier);
         $entityManager->flush();
-        $this->addFlash('success', 'Vente créée avec succès.');
         // Log the action
         $user = $this->security->getUser();
         $username = $user ? $user->getUsername() : 'Utilisateur inconnu'; // Get username or handle null
@@ -426,7 +453,7 @@ class CompromisController extends AbstractController
         $this->auditLogger->log(
             $user,
             'Création',
-            sprintf('Le dossier avec Rep: %d a été créé par %s.', $dossier->getId(), $username)
+            sprintf('La vente avec Rep: %d a été créé par %s.', $vente->getRepertoir(), $username)
         );
 
         // Redirect to the appropriate route (for example, the "vente" listing or details page)
@@ -442,4 +469,11 @@ class CompromisController extends AbstractController
         dd($dossier);
     }
 
+    #[Route('/test-rep', name: 'test_rep')]
+    public function testRepertoir(EntityManagerInterface $entityManager): Response
+    {
+        $newRepertoir = $this->generatePdf->generateRepertoir($entityManager);
+
+        return new Response("New Repertoir: " . $newRepertoir);
+    }
 }

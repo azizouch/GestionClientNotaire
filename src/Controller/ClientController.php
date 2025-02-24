@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\PersonnePhysique;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,16 +14,33 @@ use App\Form\PersonnePhysiqueFormType;
 
 class ClientController extends AbstractController
 {
-
-    #[Route('/clients', name: 'app_clients')]
-    public function index(PersonnePhysiqueRepository $personnePhysiqueRepository): Response
+    private $paginator;
+    public function __construct(PaginatorInterface $paginator)
     {
+        $this->paginator = $paginator;
+    }
+    #[Route('/clients', name: 'app_clients')]
+    public function index(Request $request,PersonnePhysiqueRepository $personnePhysiqueRepository): Response
+    {
+        $searchQuery = $request->query->get('search', '');
+        $itemsPerPage = $request->query->getInt('itemsPerPage', 25);
 
-        $clients = $personnePhysiqueRepository->findAll();
+        $clientsPagination = $personnePhysiqueRepository->searchClients($searchQuery);
+
+        // Pagination
+        $pagination = $this->paginator->paginate(
+            $clientsPagination,
+            $request->query->getInt('page', 1),
+            $itemsPerPage
+        );
         return $this->render('clients/listclients.html.twig', [
-            'clients' => $clients,
+            'clients' => $personnePhysiqueRepository->findAll(),
+            'pagination' => $pagination,
+            'itemsPerPage' => $itemsPerPage,
+            'searchQuery' => $searchQuery,
         ]);
     }
+
     #[Route('/Personne_physique/add', name: 'app_add_client')]
     public function addClient(Request $request, EntityManagerInterface $entityManager): Response
     {

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\service;
+use Doctrine\ORM\EntityManagerInterface;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,19 +22,68 @@ class GeneratePdf{
             'Content-Disposition' => 'inline; filename="' . $filename . '"',
         ]);
     }
-    public function generateRepertoir(?string $lastRepertoir): string
+
+    public function generateRepertoir(EntityManagerInterface $entityManager): string
     {
-        if (!$lastRepertoir) {
-            return '1/' . date('Y'); // Default starting value if no previous "vente" exists
+        // Initialize the maximum number variable
+        $maxNumber = 0;
+
+        // Query for "compromis" and "vente"
+        $queryContrats = $entityManager->createQuery(
+            'SELECT c.repertoir
+        FROM App\Entity\Contrat c
+        WHERE c.type IN (:types)'
+        )->setParameter('types', ['compromis', 'vente']);
+
+        $contrats = $queryContrats->getResult();
+
+        // Extract the maximum number from the repertoir
+        foreach ($contrats as $contrat) {
+            if ($contrat['repertoir']) {
+                list($number, $year) = explode('/', $contrat['repertoir']);
+                $maxNumber = max($maxNumber, (int)$number);
+            }
         }
 
-        // Split the last "repertoir" into the number and year parts
-        list($number, $year) = explode('/', $lastRepertoir);
+        // Query for "procuration"
+        $queryProcuration = $entityManager->createQuery(
+            'SELECT p.repertoir
+        FROM App\Entity\Procuration p'
+        );
 
-        // Increment the number by 1
-        $number = (int)$number + 1;
+        $procurations = $queryProcuration->getResult();
 
-        // Return the new "repertoir" in the same format
-        return $number . '/' . $year;
+        // Extract the maximum number from the repertoir for procurations
+        foreach ($procurations as $procuration) {
+            if ($procuration['repertoir']) {
+                list($number, $year) = explode('/', $procuration['repertoir']);
+                $maxNumber = max($maxNumber, (int)$number);
+            }
+        }
+
+        // Query for "desistement"
+        $queryDesistement = $entityManager->createQuery(
+            'SELECT d.repertoir
+        FROM App\Entity\Desistement d'
+        );
+
+        $desistements = $queryDesistement->getResult();
+
+        // Extract the maximum number from the repertoir for desistements
+        foreach ($desistements as $desistement) {
+            if ($desistement['repertoir']) {
+                list($number, $year) = explode('/', $desistement['repertoir']);
+                $maxNumber = max($maxNumber, (int)$number);
+            }
+        }
+
+        // Get the current year
+        $currentYear = date('Y');
+
+        // Increment the maximum number by 1 or start at 1 if none exist
+        $newNumber = $maxNumber + 1;
+
+        // Return the new repertory in the format "number/currentYear"
+        return $newNumber . '/' . $currentYear;
     }
 }

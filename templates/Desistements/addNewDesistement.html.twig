@@ -53,7 +53,6 @@
     <div class="container">
         <div class="page-inner pt-3">
             <div class="page-header m-0">
-                <h3 class="fw-bold mb-3">Ajouter desistement</h3>
                 <ul class="breadcrumbs mb-3">
                     <li class="nav-home">
                         <a href="{{ path('app_admin') }}">
@@ -70,7 +69,7 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">Créer un nouveau desistement</a>
+                        <a href="#">Créer desistement</a>
                     </li>
                 </ul>
             </div>
@@ -80,20 +79,19 @@
                         <div class="card-header">
                             <h4 class="card-title">Créer un nouveau desistement</h4>
                         </div>
-                        <div class="container card-body">
+                        <div class="card-body">
                             {{ form_start(form)}}
                             <div class="row mb-3">
-                                {{ form_row(form.repertoir) }}
-                            </div>
-                            <div class="row mb-3">
                                 <fieldset class="mb-3">
-                                    <legend class="col-form-label required mb-3">Designation</legend>
+{#                                    <legend class="col-form-label required mb-3">Designation</legend>#}
                                     <div id="compromis_designation">
                                         <div class="row mb-3">
-                                            <div class="col-md-4">
+                                            <div class="col-md-12">
                                                 {{ form_label(form.designation.numero_bien) }}
                                                 {{ form_widget(form.designation.numero_bien, { 'attr': { 'class': 'form-control shadow-sm' } }) }}
                                             </div>
+                                        </div>
+                                        <div class="row mb-3">
                                             <div class="col-md-4">
                                                 {{ form_label(form.designation.titre_foncier) }}
                                                 {{ form_widget(form.designation.titre_foncier, { 'attr': { 'class': 'form-control shadow-sm' } }) }}
@@ -102,6 +100,10 @@
                                                 {{ form_label(form.designation.titre_foncier_mere) }}
                                                 {{ form_widget(form.designation.titre_foncier_mere, { 'attr': { 'class': 'form-control shadow-sm' } }) }}
                                             </div>
+                                            <div class="col-md-4">
+                                                {{ form_label(form.designation.delai) }}
+                                                {{ form_widget(form.designation.delai, { 'attr': { 'class': 'form-control shadow-sm' } }) }}
+                                            </div>
                                         </div>
                                         <div class="row mb-3">
                                             <div class="col-md-4">
@@ -109,12 +111,12 @@
                                                 {{ form_widget(form.designation.montant_TTC, { 'attr': { 'class': 'form-control shadow-sm' } }) }}
                                             </div>
                                             <div class="col-md-4">
-                                                {{ form_label(form.designation.TVA) }}
-                                                {{ form_widget(form.designation.TVA, { 'attr': { 'class': 'form-control shadow-sm' } }) }}
+                                                {{ form_label(form.designation.montant_HT) }}
+                                                {{ form_widget(form.designation.montant_HT, { 'attr': { 'class': 'form-control shadow-sm' } }) }}
                                             </div>
                                             <div class="col-md-4">
-                                                {{ form_label(form.designation.delai) }}
-                                                {{ form_widget(form.designation.delai, { 'attr': { 'class': 'form-control shadow-sm' } }) }}
+                                                {{ form_label(form.designation.TVA) }}
+                                                {{ form_widget(form.designation.TVA, { 'attr': { 'class': 'form-control shadow-sm' } }) }}
                                             </div>
                                         </div>
                                         <div class="row mb-3">
@@ -179,14 +181,14 @@
                                     {{ form_row(form.date_maitre, { 'attr': { 'class': 'form-control shadow-sm' } }) }}
                                 </div>
                             </div>
-{#                            <div class="row d-none">#}
-{#                                <div class="col-md-6">#}
+                            <div class="row d-none">
+                                <div class="col-md-4">
 {#                                    {{ form_row(form.createdAt) }}#}
-{#                                </div>#}
-{#                                <div class="col-md-6">#}
+                                </div>
+                                <div class="col-md-4">
 {#                                    {{ form_row(form.updatedAt) }}#}
-{#                                </div>#}
-{#                            </div>#}
+                                </div>
+                            </div>
                             <div class="pphysiqueContainer mb-3 d-none">
                                 {{ form_row(form.pphysique) }}
                             </div>
@@ -197,24 +199,26 @@
                                 <div class="col-md-12">
                                     <div class="card shadow">
                                         <div class="card-header">
-                                            <div class="card-title">Premiere part(s)</div>
+                                            <div class="card-title">Promettant(s)</div>
                                         </div>
                                         <div class="card-body">
-                                            <table class="table table-hover" id="PromettantTable">
-                                                <thead>
-                                                <tr>
-                                                    <th scope="col" class="text-capitalize">Dénomination/Nom Prenom</th>
-                                                    <th scope="col" class="text-capitalize">Identifiant</th>
-                                                    <th scope="col" class="text-capitalize">Ville</th>
-                                                    <th scope="col" class="text-capitalize">Telephone</th>
-                                                    <th scope="col" class="text-capitalize">Email</th>
-                                                    <th scope="col" class="text-capitalize">Actions</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <!-- Client entries will go here -->
-                                                </tbody>
-                                            </table>
+                                            <div class="table-responsive">
+                                                <table class="table table-hover AdditionTable" id="PromettantTable">
+                                                    <thead>
+                                                    <tr>
+                                                        <th scope="col" class="text-capitalize">Dénomination/Nom Prenom</th>
+                                                        <th scope="col" class="text-capitalize">Identifiant</th>
+                                                        <th scope="col" class="text-capitalize">Ville</th>
+                                                        <th scope="col" class="text-capitalize">Telephone</th>
+                                                        <th scope="col" class="text-capitalize">Email</th>
+                                                        <th scope="col" class="text-capitalize">Actions</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <!-- Client entries will go here -->
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                         <div class="card-footer">
                                             <!-- Button to Open the Modal -->
@@ -230,24 +234,26 @@
                                 <div class="col-md-12">
                                     <div class="card shadow">
                                         <div class="card-header">
-                                            <div class="card-title">Deuxieme part(s)</div>
+                                            <div class="card-title">Bénéficiaire(s)</div>
                                         </div>
                                         <div class="card-body">
-                                            <table class="table table-hover" id="BeneficiaireTable">
-                                                <thead>
-                                                <tr>
-                                                    <th scope="col" class="text-capitalize">Dénomination/Nom Prenom</th>
-                                                    <th scope="col" class="text-capitalize">Identifiant</th>
-                                                    <th scope="col" class="text-capitalize">Ville</th>
-                                                    <th scope="col" class="text-capitalize">Telephone</th>
-                                                    <th scope="col" class="text-capitalize">Email</th>
-                                                    <th scope="col" class="text-capitalize">Actions</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <!-- Client entries will go here -->
-                                                </tbody>
-                                            </table>
+                                            <div class="table-responsive">
+                                                <table class="table table-hover AdditionTable" id="BeneficiaireTable">
+                                                    <thead>
+                                                    <tr>
+                                                        <th scope="col" class="text-capitalize">Dénomination/Nom Prenom</th>
+                                                        <th scope="col" class="text-capitalize">Identifiant</th>
+                                                        <th scope="col" class="text-capitalize">Ville</th>
+                                                        <th scope="col" class="text-capitalize">Telephone</th>
+                                                        <th scope="col" class="text-capitalize">Email</th>
+                                                        <th scope="col" class="text-capitalize">Actions</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <!-- Client entries will go here -->
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                         <div class="card-footer">
                                             <!-- Button to Open the Modal -->
@@ -260,7 +266,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                {{ form_row(form.Submit) }}
+                                {{ form_row(form.Submit, { 'label': 'Créer' }) }}
                             </div>
                             {{ form_end(form) }}
                             <!-- Modal for Client Selection -->
@@ -275,37 +281,39 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <table class="table table-hover basetable" id="clientsTables">
-                                                <thead>
-                                                <tr style="text-transform: capitalize">
-                                                    <th>Denomination/Nom/Prenom</th>
-                                                    <th>Identifiant</th>
-                                                    <th>Ville</th>
-                                                    <th>Telephone</th>
-                                                    <th>Email</th>
-                                                </tr>
-                                                </thead>
-{#                                                <tbody class="tablebody">#}
-{#                                                {% for person in PersonnesPhysiques %}#}
-{#                                                    <tr data-id="{{ person.id }}" data-cin="{{ person.cin }}" data-type="personPhysique">#}
-{#                                                        <td>{{ person.firstName }} {{ person.lastName }}</td>#}
-{#                                                        <td>CIN: {{ person.cin }}</td>#}
-{#                                                        <td>{{ person.city }}</td>#}
-{#                                                        <td>{{ person.telephone }}</td>#}
-{#                                                        <td>{{ person.email }}</td>#}
-{#                                                    </tr>#}
-{#                                                {% endfor %}#}
-{#                                                {% for personne in PersonnesMorales %}#}
-{#                                                    <tr data-id="{{ person.id }}" data-cin="{{ person.cin }}" data-type="personMorale">#}
-{#                                                        <td>{{ person.name }}</td>#}
-{#                                                        <td>RC: {{ person.RC }}</td>#}
-{#                                                        <td>{{ person.city }}</td>#}
-{#                                                        <td>{{ person.telephone }}</td>#}
-{#                                                        <td>{{ person.email }}</td>#}
-{#                                                    </tr>#}
-{#                                                {% endfor %}#}
-{#                                                </tbody>#}
-                                            </table>
+                                            <div class="table-responsive">
+                                                <table class="table table-hover basetable" id="clientsTables">
+                                                    <thead>
+                                                    <tr style="text-transform: capitalize">
+                                                        <th>Denomination/Nom/Prenom</th>
+                                                        <th>Identifiant</th>
+                                                        <th>Ville</th>
+                                                        <th>Telephone</th>
+                                                        <th>Email</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody class="tablebody">
+                                                    {% for person in Pphysiques %}
+                                                        <tr data-id="{{ person.id }}" data-cin="{{ person.cin }}" data-type="personPhysique">
+                                                            <td>{{ person.firstName }} {{ person.lastName }}</td>
+                                                            <td>CIN: {{ person.cin }}</td>
+                                                            <td>{{ person.city }}</td>
+                                                            <td>{{ person.telephone }}</td>
+                                                            <td>{{ person.email }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    {% for personne in Pmorales %}
+                                                        <tr data-id="{{ personne.id }}" data-if="{{ personne.RC }}" data-type="personMorale">
+                                                            <td>{{ personne.name }}</td>
+                                                            <td>RC: {{ personne.RC }}</td>
+                                                            <td>{{ personne.Ville }}</td>
+                                                            <td>{{ personne.telephone }}</td>
+                                                            <td>{{ personne.email }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
@@ -322,7 +330,6 @@
                                             <h5 class="modal-title" id="newClientModal2Label">Créer</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-
                                         <div class="modal-body">
                                             <div class="text-center">
                                                 <!-- Radio buttons for type selection -->
@@ -413,32 +420,39 @@
                                                     </div>
                                                 </div>
                                                 <div class="row " id="partenaire" style="display: none">
-                                                    <label class="form-label">Partenaire</label>
+                                                    <label class="form-label">Partenaires</label>
                                                 </div>
-                                                <div class="container mb-3 rounded-1 p-2" id="partnerFields" style="display: none;border: 0.5px solid #adb5bd">
-                                                    <div class="row mb-3">
-                                                        <div class="col-md-6">
-                                                            <label for="partnerFirstName" class="form-label required">Prenom</label>
-                                                            <input type="text" class="form-control" id="partnerFirstName" required>
+                                                <div class="container mb-3 rounded-1 p-2" id="partnerContainer" style="display: none;border: 0.5px solid #adb5bd">
+                                                    <div class="container " id="partnerFields">
+                                                        <label class="form-label">Partenaire 1</label>
+                                                        <div class="row mb-3">
+                                                            <div class="col-md-6">
+                                                                <label for="partnerFirstName" class="form-label">Prenom</label>
+                                                                <input type="text" class="form-control" id="partnerFirstName" required>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label for="partnerLastName" class="form-label">Nom</label>
+                                                                <input type="text" class="form-control" id="partnerLastName" required>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-md-6">
-                                                            <label for="partnerLastName" class="form-label required">Nom</label>
-                                                            <input type="text" class="form-control" id="partnerLastName" required>
+                                                        <div class="row mb-3">
+                                                            <div class="col-md-6">
+                                                                <label for="mariagePlace" class="form-label">Lieu de mariage</label>
+                                                                <input type="text" class="form-control" id="mariagePlace" required>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label for="mariageYear" class="form-label">Année de mariage</label>
+                                                                <input type="number" class="form-control" id="mariageYear" min="1900" max="2024"  required>
+                                                                <small id="mariageYearMessage" class="text-danger" style="display: none;">
+                                                                    L'année doit être comprise entre 1900 et l'année actuelle.
+                                                                </small>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div class="row mb-3">
-                                                        <div class="col-md-6">
-                                                            <label for="mariagePlace" class="form-label required">Lieu de mariage</label>
-                                                            <input type="text" class="form-control" id="mariagePlace" required>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="mariageYear" class="form-label required">Année de mariage</label>
-                                                            <input type="number" class="form-control" id="mariageYear" min="1900" max="2024"  required>
-                                                            <small id="mariageYearMessage" class="text-danger" style="display: none;">
-                                                                L'année doit être comprise entre 1900 et l'année actuelle.
-                                                            </small>
-                                                        </div>
-                                                    </div>
+                                                    <button type="button" class="btn btn-dark btn-sm" id="add_partner" style="margin-left: 10px">
+                                                        <i class="fas fa-plus-circle"></i>
+                                                        Ajouter
+                                                    </button>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <div class="col-md-6">
@@ -515,6 +529,7 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
                                             <button type="button" class="btn btn-primary" id="saveNewClientButton">Enregistrer</button>
+                                            <button type="button" class="btn btn-primary" id="saveAndNew">Enregistrer & Nouveau</button>
                                         </div>
                                     </div>
                                 </div>

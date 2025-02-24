@@ -11,7 +11,9 @@ use App\Repository\DossierRepository;
 use App\Repository\PersonnePhysiqueRepository;
 use App\Repository\ProcurationRepository;
 use App\service\AuditLogger;
+use App\service\ConvertNumber;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,24 +33,45 @@ use App\service\GeneratePdf;
 class ProcurationController extends AbstractController
 {
     private DateFormatterService $dateFormatter;
+    private ConvertNumber $convertNumber;
     private GeneratePdf $generatePdf;
     private AuditLogger $auditLogger;
     private Security $security;
+    private $paginator;
 
 
-    public function __construct(DateFormatterService $dateFormatter,GeneratePdf $generatePdf,AuditLogger $auditLogger, Security $security)
+    public function __construct(DateFormatterService $dateFormatter,
+                                GeneratePdf $generatePdf,
+                                ConvertNumber $convertNumber,
+                                AuditLogger $auditLogger,
+                                Security $security,
+                                PaginatorInterface $paginator)
     {
         $this->dateFormatter = $dateFormatter;
         $this->generatePdf = $generatePdf;
         $this->auditLogger = $auditLogger;
         $this->security = $security;
+        $this->paginator = $paginator;
     }
     #[Route('/procurations', name: 'app_procurations')]
-    public function index(ProcurationRepository $procurationRepository): Response
+    public function index(Request $request,ProcurationRepository $procurationRepository): Response
     {
-        $procurations = $procurationRepository->findAll();
+        $searchQuery = $request->query->get('search', '');
+        $itemsPerPage = $request->query->getInt('itemsPerPage', 25);
+
+        $procurations = $procurationRepository->searchProcurations($searchQuery);
+
+        // Pagination
+        $pagination = $this->paginator->paginate(
+            $procurations,
+            $request->query->getInt('page', 1),
+            $itemsPerPage
+        );
         return $this->render('procurations/listProcurations.html.twig', [
-            'procurations' => $procurations,
+            'procurations' => $procurationRepository->findAll(),
+            'pagination' => $pagination,
+            'itemsPerPage' => $itemsPerPage,
+            'searchQuery' => $searchQuery
         ]);
     }
 
@@ -60,7 +83,10 @@ class ProcurationController extends AbstractController
         $dossier = new Dossier();
         $dossier->setDevis(0);
         $dossier->setStatut("Active");
-        $dossier->setSuivie("Procuration creé");
+        $dossier->setSuivie("Procuration créé");
+        $dossier->setCreatedAt(new \DateTime());
+        $dossier->setUpdatedAt(new \DateTime());
+        $dossier->setRepertoir($dossierRepository->generateRepertoir($entityManager));
 
         // Create the form with your form type
         $form = $this->createForm(ProcurationType::class, $procuration);
@@ -70,15 +96,17 @@ class ProcurationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $procuration->setDossier($dossier);  // Set Dossier on Procuration
             $procuration->setCreatedAt(new \DateTime());
             $procuration->setUpdatedAt(new \DateTime());
-            $dossier->setProcuration($procuration);  // Set Procuration on Dossier
-            $dossier->setRepertoir($dossierRepository->generateRepertoir($entityManager));  // Generate and set the repertoir
+            $procuration->setRepertoir($this->generatePdf->generateRepertoir($entityManager));
+            $procuration->setDossier($dossier);
+            $dossier->setProcuration($procuration);
+
             dd($procuration);
             $entityManager->persist($dossier);  // Persist the Dossier
             $entityManager->persist($procuration);  // Persist the Procuration
             $entityManager->flush();  // Save to the database
+
             // Log the action
             $user = $this->security->getUser();
             $username = $user ? $user->getUsername() : 'Utilisateur inconnu';
@@ -140,7 +168,7 @@ class ProcurationController extends AbstractController
                 }
             }
 
-//            dd($procuration);
+            dd($procuration);
             $entityManager->flush();
 
             // Log the update action

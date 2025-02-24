@@ -15,29 +15,23 @@ class UserRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, User::class);
     }
+    public function searchUsers(?string $searchQuery, ?string $role)
+    {
+        $qb = $this->createQueryBuilder('u');
 
-//    /**
-//     * @return User[] Returns an array of User objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('u.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+        // Filter by search query (search in name or email)
+        if (!empty($searchQuery)) {
+            $qb->andWhere('u.username LIKE :search')
+                ->setParameter('search', "{$searchQuery}%");
+        }
 
-//    public function findOneBySomeField($value): ?User
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        // Filter by user type
+        if (!empty($role)) {
+            $qb->andWhere('u.roles LIKE :role')
+                ->setParameter('role','%"'. $role .'"%');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
 }

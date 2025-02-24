@@ -39,30 +39,19 @@ class ProcurationRepository extends ServiceEntityRepository
         return array_values($monthlyData); // Return values indexed 0-11 for the frontend
     }
 
+    public function searchProcurations(?string $searchQuery = null): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->leftJoin('p.persons', 'ps')
+            ->addSelect('ps');
 
+        // Filter by search query if provided
+        if (!empty($searchQuery)) {
+            $qb->andWhere('ps.last_name IS NULL OR ps.last_name  LIKE :searchQuery')
+                ->setParameter('searchQuery', "{$searchQuery}%");
+        }
 
-//    /**
-//     * @return Procuration[] Returns an array of Procuration objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+        return $qb->getQuery()->getResult();
+    }
 
-//    public function findOneBySomeField($value): ?Procuration
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }

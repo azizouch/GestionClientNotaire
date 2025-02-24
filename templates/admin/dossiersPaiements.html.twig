@@ -23,7 +23,6 @@
     <div class="container">
         <div class="page-inner pt-2">
             <div class="page-header m-0">
-                <h4 class="fw-bold mb-2"></h4>
                 <ul class="breadcrumbs mb-2">
                     <li class="nav-home">
                         <a href="{{ path('app_admin') }}">
@@ -40,7 +39,7 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">Liste dossiers</a>
+                        <a href="#">Dossiers paiements</a>
                     </li>
                 </ul>
             </div>
@@ -85,34 +84,23 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                {% if pagination is not empty %}
-                                <table class="table table-bordered table-hover dossierTable mt-0">
+                                {% if pagination is not empty  %}
+                                <table class="table table-bordered table-hover dossierTable">
                                     <thead>
                                     <tr>
-                                        <th>Repertoir</th>
+                                        <th scope="col" class="text-capitalize small">Dossier</th>
                                         <th>1ere partie(S)</th>
                                         <th>2eme partie(S)</th>
-                                        <th>Nature D'operation</th>
-                                        <th>Devis</th>
-                                        <th>Paiements</th>
-                                        <th>Reste à payer</th>
-                                        <th>Statut</th>
+                                        <th scope="col" class="text-capitalize small">Devis</th>
+                                        <th scope="col" class="text-capitalize small">Paiements</th>
+                                        <th scope="col" class="text-capitalize small">Reste à payer</th>
+                                        <th scope="col" class="text-capitalize small">Statut</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     {% for dossier in pagination %}
-                                        <tr class="dossier-row"
-                                            data-id="{{ dossier.id }}"
-                                            data-repertoir="{{ dossier.repertoir }}"
-                                            data-compromis="{{ dossier.compromis ? 'Oui' : 'Non' }}"
-                                            data-vente="{{ dossier.vente ? 'Oui' : 'Non' }}"
-                                            data-devis="{{ dossier.devis }}"
-                                            data-paiements='{{ dossier.getPaiementsArray|json_encode(constant("JSON_UNESCAPED_UNICODE"))|raw }}'
-                                            data-reste="{{ dossier.devis - dossier.getTotalPaiement() }}"
-                                            data-suivie="{{ dossier.suivie }}"
-                                            data-statut="{{ dossier.statut }}"
-                                            data-procuration="{{ dossier.procuration ? 'Oui' : 'Non' }}"
-{#                                            data-desistement="{{ dossier.desistement ? 'Oui' : 'Non' }}"#}>
+                                        {% set rest = dossier.devis - dossier.getTotalPaiement() %}
+                                        <tr>
                                             <td class="fw-bold">{{ dossier.repertoir }}</td>
                                             <td>
                                                 {# Display the name of the person with the role 'Promettant' #}
@@ -179,37 +167,16 @@
                                                 {% endif %}
 
                                             </td>
-                                            <td>
-                                                {% if dossier.procuration %}
-                                                    Procuration
-                                                {% elseif dossier.compromis and dossier.vente %}
-                                                    Compromis et Vente
-                                                {% elseif dossier.compromis %}
-                                                    Compromis
-                                                {% elseif dossier.vente %}
-                                                    Vente
-                                                {% elseif dossier.desistement %}
-                                                    Desistement
-                                                {% else %}
-                                                    Aucune opération
-                                                {% endif %}
-                                            </td>
                                             <td>{{ dossier.devis|number_format(2, '.', ' ') }} DH</td>
+                                            <td>{{ dossier.getTotalPaiement()|number_format(2, '.', ' ') }} DH</td>
+                                            <td>{{ rest|number_format(2, '.', ' ') }} DH</td>
                                             <td>
-                                                {% if dossier.getTotalPaiement() is not empty %}
-                                                    {{ dossier.getTotalPaiement()|number_format(2, '.', ' ') }} DH
+                                                {% if rest == 0 %}
+                                                    <span class="badge badge-success">Complete</span>
                                                 {% else %}
-                                                    0.00 DH
+                                                    <span class="badge badge-warning">En cour...</span>
                                                 {% endif %}
                                             </td>
-                                            <td>{{ (dossier.devis - dossier.getTotalPaiement())|number_format(2, '.', ' ') }} DH</td>
-                                            <td>
-                                            {% if dossier.statut == "Active" %}
-                                                <span class="badge bg-soft-success text-success border-0" style="font-size: 11px">{{ dossier.statut }}</span>
-                                            {% else %}
-                                                <span class="badge bg-soft-success text-danger border-0" style="font-size: 11px">{{ dossier.statut }}</span>
-                                            {% endif %}
-                                                </td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>
@@ -218,7 +185,7 @@
                                     <div class="alert-search alert_warning text-center">Aucun résultat trouvé.</div>
                                 {% endif %}
                             </div>
-                            <div class="row navigation d-flex justify-content-center mt-3" >
+                            <div class="row navigation d-flex justify-content-center mt-4" >
                                 {{ knp_pagination_render(pagination,'@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig') }}
                             </div>
                         </div>

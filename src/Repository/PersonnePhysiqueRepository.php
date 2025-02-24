@@ -24,6 +24,19 @@ class PersonnePhysiqueRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function searchClients(?string $searchQuery)
+    {
+        $qb = $this->createQueryBuilder('c');
+
+        // Filter by search query (search in name or email)
+        if (!empty($searchQuery)) {
+            $qb->andWhere('c.last_name LIKE :search')
+                ->setParameter('search', "{$searchQuery}%");
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
     public function searchPersonPhysiqueWithRelations(string $searchTerm): array
     {
         return $this->createQueryBuilder('p')
@@ -33,8 +46,8 @@ class PersonnePhysiqueRepository extends ServiceEntityRepository
             ->addSelect('pr')
             ->leftJoin('p.desistements', 'd')
             ->addSelect('d')
-            ->where('p.last_name LIKE :search OR p.first_name LIKE :search OR p.cin LIKE :search')
-            ->setParameter('search', "%{$searchTerm}%")
+            ->where('p.last_name LIKE :search')
+            ->setParameter('search', "{$searchTerm}%")
             ->getQuery()
             ->getResult();
     }

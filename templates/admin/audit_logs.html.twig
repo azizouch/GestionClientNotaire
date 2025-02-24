@@ -3,11 +3,12 @@
 {% block title %}Liste d'activités{% endblock %}
 
 {% block body %}
+
     <link rel="stylesheet" href="{{ asset('asset/css/comunee.css') }}" />
+
     <div class="container">
         <div class="page-inner pt-2">
             <div class="page-header m-0">
-                <h4 class="fw-bold mb-2">Suivi les utilisateurs</h4>
                 <ul class="breadcrumbs mb-2">
                     <li class="nav-home">
                         <a href="{{ path('app_admin') }}">
@@ -18,13 +19,13 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">Tables</a>
+                        <a href="#">Suivis</a>
                     </li>
                     <li class="separator">
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">Datatables</a>
+                        <a href="#">Suivi les utilisateurs</a>
                     </li>
                 </ul>
             </div>
@@ -35,7 +36,6 @@
                             <div class="d-flex align-items-center justify-content-between">
                                 <h4>Activités<span class="badge bg-soft-dark text-dark ms-2">{{auditLoggers|length}}</span></h4>
                                 <form method="get" class="d-flex align-items-center" id="itemsPerPageForm">
-                                    <label for="itemsPerPage" class="mx-lg-2">Activités par page:</label>
                                     <select id="itemsPerPage" name="itemsPerPage" class="form-control d-inline w-auto mx-lg-2" style="width: auto;" onchange="document.getElementById('itemsPerPageForm').submit();">
                                         <option value="10" {% if itemsPerPage == 10 %}selected{% endif %}>10</option>
                                         <option value="25" {% if itemsPerPage == 25 %}selected{% endif %}>25</option>
@@ -49,30 +49,34 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
+                                {% if pagination is not empty  %}
                                 <table class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
                                             <th>Utilisateur</th>
                                             <th>Action</th>
                                             <th>Détails</th>
-                                            <th>Date & houre</th>
+                                            <th>Date</th>
+                                            <th>Houre</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {% for log in pagination %}
                                             <tr>
-                                                <td>{{ log.id }}</td>
                                                 <td>{{ log.user ? log.user.username : 'Utilisateur inconnu' }}</td>
                                                 <td>{{ log.action }}</td>
                                                 <td>{{ log.details }}</td>
-                                                <td>{{ log.timestamp|date('d/m/Y H:i') }}</td>
+                                                <td>{{ log.timestamp|date('d/m/Y') }}</td>
+                                                <td>{{ log.timestamp|date('H:i') }}</td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>
                                 </table>
+                                {% else %}
+                                    <div class="alert-search alert_warning text-center">Aucun résultat trouvé.</div>
+                                {% endif %}
                             </div>
-                            <div class="row navigation d-flex justify-content-center mt-4" >
+                            <div class="row navigation d-flex justify-content-center mt-3" >
                                 {{ knp_pagination_render(pagination,'@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig') }}
                             </div>
                         </div>
@@ -81,6 +85,7 @@
             </div>
         </div>
     </div>
+
     <!-- Dossier Details Modal -->
     <div class="modal fade" id="filtersModal" tabindex="-1" aria-labelledby="filtersModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -143,6 +148,7 @@
             </div>
         </div>
     </div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('filterForm');
@@ -231,4 +237,5 @@
         });
     });
 </script>
+
 {% endblock %}

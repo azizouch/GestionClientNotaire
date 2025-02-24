@@ -18,37 +18,85 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class RegistrationController extends AbstractController
 {
-    #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
-    {
-        $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
-        $form->handleRequest($request);
+//    #[Route('/register', name: 'app_register')]
+//    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
+//    {
+//        $user = new User();
+//        $form = $this->createForm(RegistrationFormType::class, $user);
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            /** @var string $plainPassword */
+//            $plainPassword = $form->get('plainPassword')->getData();
+//            $user = $form->getData();
+//            if($request->files->get('registration_form')['image']){
+//                $image = $request->files->get('registration_form')['image'];
+//                $image_name = time().'_'.$image->getClientOriginalName();
+//                $image->move($this->getParameter('image_directory'), $image_name);
+//                $user->setImage($image_name);
+//            }
+//            // encode the plain password
+//            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
+//
+//            $entityManager->persist($user);
+//            $entityManager->flush();
+//
+//            // do anything else you need here, like send an email
+//            // Redirect to the app_users route
+//            return new RedirectResponse($this->generateUrl('app_users'));
+//            //return $security->login($user, AppCustomAuthenticator::class, 'main');
+//        }
+//
+//        return $this->render('registration/register.html.twig', [
+//            'registrationForm' => $form,
+//        ]);
+//    }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            /** @var string $plainPassword */
-            $plainPassword = $form->get('plainPassword')->getData();
-            $user = $form->getData();
-            if($request->files->get('registration_form')['image']){
-                $image = $request->files->get('registration_form')['image'];
-                $image_name = time().'_'.$image->getClientOriginalName();
-                $image->move($this->getParameter('image_directory'), $image_name);
-                $user->setImage($image_name);
-            }
-            // encode the plain password
-            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
+//    #[Route('/register/{id?}', name: 'app_register')]
+//    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, UserRepository $userRepository, $id = null): Response
+//    {
+//        $user = $id ? $userRepository->find($id) : new User(); // If an ID is provided, fetch the user
+//
+//        $form = $this->createForm(RegistrationFormType::class, $user);
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            /** @var string $plainPassword */
+//            $plainPassword = $form->get('plainPassword')->getData();
+//
+//            if ($request->files->get('registration_form')['image']) {
+//                $image = $request->files->get('registration_form')['image'];
+//                $image_name = time().'_'.$image->getClientOriginalName();
+//                $image->move($this->getParameter('image_directory'), $image_name);
+//                $user->setImage($image_name);
+//            }
+//
+//            // Set user roles
+//            $userType = $request->request->get('userType');
+//            $user->setRoles([$userType]);
+//
+//            if (!$id) {
+//                // New user registration
+//                $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
+//            } else {
+//                // Update existing user
+//                // Here, handle password hashing only if it's changed
+//                if ($plainPassword) {
+//                    $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
+//                }
+//            }
+//
+//            $entityManager->persist($user);
+//            $entityManager->flush();
+//
+//            return new RedirectResponse($this->generateUrl('app_users'));
+//        }
+//
+//        $users = $userRepository->findAll();
+//        return $this->render('admin/users.html.twig', [
+//            'users' => $users,
+//            'registrationForm' => $form->createView(),
+//        ]);
+//    }
 
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            // do anything else you need here, like send an email
-            // Redirect to the app_users route
-            return new RedirectResponse($this->generateUrl('app_users'));
-            //return $security->login($user, AppCustomAuthenticator::class, 'main');
-        }
-
-        return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form,
-        ]);
-    }
 }

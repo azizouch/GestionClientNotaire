@@ -56,7 +56,6 @@
     <div class="container">
         <div class="page-inner pt-3">
             <div class="page-header m-0">
-                <h3 class="fw-bold mb-3">Ajouter vente</h3>
                 <ul class="breadcrumbs mb-3">
                     <li class="nav-home">
                         <a href="{{ path('app_admin') }}">
@@ -73,7 +72,7 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">Créer un nouveau vente</a>
+                        <a href="#">Créer vente</a>
                     </li>
                 </ul>
             </div>
@@ -106,18 +105,15 @@
                                     <div class="container card-body">
                                         {{ form_start(form)}}
                                         <div class="row mb-3">
-                                            <div class="col-md-6">
-                                                {{ form_row(form.repertoir) }}
-                                            </div>
-                                            <div class="col-md-6">
-                                                {{ form_label(form.designation.numero_bien) }}
-                                                {{ form_widget(form.designation.numero_bien, { 'attr': { 'class': 'form-control shadow-sm' } }) }}
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
                                             <fieldset class="mb-3">
-                                                <legend class="col-form-label required mb-3">Designation</legend>
+{#                                                <legend class="col-form-label required mb-3">Designation</legend>#}
                                                 <div id="compromis_designation">
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-12">
+                                                            {{ form_label(form.designation.numero_bien) }}
+                                                            {{ form_widget(form.designation.numero_bien, { 'attr': { 'class': 'form-control shadow-sm' } }) }}
+                                                        </div>
+                                                    </div>
                                                     <div class="row mb-3">
                                                         <div class="col-md-4">
                                                             {{ form_label(form.designation.titre_foncier) }}
@@ -232,6 +228,7 @@
                                                         <div class="card-title">Promettant(s)</div>
                                                     </div>
                                                     <div class="card-body">
+                                                        <div class="table-responsive">
                                                         <table class="table table-hover AdditionTable" id="PromettantTable">
                                                             <thead>
                                                             <tr>
@@ -247,6 +244,7 @@
                                                             <!-- Client entries will go here -->
                                                             </tbody>
                                                         </table>
+                                                        </div>
                                                     </div>
                                                     <div class="card-footer">
                                                         <!-- Button to Open the Modal -->
@@ -265,6 +263,7 @@
                                                         <div class="card-title">Bénéficiaire(s)</div>
                                                     </div>
                                                     <div class="card-body">
+                                                        <div class="table-responsive">
                                                         <table class="table table-hover AdditionTable" id="BeneficiaireTable">
                                                             <thead>
                                                             <tr>
@@ -280,6 +279,7 @@
                                                             <!-- Client entries will go here -->
                                                             </tbody>
                                                         </table>
+                                                        </div>
                                                     </div>
                                                     <div class="card-footer">
                                                         <!-- Button to Open the Modal -->
@@ -292,7 +292,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            {{ form_row(form.Submit, { 'label': 'Creer vente' }) }}
+                                            {{ form_row(form.Submit, { 'label': 'Créer' }) }}
                                         </div>
                                         {{ form_end(form) }}
                                         <!-- Modal for Client Selection -->
@@ -545,8 +545,9 @@
                                                     </div>
 
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                                                        <button type="button" class="btn btn-primary" id="saveNewClientButton">Enregistrer</button>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ignorer</button>
+                                                        <button type="button" class="btn btn-primary" id="saveNewClientButton">Enregistrer & Fermer</button>
+                                                        <button type="button" class="btn btn-info" id="saveAndNew">Enregistrer & Nouveau</button>
                                                     </div>
                                                 </div>
                                             </div>

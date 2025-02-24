@@ -78,6 +78,7 @@ function customCheckColor() {
     $navbarBrand.attr("src", logoLight);
   } else {
     $navbarBrand.attr("src", logoDark);
+    console.log(logoDark);
   }
 }
 
